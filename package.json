@@ -4,13 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "vercel-build": "npm run build",
+    "prebuild": "ls -la node_modules/@melcanz85/chaincss/ || echo 'Package not found'"
   },
   "dependencies": {
-    "@melcanz85/chaincss": "^1.11.1",
+    "@melcanz85/chaincss": "^1.11.2",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.577.0",
     "react": "^19.2.4",
