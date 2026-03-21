@@ -1,0 +1,16 @@
+<@
+  // Default styles
+  const reset = $().boxSizing('border-box').block('*')
+  const body = $().margin('0').fontFamily("system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif")
+  .backgroundColor('#f8fafc').color('#1e293b').block('body')
+  const root = $().minHeight('100vh').block('#root')
+
+  // Components
+  const nav = get('./components/Nav/nav.jcss');
+  const hero = get('./components/Hero/hero.jcss');
+  const playground = get('./components/Playground/playground.jcss');
+  const merged = Object.assign({}, nav, hero, playground);
+
+  compile({reset,body,root,...merged});
+
+@>
