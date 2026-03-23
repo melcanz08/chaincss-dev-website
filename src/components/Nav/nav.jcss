@@ -1,37 +1,38 @@
-const nav = $()
-  .backgroundColor('rgba(255,255,255,0.95)')
-  .backdropFilter('blur(12px)')
-  .borderBottom('1px solid #e2e8f0')
-  .position('sticky')
-  .top('0')
-  .zIndex('50')
-  .block('.nav');
-
-const navContainer = $()
-  .maxWidth('80rem')
-  .margin('0 auto')
-  .padding('1rem 1.5rem')
-  .display('flex')
-  .justifyContent('space-between')
-  .alignItems('center')
-  .flexWrap('wrap')
-  .gap('1rem')
-  .block('.nav-container');
-
-const logo = $()
-  .fontSize('1.5rem')
-  .fontWeight('800')
-  .background('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
-  .backgroundClip('text')
-  .color('transparent')
-  .cursor('pointer')
-  .block('.logo');
-
-const navLinks = $()
-  .display('flex')
-  .gap('2rem')
-  .alignItems('center')
-  .flexWrap('wrap')
-  .block('.nav-links');
-
-module.exports = { nav, navContainer, logo, navLinks };
+  
+  const nav = $()
+    .backgroundColor('rgba(255,255,255,0.95)')
+    .backdropFilter('blur(12px)')
+    .borderBottom('1px solid #e2e8f0')
+    .position('sticky')
+    .top('0')
+    .zIndex('50')
+    .block('.nav');
+  
+  const navContainer = $()
+    .maxWidth('80rem')
+    .margin('0 auto')
+    .padding('1rem 1.5rem')
+    .display('flex')
+    .justifyContent('space-between')
+    .alignItems('center')
+    .flexWrap('wrap')
+    .gap('1rem')
+    .block('.nav-container');
+  
+  const logo = $()
+    .fontSize('1.5rem')
+    .fontWeight('800')
+    .background('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
+    .backgroundClip('text')
+    .color('transparent')
+    .cursor('pointer')
+    .block('.logo');
+  
+  const navLinks = $()
+    .display('flex')
+    .gap('2rem')
+    .alignItems('center')
+    .flexWrap('wrap')
+    .block('.nav-links');
+  
+  module.exports = { nav, navContainer, logo, navLinks };

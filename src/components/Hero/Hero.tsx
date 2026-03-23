@@ -1,11 +1,12 @@
-import { $, useChainStyles } from '@melcanz85/chaincss/react';
+import { useChainStyles } from '@melcanz85/chaincss/react';
+import { $ } from '@melcanz85/chaincss';
+import { useNavigate } from 'react-router-dom';
+import Stats from '../Stats/Stats';
+import './hero.jcss';
 
-interface HeroProps {
-  onPlaygroundClick: () => void;
-}
-
-const Hero = ({ onPlaygroundClick }: HeroProps) => {
-  // ONLY dynamic styles for interactive button states
+const Hero = () => {
+  const navigate = useNavigate();
+  
   const styles = useChainStyles(() => ({
     primaryButton: $()
       .backgroundColor('white')
@@ -18,10 +19,11 @@ const Hero = ({ onPlaygroundClick }: HeroProps) => {
         .backgroundColor('#f1f5f9')
         .scale(1.05)
         .translateY('-2px')
+      .end()
       .transition('all 0.2s ease')
       .cursor('pointer')
       .block(),
-
+      
     secondaryButton: $()
       .backgroundColor('transparent')
       .color('white')
@@ -32,10 +34,11 @@ const Hero = ({ onPlaygroundClick }: HeroProps) => {
       .hover()
         .backgroundColor('rgba(255,255,255,0.1)')
         .scale(1.05)
+      .end()
       .transition('all 0.2s ease')
       .cursor('pointer')
       .block(),
-  }));
+  }), []);
 
   return (
     <section className="hero">
@@ -45,7 +48,7 @@ const Hero = ({ onPlaygroundClick }: HeroProps) => {
           Chainable CSS-in-JS library for modern React applications
         </p>
         <div className="hero-button-group">
-          <button className={styles.primaryButton} onClick={onPlaygroundClick}>
+          <button className={styles.primaryButton} onClick={() => navigate('/playground')}>
             Try Playground
           </button>
           <a 
@@ -57,6 +60,10 @@ const Hero = ({ onPlaygroundClick }: HeroProps) => {
             GitHub
           </a>
         </div>
+        
+        {/* Dynamic Stats Component */}
+        <Stats />
+        
         <div className="hero-badge">
           This entire website is styled with ChainCSS • MIT licensed • Actively maintained
         </div>

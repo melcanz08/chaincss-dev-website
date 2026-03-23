@@ -1,12 +1,30 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'chaincss-ignore',
+      enforce: 'pre',
+      transform(code, id) {
+        // Skip processing .jcss files - they should be handled by ChainCSS CLI
+        if (id.endsWith('.jcss')) {
+          return {
+            code: 'export default {};',
+            map: null
+          };
+        }
+        return null;
+      }
+    }
+  ],
   optimizeDeps: {
-    // Prevent Vite from pre-bundling ChainCSS's React entry during dev
-    // This lets it resolve imports at runtime like a normal ESM module
+    // Exclude ChainCSS from optimization - let React handle the JSX
     exclude: ['@melcanz85/chaincss'],
+    include: ['react', 'react-dom', 'react-router-dom', 'lucide-react']
   },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
+  }
 })

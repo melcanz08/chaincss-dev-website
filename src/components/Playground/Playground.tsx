@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { $, useChainStyles, createTokens, responsive, compile } from '@melcanz85/chaincss/react';
+import { $ } from '@melcanz85/chaincss';
+import { useChainStyles } from '@melcanz85/chaincss/react';
 import { Copy, Check, AlertCircle } from 'lucide-react';
+import './playground.jcss';
 
 const templates = {
   button: `const buttonStyle = $()
@@ -14,7 +16,8 @@ const templates = {
   .cursor('pointer')
   .hover()
     .backgroundColor('#5a67d8')
-    .scale(1.05).end()
+    .transform('scale(1.05)')
+  .end()
   .transition('all 0.2s ease')
   .block();`,
 
@@ -25,7 +28,8 @@ const templates = {
   .boxShadow('0 10px 15px -3px rgba(0,0,0,0.1)')
   .hover()
     .boxShadow('0 20px 25px -5px rgba(0,0,0,0.15)')
-    .translateY('-4px').end()
+    .transform('translateY(-4px)')
+  .end()
   .transition('all 0.3s ease')
   .block();`,
 
@@ -38,99 +42,12 @@ const templates = {
   .block();`,
 };
 
-// Convert camelCase to kebab-case
-const toKebabCase = (str: string): string => {
-  return str.replace(/([A-Z])/g, '-$1').toLowerCase();
-};
-
-// Generate CSS from style object
-const generateCSSFromStyle = (styleObj: any, className: string): string => {
-  if (!styleObj || typeof styleObj !== 'object') return '';
-  
-  let normalStyles: string[] = [];
-  let hoverStyles: string[] = [];
-  
-  Object.entries(styleObj).forEach(([key, value]) => {
-    if (key === 'selectors') return;
-    
-    // Check if this is a hover property (from .hover() method)
-    if (key === 'hover' && typeof value === 'object') {
-      Object.entries(value).forEach(([hoverKey, hoverValue]) => {
-        if (hoverKey !== 'selectors') {
-          const cssProp = toKebabCase(hoverKey);
-          hoverStyles.push(`  ${cssProp}: ${hoverValue};`);
-        }
-      });
-    } 
-    // Regular styles
-    else if (key !== 'hover') {
-      const cssProp = toKebabCase(key);
-      normalStyles.push(`  ${cssProp}: ${value};`);
-    }
-  });
-  
-  let css = '';
-  if (normalStyles.length > 0) {
-    css += `.${className} {\n${normalStyles.join('\n')}\n}\n`;
-  }
-  if (hoverStyles.length > 0) {
-    css += `.${className}:hover {\n${hoverStyles.join('\n')}\n}\n`;
-  }
-  
-  return css;
-};
-
-// Evaluate ChainCSS code using the actual compile function
-const evaluateChainCSS = (code: string, styleName: string): any => {
-  try {
-    // Create a temporary object to store compiled styles
-    const tempStyles: any = {};
-    
-    // Create a sandbox with ChainCSS functions that capture to tempStyles
-    const sandbox = {
-      $: $,
-      tokens: createTokens({
-        colors: {
-          primary: '#667eea',
-          primaryDark: '#5a67d8',
-          accent: '#764ba2',
-        },
-        spacing: {
-          sm: '0.5rem',
-          md: '1rem',
-          lg: '2rem',
-        },
-      }),
-      createTokens,
-      responsive,
-    };
-    
-    // Execute the code to get the style object
-    const fn = new Function('$', 'tokens', 'createTokens', 'responsive', `
-      ${code}
-      return ${styleName};
-    `);
-    
-    const result = fn(sandbox.$, sandbox.tokens, sandbox.createTokens, sandbox.responsive);
-    
-    // The result should already have the hover property from .block()
-    // Let's inspect what we got
-    console.log('Raw result from .block():', result);
-    
-    return result;
-  } catch (error) {
-    console.error('Evaluation error:', error);
-    return null;
-  }
-};
-
 const Playground = () => {
   const [code, setCode] = useState(templates.button);
   const [activeTemplate, setActiveTemplate] = useState('button');
   const [copied, setCopied] = useState(false);
   const [cssOutput, setCssOutput] = useState('');
   const [error, setError] = useState('');
-  
   const styleRef = useRef<HTMLStyleElement | null>(null);
 
   const uiStyles = useChainStyles(() => ({
@@ -147,54 +64,9 @@ const Playground = () => {
       .hover()
         .color('#ffffff')
         .backgroundColor('rgba(255,255,255,0.1)')
+      .end()
       .block(),
-  }));
-
-  useEffect(() => {
-    if (styleRef.current) {
-      styleRef.current.remove();
-    }
-    
-    const styleName = activeTemplate === 'button' ? 'buttonStyle' : 
-                      activeTemplate === 'card' ? 'cardStyle' : 'headingStyle';
-    
-    const styleObj = evaluateChainCSS(code, styleName);
-    
-    if (!styleObj) {
-      setError('Failed to parse ChainCSS code. Check your syntax.');
-      setCssOutput('');
-      return;
-    }
-    
-    console.log('Final style object:', styleObj);
-    console.log('Has hover?', styleObj.hover ? 'YES' : 'NO');
-    if (styleObj.hover) {
-      console.log('Hover styles:', styleObj.hover);
-    }
-    
-    const css = generateCSSFromStyle(styleObj, styleName);
-    
-    if (css) {
-      setCssOutput(css);
-      setError('');
-      
-      const styleElement = document.createElement('style');
-      styleElement.textContent = css;
-      styleElement.setAttribute('data-playground', styleName);
-      document.head.appendChild(styleElement);
-      styleRef.current = styleElement;
-      
-      console.log('Generated CSS:\n', css);
-    } else {
-      setError('No valid styles generated.');
-    }
-    
-    return () => {
-      if (styleRef.current) {
-        styleRef.current.remove();
-      }
-    };
-  }, [code, activeTemplate]);
+  }), []);
 
   const loadTemplate = (template: string) => {
     setActiveTemplate(template);
@@ -216,21 +88,122 @@ const Playground = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // Evaluation logic - generate CSS from ChainCSS code
+  useEffect(() => {
+    try {
+      const sandbox: any = {
+        $: $,
+        buttonStyle: null,
+        cardStyle: null,
+        headingStyle: null,
+      };
+      
+      const fn = new Function('$', 'sandbox', `
+        try {
+          ${code}
+          if (typeof buttonStyle !== 'undefined') sandbox.buttonStyle = buttonStyle;
+          if (typeof cardStyle !== 'undefined') sandbox.cardStyle = cardStyle;
+          if (typeof headingStyle !== 'undefined') sandbox.headingStyle = headingStyle;
+        } catch(e) {
+          sandbox.error = e.message;
+        }
+      `);
+      
+      fn($, sandbox);
+      
+      if (sandbox.error) {
+        setError(sandbox.error);
+        setCssOutput('');
+        return;
+      }
+      
+      let styleObj = null;
+      if (activeTemplate === 'button') styleObj = sandbox.buttonStyle;
+      if (activeTemplate === 'card') styleObj = sandbox.cardStyle;
+      if (activeTemplate === 'gradient') styleObj = sandbox.headingStyle;
+      
+      if (!styleObj) {
+        setError('No style defined. Make sure to assign to buttonStyle, cardStyle, or headingStyle');
+        setCssOutput('');
+        return;
+      }
+      
+      // Generate CSS from the style object
+      let generatedCSS = '';
+      const className = activeTemplate === 'button' ? 'chaincss-button' : 
+                        activeTemplate === 'card' ? 'chaincss-card' : 'chaincss-gradient';
+      
+      // Generate base styles
+      generatedCSS = `.${className} {\n`;
+      for (let prop in styleObj) {
+        if (prop !== 'selectors' && prop !== 'hover') {
+          const kebabProp = prop.replace(/([A-Z])/g, '-$1').toLowerCase();
+          generatedCSS += `  ${kebabProp}: ${styleObj[prop]};\n`;
+        }
+      }
+      generatedCSS += `}\n`;
+      
+      // Generate hover styles
+      if (styleObj.hover && typeof styleObj.hover === 'object') {
+        generatedCSS += `.${className}:hover {\n`;
+        for (let prop in styleObj.hover) {
+          const kebabProp = prop.replace(/([A-Z])/g, '-$1').toLowerCase();
+          generatedCSS += `  ${kebabProp}: ${styleObj.hover[prop]};\n`;
+        }
+        generatedCSS += `}\n`;
+      }
+      
+      setCssOutput(generatedCSS);
+      setError('');
+      
+      // Remove old style element
+      if (styleRef.current) {
+        styleRef.current.remove();
+      }
+      
+      // Add new style element
+      const styleElement = document.createElement('style');
+      styleElement.textContent = generatedCSS;
+      styleElement.setAttribute('data-playground', className);
+      document.head.appendChild(styleElement);
+      styleRef.current = styleElement;
+      
+    } catch (err: any) {
+      setError(err.message);
+      setCssOutput('');
+    }
+    
+    return () => {
+      if (styleRef.current) {
+        styleRef.current.remove();
+      }
+    };
+  }, [code, activeTemplate]);
+
   return (
-    <div className="playground-container">
+    <div id="playground" className="playground-container">
       <div className="playground-header">
         <h1 className="playground-title">Interactive Playground</h1>
         <p className="playground-description">Write ChainCSS code and see the results in real-time</p>
       </div>
 
       <div className="template-buttons">
-        <button className={`template-btn ${activeTemplate === 'button' ? 'template-btn-active' : ''}`} onClick={() => loadTemplate('button')}>
+        <button 
+          className={`template-btn ${activeTemplate === 'button' ? 'template-btn-active' : ''}`}
+          onClick={() => loadTemplate('button')}
+        >
           Button
         </button>
-        <button className={`template-btn ${activeTemplate === 'card' ? 'template-btn-active' : ''}`} onClick={() => loadTemplate('card')}>
+        <button 
+          className={`template-btn ${activeTemplate === 'card' ? 'template-btn-active' : ''}`}
+          onClick={() => loadTemplate('card')}
+        >
           Card
         </button>
-        <button className={`template-btn ${activeTemplate === 'gradient' ? 'template-btn-active' : ''}`} onClick={() => loadTemplate('gradient')}>
+        <button 
+          className={`template-btn ${activeTemplate === 'gradient' ? 'template-btn-active' : ''}`}
+          onClick={() => loadTemplate('gradient')}
+        >
           Gradient Text
         </button>
       </div>
@@ -258,18 +231,37 @@ const Playground = () => {
           </div>
           <div className="preview-area">
             {error ? (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '2rem', color: '#dc2626', textAlign: 'center' }}>
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                gap: '1rem', 
+                padding: '2rem', 
+                color: '#dc2626', 
+                textAlign: 'center' 
+              }}>
                 <AlertCircle size={24} />
                 <p style={{ fontSize: '0.875rem' }}>{error}</p>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                width: '100%',
+                minHeight: '300px'
+              }}>
                 {activeTemplate === 'button' && (
-                  <button className="buttonStyle">ChainCSS Button</button>
+                  <button className="chaincss-button">
+                    ChainCSS Button
+                  </button>
                 )}
                 {activeTemplate === 'card' && (
-                  <div className="cardStyle">
-                    <h3 style={{ marginBottom: '0.5rem' }}>ChainCSS Card</h3>
+                  <div className="chaincss-card">
+                    <h3 style={{ marginBottom: '0.5rem', fontSize: '1.25rem', fontWeight: 600 }}>
+                      ChainCSS Card
+                    </h3>
                     <p style={{ color: '#64748b' }}>Styled with ChainCSS</p>
                     <p style={{ fontSize: '0.875rem', color: '#94a3b8', marginTop: '1rem' }}>
                       Hover to see animation
@@ -277,7 +269,9 @@ const Playground = () => {
                   </div>
                 )}
                 {activeTemplate === 'gradient' && (
-                  <h2 className="headingStyle">ChainCSS Gradient Text</h2>
+                  <h2 className="chaincss-gradient">
+                    ChainCSS Gradient Text
+                  </h2>
                 )}
               </div>
             )}
