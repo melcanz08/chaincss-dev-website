@@ -1,6 +1,7 @@
-import { useLocation } from 'react-router-dom';
-import { $, useChainStyles } from '@melcanz85/chaincss';
+import { $ } from 'chaincss';
+import { useChainStyles } from 'chaincss/react';
 import { Github } from 'lucide-react';
+import { useLocation, Link } from 'react-router-dom';
 
 interface NavProps {
   mode: 'build' | 'runtime';

@@ -1,5 +1,4 @@
 import { Routes, Route, NavLink } from 'react-router-dom';
-import './docs.jcss';
 import GettingStarted from './GettingStarted';
 import Installation from './Installation';
 import CoreConcepts from './CoreConcepts';

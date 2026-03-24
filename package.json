@@ -5,16 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run build:css:watch\" \"vite\"",
-    "build:css": "npx @melcanz85/chaincss ./src/main.jcss ./src/styles --atomic",
-    "build:css:watch": "npx @melcanz85/chaincss ./src/main.jcss ./src/styles --watch --atomic",
+    "build:css": "npx chaincss ./src/main.jcss ./src/styles --atomic",
+    "build:css:watch": "npx chaincss ./src/main.jcss ./src/styles --watch --atomic",
     "build": "npm run build:css && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@melcanz85/chaincss": "^1.12.6",
     "autoprefixer": "^10.4.27",
     "browserslist": "^4.28.1",
     "caniuse-db": "^1.0.30001780",
+    "chaincss": "^1.12.11",
     "lucide-react": "^0.577.0",
     "postcss": "^8.5.8",
     "react": "^19.2.4",

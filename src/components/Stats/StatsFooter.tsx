@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useChainStyles } from '@melcanz85/chaincss/react';
-import { $ } from '@melcanz85/chaincss';
+import { useChainStyles } from 'chaincss/react';
+import { $ } from 'chaincss';
 import { fetchStats } from '../../lib/stats';
 
 const StatsFooter = () => {
@@ -30,9 +30,9 @@ const StatsFooter = () => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.stat}>📦 v{stats.version}</span>
-      <span className={styles.stat}>⬇️ {stats.npmDownloads.toLocaleString()} downloads (30d)</span>
-      <span className={styles.stat}>⭐ {stats.githubStars.toLocaleString()} stars</span>
+      <span className={styles.stat}>v{stats.version}</span>
+      <span className={styles.stat}>{stats.npmDownloads.toLocaleString()} downloads (30d)</span>
+      <span className={styles.stat}>{stats.githubStars.toLocaleString()} stars</span>
     </div>
   );
 };

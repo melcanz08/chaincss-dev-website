@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useChainStyles } from '@melcanz85/chaincss/react';
-import { $ } from '@melcanz85/chaincss';
+import { useChainStyles } from 'chaincss/react';
+import { $ } from 'chaincss';
 import { fetchStats } from '../../lib/stats';
 
 interface StatsData {

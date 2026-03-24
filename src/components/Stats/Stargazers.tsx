@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { $, useChainStyles } from '@melcanz85/chaincss';
+import { $ } from 'chaincss';
+import { useChainStyles } from 'chaincss/react';
+import { useEffect, useState } from 'react';
 
 interface Stargazer {
   login: string;
@@ -90,7 +91,7 @@ const Stargazers = () => {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.title}>✨ Recent Supporters</div>
+        <div className={styles.title}>Recent Supporters</div>
         <div className={styles.loadingText}>Loading stargazers...</div>
       </div>
     );
@@ -99,7 +100,7 @@ const Stargazers = () => {
   if (error) {
     return (
       <div className={styles.container}>
-        <div className={styles.title}>✨ Recent Supporters</div>
+        <div className={styles.title}>Recent Supporters</div>
         <div className={styles.errorText}>{error}</div>
       </div>
     );
@@ -108,7 +109,7 @@ const Stargazers = () => {
   if (stargazers.length === 0) {
     return (
       <div className={styles.container}>
-        <div className={styles.title}>✨ Be the first to star ChainCSS on GitHub!</div>
+        <div className={styles.title}>Be the first to star ChainCSS on GitHub!</div>
         <a
           href="https://github.com/melcanz08/chaincss"
           target="_blank"
@@ -124,7 +125,7 @@ const Stargazers = () => {
             fontSize: '0.875rem'
           }}
         >
-          ⭐ Star on GitHub
+          Star on GitHub
         </a>
       </div>
     );
@@ -133,7 +134,7 @@ const Stargazers = () => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>
-        ✨ {stargazers.length} {stargazers.length === 1 ? 'Supporter' : 'Supporters'} ❤️
+        {stargazers.length} {stargazers.length === 1 ? 'Supporter' : 'Supporters'} 
       </div>
       <div className={styles.avatarContainer}>
         {stargazers.map((user) => (

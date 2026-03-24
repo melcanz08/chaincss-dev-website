@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { $ } from '@melcanz85/chaincss';
-import { useChainStyles } from '@melcanz85/chaincss/react';
+import { $ } from 'chaincss';
+import { useChainStyles } from 'chaincss/react';
 import { Copy, Check, AlertCircle } from 'lucide-react';
-import './playground.jcss';
 
 const templates = {
   button: `const buttonStyle = $()

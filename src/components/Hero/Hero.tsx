@@ -1,8 +1,7 @@
-import { useChainStyles } from '@melcanz85/chaincss/react';
-import { $ } from '@melcanz85/chaincss';
+import { useChainStyles } from 'chaincss/react';
+import { $ } from 'chaincss';
 import { useNavigate } from 'react-router-dom';
 import Stats from '../Stats/Stats';
-import './hero.jcss';
 
 const Hero = () => {
   const navigate = useNavigate();
