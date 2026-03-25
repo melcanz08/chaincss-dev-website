@@ -9,9 +9,9 @@ const templates = {
   .color('white')
   .padding('12px 24px')
   .borderRadius('8px')
+  .borderStyle('none')
   .fontSize('16px')
   .fontWeight('600')
-  .border('none')
   .cursor('pointer')
   .hover()
     .backgroundColor('#5a67d8')
@@ -210,7 +210,7 @@ const Playground = () => {
       <div className="playground-grid">
         <div className="editor-section">
           <div className="section-header">
-            <span>📝 ChainCSS Code</span>
+            <span>ChainCSS Code</span>
             <button className={uiStyles.copyBtn} onClick={copyCode}>
               {copied ? <Check size={14} /> : <Copy size={14} />}
               {copied ? 'Copied!' : 'Copy'}
@@ -226,7 +226,7 @@ const Playground = () => {
 
         <div className="preview-section">
           <div className="section-header">
-            <span>🎨 Live Preview</span>
+            <span>Live Preview</span>
           </div>
           <div className="preview-area">
             {error ? (
@@ -281,7 +281,7 @@ const Playground = () => {
       {cssOutput && !error && (
         <div className="css-output">
           <div className="section-header">
-            <span>🎨 Generated CSS</span>
+            <span>Generated CSS</span>
             <button className={uiStyles.copyBtn} onClick={copyCSS}>
               <Copy size={14} /> Copy CSS
             </button>

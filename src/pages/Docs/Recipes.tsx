@@ -4,59 +4,121 @@ export default function Recipes() {
       <div className="docs-header">
         <h1 className="docs-title">Recipe System</h1>
         <p className="docs-description">
-          Create variant-based component styles like CVA (Class Variance Authority)
+          Create variant-rich components with ease
         </p>
       </div>
-      
+
+      <h2>What is a Recipe?</h2><br />
+      <p>
+        The <code className="inline-code">recipe()</code> function lets you define components with variants,
+        similar to CVA (Class Variance Authority). It's perfect for design systems and component libraries.
+      </p><br />
+
       <h2>Basic Recipe</h2>
-      <pre className="code-block">
-        <code>{`import { recipe } from 'chaincss/react';
+      <div className="code-block">
+        <pre>{`import { recipe } from 'chaincss';
 
 const button = recipe({
-  base: 'px-4 py-2 rounded font-semibold',
+  base: $()
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .padding('8px 16px')
+    .fontSize('14px')
+    .fontWeight('500')
+    .borderRadius('6px')
+    .transition('all 0.2s')
+    .cursor('pointer')
+    .border('none')
+    .block(),
+  
   variants: {
-    variant: {
-      primary: 'bg-blue-500 text-white',
-      secondary: 'bg-gray-500 text-white',
-      outline: 'border-2 border-blue-500 text-blue-500'
+    color: {
+      primary: $()
+        .backgroundColor('#3b82f6')
+        .color('white')
+        .hover()
+          .backgroundColor('#2563eb')
+          .scale(1.05)
+          .end()
+        .block(),
+      
+      secondary: $()
+        .backgroundColor('#6b7280')
+        .color('white')
+        .hover()
+          .backgroundColor('#4b5563')
+          .scale(1.05)
+          .end()
+        .block()
     },
+    
     size: {
-      sm: 'text-sm px-3 py-1',
-      lg: 'text-lg px-6 py-3'
+      sm: $().padding('4px 8px').fontSize('12px').block(),
+      md: $().padding('8px 16px').fontSize('14px').block(),
+      lg: $().padding('12px 24px').fontSize('16px').block()
     }
   },
+  
   defaultVariants: {
-    variant: 'primary',
-    size: 'sm'
+    color: 'primary',
+    size: 'md'
   }
-});
+});`}</pre>
+      </div>
+
+      <h2>Using a Recipe</h2>
+      <div className="code-block">
+        <pre>{`function Button({ color, size, children }) {
+  const className = button({ color, size });
+  return <button className={className}>{children}</button>;
+}
 
 // Usage
-<button className={button({ variant: 'secondary', size: 'lg' })}>
-  Click me
-</button>`}</code>
-      </pre>
-      
+<Button color="primary" size="lg">Click Me</Button>
+<Button color="secondary" size="sm">Cancel</Button>`}</pre>
+      </div>
+
       <h2>Compound Variants</h2>
-      <pre className="code-block">
-        <code>{`const button = recipe({
-  base: 'px-4 py-2 rounded',
-  variants: {
-    variant: { primary: 'bg-blue-500', danger: 'bg-red-500' },
-    disabled: { true: 'opacity-50' }
-  },
+      <p>
+        Compound variants apply styles when multiple conditions are met:
+      </p>
+      <div className="code-block">
+        <pre>{`const button = recipe({
+  // ... base and variants ...
+  
   compoundVariants: [
     {
-      variant: 'primary',
-      disabled: true,
-      className: 'bg-blue-300 cursor-not-allowed'
+      variants: { color: 'primary', size: 'lg' },
+      style: $()
+        .fontWeight('bold')
+        .textTransform('uppercase')
+        .block()
+    },
+    {
+      variants: { color: 'danger', size: 'lg' },
+      style: $()
+        .boxShadow('0 4px 6px rgba(0,0,0,0.1)')
+        .block()
     }
   ]
-});`}</code>
-      </pre>
-      
-      <h2>With Atomic Optimization</h2>
-      <p>Recipes automatically work with the atomic CSS optimizer when enabled.</p>
+});`}</pre>
+      </div>
+
+      <h2>Pre-compile All Variants</h2>
+      <p>
+        For production, you can pre-compile all variant combinations to CSS:
+      </p>
+      <div className="code-block">
+        <pre>{`// At build time
+button.compileAll();
+
+// All variant styles are now in your CSS bundle`}</pre>
+      </div>
+
+      <div className="tip">
+        <strong>💡 Pro Tip:</strong> Recipes are type-safe! Your IDE will autocomplete variants.
+      </div>
     </>
   );
 }

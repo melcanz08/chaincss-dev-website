@@ -1,143 +1,221 @@
+// ========== LAYOUT ==========
+const docsContainer = $()
+  .maxWidth('80rem')
+  .margin('0 auto')
+  .padding('3rem 1.5rem')
+  .display('grid')
+  .gridTemplateColumns('280px 1fr')
+  .gap('3rem')
+  .block('.docs-container');
 
-  const docsContainer = $()
-    .maxWidth('80rem')
-    .margin('0 auto')
-    .padding('3rem 1.5rem')
-    .display('grid')
-    .gridTemplateColumns('280px 1fr')
-    .gap('3rem')
-    .block('.docs-container');
-  
-  const sidebar = $()
-    .position('sticky')
-    .top('5rem')
-    .height('calc(100vh - 5rem)')
-    .overflowY('auto')
-    .paddingRight('1rem')
-    .block('.docs-sidebar');
-  
-  const sidebarSection = $()
-    .marginBottom('2rem')
-    .block('.docs-sidebar-section');
-  
-  const sidebarTitle = $()
-    .fontSize('0.75rem')
-    .fontWeight('600')
-    .textTransform('uppercase')
-    .letterSpacing('0.05em')
-    .color('#64748b')
-    .marginBottom('1rem')
-    .block('.docs-sidebar-title');
-  
-  const sidebarLink = $()
-    .display('block')
-    .padding('0.5rem 0.75rem')
-    .color('#475569')
-    .borderRadius('0.5rem')
-    .transition('all 0.2s')
-    .marginBottom('0.25rem')
-    .hover()
-      .backgroundColor('#f1f5f9')
-      .color('#667eea')
-    .end()
-    .block('.docs-sidebar-link');
-  
-  const sidebarLinkActive = $()
-    .backgroundColor('#eef2ff')
-    .color('#667eea')
-    .fontWeight('500')
-    .block('.docs-sidebar-link-active');
-  
-  const content = $()
-    .minWidth('0')
-    .block('.docs-content');
-  
-  const docsHeader = $()
-    .marginBottom('2rem')
-    .borderBottom('1px solid #e2e8f0')
-    .paddingBottom('1rem')
-    .block('.docs-header');
-  
-  const docsTitle = $()
-    .fontSize('2.5rem')
-    .fontWeight('700')
-    .marginBottom('0.5rem')
-    .background('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
-    .backgroundClip('text')
-    .color('transparent')
-    .block('.docs-title');
-  
-  const docsDescription = $()
-    .fontSize('1.125rem')
-    .color('#64748b')
-    .block('.docs-description');
-  
-  const codeBlock = $()
-    .backgroundColor('#1e1e1e')
-    .color('#d4d4d4')
-    .padding('1rem')
-    .borderRadius('0.5rem')
-    .overflowX('auto')
-    .fontFamily('monospace')
-    .fontSize('0.875rem')
-    .marginBottom('1.5rem')
-    .block('.code-block');
-  
-  const inlineCode = $()
+const sidebar = $()
+  .position('sticky')
+  .top('5rem')
+  .height('calc(100vh - 5rem)')
+  .overflowY('auto')
+  .paddingRight('1rem')
+  .block('.docs-sidebar');
+
+const sidebarSection = $()
+  .marginBottom('2rem')
+  .block('.docs-sidebar-section');
+
+const sidebarTitle = $()
+  .fontSize('0.75rem')
+  .fontWeight('600')
+  .textTransform('uppercase')
+  .letterSpacing('0.05em')
+  .color('#64748b')
+  .marginBottom('1rem')
+  .block('.docs-sidebar-title');
+
+const sidebarLink = $()
+  .display('block')
+  .padding('0.5rem 0.75rem')
+  .color('#475569')
+  .borderRadius('0.5rem')
+  .transition('all 0.2s')
+  .marginBottom('0.25rem')
+  .hover()
     .backgroundColor('#f1f5f9')
-    .padding('0.125rem 0.25rem')
-    .borderRadius('0.25rem')
-    .fontFamily('monospace')
-    .fontSize('0.875rem')
-    .color('#e11d48')
-    .block('.inline-code');
-  
-  const featureGrid = $()
-    .display('grid')
-    .gridTemplateColumns('repeat(auto-fill, minmax(280px, 1fr))')
-    .gap('1rem')
-    .marginBottom('2rem')
-    .block('.feature-grid');
-  
-  const featureCard = $()
-    .padding('1rem')
-    .backgroundColor('#f8fafc')
-    .borderRadius('0.5rem')
-    .border('1px solid #e2e8f0')
-    .transition('all 0.2s')
-    .hover()
-      .transform('translateY(-2px)')
-      .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
+    .color('#667eea')
     .end()
-    .block('.feature-card');
-  
-  const tip = $()
-    .backgroundColor('#e0f2fe')
-    .borderLeft('4px solid #3b82f6')
-    .padding('1rem')
-    .borderRadius('0.5rem')
-    .marginBottom('1.5rem')
-    .block('.tip');
-  
-  const note = $()
-    .backgroundColor('#fef9e3')
-    .borderLeft('4px solid #f59e0b')
-    .padding('1rem')
-    .borderRadius('0.5rem')
-    .marginBottom('1.5rem')
-    .block('.note');
-  
-  const warning = $()
-    .backgroundColor('#fee2e2')
-    .borderLeft('4px solid #ef4444')
-    .padding('1rem')
-    .borderRadius('0.5rem')
-    .marginBottom('1.5rem')
-    .block('.warning');
-  
-  module.exports = {
-    docsContainer, sidebar, sidebarSection, sidebarTitle,
-    sidebarLink, sidebarLinkActive, content, docsHeader,
-    docsTitle, docsDescription, codeBlock, inlineCode,
-    featureGrid, featureCard, tip, note, warning
-  };
+  .block('.docs-sidebar-link');
+
+const sidebarLinkActive = $()
+  .backgroundColor('#eef2ff')
+  .color('#667eea')
+  .fontWeight('500')
+  .block('.docs-sidebar-link-active');
+
+const content = $()
+  .minWidth('0')
+  .block('.docs-content');
+
+// ========== TYPOGRAPHY ==========
+const docsHeader = $()
+  .marginBottom('2rem')
+  .borderBottom('1px solid #e2e8f0')
+  .paddingBottom('1rem')
+  .block('.docs-header');
+
+const docsTitle = $()
+  .fontSize('2.5rem')
+  .fontWeight('700')
+  .marginBottom('0.5rem')
+  .background('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
+  .backgroundClip('text')
+  .color('transparent')
+  .block('.docs-title');
+
+const docsDescription = $()
+  .fontSize('1.125rem')
+  .color('#64748b')
+  .block('.docs-description');
+
+// ========== CODE ==========
+const codeBlock = $()
+  .backgroundColor('#1e1e1e')
+  .color('#d4d4d4')
+  .padding('1rem')
+  .borderRadius('0.5rem')
+  .overflowX('auto')
+  .fontFamily('monospace')
+  .fontSize('0.875rem')
+  .marginBottom('1.5rem')
+  .block('.code-block');
+
+const inlineCode = $()
+  .backgroundColor('#f1f5f9')
+  .padding('0.125rem 0.25rem')
+  .borderRadius('0.25rem')
+  .fontFamily('monospace')
+  .fontSize('0.875rem')
+  .color('#e11d48')
+  .block('.inline-code');
+
+// ========== FEATURE GRID ==========
+const featureGrid = $()
+  .display('grid')
+  .gridTemplateColumns('repeat(auto-fill, minmax(280px, 1fr))')
+  .gap('1rem')
+  .marginBottom('2rem')
+  .block('.feature-grid');
+
+const featureCard = $()
+  .padding('1rem')
+  .backgroundColor('#f8fafc')
+  .borderRadius('0.5rem')
+  .border('1px solid #e2e8f0')
+  .transition('all 0.2s')
+  .hover()
+    .transform('translateY(-2px)')
+    .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
+    .end()
+  .block('.feature-card');
+
+// ========== CALL OUTS ==========
+const tip = $()
+  .backgroundColor('#e0f2fe')
+  .borderLeft('4px solid #3b82f6')
+  .padding('1rem')
+  .borderRadius('0.5rem')
+  .marginBottom('1.5rem')
+  .block('.tip');
+
+const note = $()
+  .backgroundColor('#fef9e3')
+  .borderLeft('4px solid #f59e0b')
+  .padding('1rem')
+  .borderRadius('0.5rem')
+  .marginBottom('1.5rem')
+  .block('.note');
+
+const warning = $()
+  .backgroundColor('#fee2e2')
+  .borderLeft('4px solid #ef4444')
+  .padding('1rem')
+  .borderRadius('0.5rem')
+  .marginBottom('1.5rem')
+  .block('.warning');
+
+// ========== COMPARISON TABLE ==========
+const comparisonTableWrapper = $()
+  .margin('2rem 0')
+  .borderRadius('1rem')
+  .border('1px solid #e2e8f0')
+  .overflow('auto')
+  .block('.comparison-table-wrapper');
+
+const comparisonTable = $()
+  .width('100%')
+  .borderCollapse('collapse')
+  .block('.comparison-table');
+
+const comparisonTableThead = $()
+  .backgroundColor('#f8fafc')
+  .borderBottom('2px solid #e2e8f0')
+  .block('thead');
+
+const comparisonTableTh = $()
+  .padding('1rem 1.5rem')
+  .textAlign('left')
+  .fontWeight('600')
+  .color('#1e293b')
+  .fontSize('1rem')
+  .textTransform('uppercase')
+  .letterSpacing('0.05em')
+  .block('th');
+
+const comparisonRow = $()
+  .transition('all 0.2s')
+  .borderBottom('1px solid #f1f5f9')
+  .hover()
+    .backgroundColor('#faf9ff')
+    .transform('translateX(2px)')
+    .end()
+  .block('.comparison-row');
+
+const problemCell = $()
+  .padding('1rem 1.5rem')
+  .fontWeight('500')
+  .color('#1e293b')
+  .fontSize('1rem')
+  .block('.problem-cell');
+
+const solutionCell = $()
+  .padding('1rem 1.5rem')
+  .color('#475569')
+  .fontSize('1rem')
+  .lineHeight('1.5')
+  .block('.solution-cell');
+
+const solutionBadge = $()
+  .display('inline-block')
+  .backgroundColor('#667eea')
+  .color('white')
+  .padding('0.375rem 0.875rem')
+  .borderRadius('9999px')
+  .fontSize('0.75rem')
+  .fontWeight('500')
+  .marginLeft('1rem')
+  .verticalAlign('middle')
+  .block('.solution-badge');
+
+// ========== EXPORT ==========
+module.exports = {
+  // Layout
+  docsContainer, sidebar, sidebarSection, sidebarTitle,
+  sidebarLink, sidebarLinkActive, content,
+  // Typography
+  docsHeader, docsTitle, docsDescription,
+  // Code
+  codeBlock, inlineCode,
+  // Features
+  featureGrid, featureCard,
+  // Call outs
+  tip, note, warning,
+  // Comparison table
+  comparisonTableWrapper, comparisonTable, comparisonTableThead, comparisonTableTh,
+  comparisonRow, problemCell, solutionCell, solutionBadge
+};

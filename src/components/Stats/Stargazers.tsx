@@ -1,6 +1,7 @@
 import { $ } from 'chaincss';
 import { useChainStyles } from 'chaincss/react';
 import { useEffect, useState } from 'react';
+import {_container,_title,_avatarContainer,_avatar,_link,_loadingText,_errorText } from './stargazers.chain';
 
 interface Stargazer {
   login: string;
@@ -15,53 +16,13 @@ const Stargazers = () => {
   const [error, setError] = useState<string | null>(null);
 
   const styles = useChainStyles(() => ({
-    container: $()
-      .display('flex')
-      .flexDirection('column')
-      .alignItems('center')
-      .padding('2rem 1.5rem')
-      .backgroundColor('#f8fafc')
-      .borderTop('1px solid #e2e8f0')
-      .block(),
-    
-    title: $()
-      .fontSize('1rem')
-      .fontWeight('600')
-      .color('#1e293b')
-      .marginBottom('1rem')
-      .block(),
-    
-    avatarContainer: $()
-      .display('flex')
-      .gap('0.75rem')
-      .flexWrap('wrap')
-      .justifyContent('center')
-      .block(),
-    
-    avatar: $()
-      .width('40px')
-      .height('40px')
-      .borderRadius('50%')
-      .transition('all 0.2s')
-      .hover()
-        .transform('scale(1.1)')
-        .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
-      .end()
-      .block(),
-    
-    link: $()
-      .textDecoration('none')
-      .block(),
-    
-    loadingText: $()
-      .fontSize('0.875rem')
-      .color('#64748b')
-      .block(),
-    
-    errorText: $()
-      .fontSize('0.875rem')
-      .color('#dc2626')
-      .block()
+    container: _container,
+    title: _title,
+    avatarContainer: _avatarContainer,
+    avatar: _avatar,
+    link: _link,
+    loadingText: _loadingText,
+    errorText: _errorText
   }), []);
 
   useEffect(() => {

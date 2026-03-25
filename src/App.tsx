@@ -87,9 +87,6 @@ function App() {
             <div ref={modeSectionRef}>
               <section id="mode-section" style={{ padding: '4rem 1.5rem', textAlign: 'center', background: '#ffffff', borderTop: '1px solid #e2e8f0' }}>
                 <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                  <div style={{ display: 'inline-block', padding: '0.5rem 1rem', background: '#f1f5f9', borderRadius: '9999px', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
-                    ChainCSS
-                  </div>
                   <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1rem' }}>
                     Current Mode: <span style={{ color: '#667eea' }}>{mode}</span>
                   </h2>
@@ -103,8 +100,7 @@ function App() {
                 </div>
               </section>
             </div>
-          </>
-        } />
+          </>} />
         <Route path="/docs/*" element={<Docs />} />
         <Route path="/playground" element={<Playground />} />
       </Routes>

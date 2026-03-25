@@ -23,7 +23,7 @@
   const playground = get('./components/Playground/playground.jcss');
   const docs = get('./pages/Docs/docs.jcss');
   
-  // Merge all styles
+  // IMPORTANT: Use ONLY the static part from hero
   const merged = Object.assign({}, nav, hero, playground, docs);
   
   // Compile with atomic optimization

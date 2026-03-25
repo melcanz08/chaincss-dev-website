@@ -2,6 +2,7 @@ import { $ } from 'chaincss';
 import { useChainStyles } from 'chaincss/react';
 import { Github } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
+import { _link,_activeLink,_modeButton,_activeMode,_inactiveMode} from './nav.chain.js';
 
 interface NavProps {
   mode: 'build' | 'runtime';
@@ -13,48 +14,11 @@ const Nav = ({ mode, setMode, handleNavigate }: NavProps) => {
   const location = useLocation();
   
   const styles = useChainStyles(() => ({
-    link: $()
-      .color('#1e293b')
-      .fontWeight('500')
-      .hover()
-        .color('#667eea')
-      .end()
-      .transition('color 0.2s')
-      .cursor('pointer')
-      .textDecoration('none')
-      .block(),
-      
-    activeLink: $()
-      .color('#667eea')
-      .fontWeight('600')
-      .block(),
-      
-    modeButton: $()
-      .padding('0.5rem 1rem')
-      .borderRadius('0.5rem')
-      .fontSize('0.875rem')
-      .fontWeight('500')
-      .transition('all 0.2s')
-      .cursor('pointer')
-      .border('none')
-      .fontFamily('inherit')
-      .block(),
-      
-    activeMode: $()
-      .backgroundColor('#667eea')
-      .color('white')
-      .hover()
-        .backgroundColor('#5a67d8')
-      .end()
-      .block(),
-      
-    inactiveMode: $()
-      .backgroundColor('#f1f5f9')
-      .color('#475569')
-      .hover()
-        .backgroundColor('#e2e8f0')
-      .end()
-      .block()
+    link: _link,
+    activeLink: _activeLink,
+    modeButton: _modeButton,
+    activeMode: _activeMode,
+    inactiveMode: _inactiveMode
   }), []);
 
   const isActive = (path: string) => {
@@ -92,7 +56,7 @@ const Nav = ({ mode, setMode, handleNavigate }: NavProps) => {
     <nav className="nav">
       <div className="nav-container">
         <div className="logo" onClick={() => handleNavigate('home')}>
-          chaincss<span style={{ color: '#764ba2' }}>.dev</span>
+          ChainCSS
         </div>
 
         <div className="nav-links">

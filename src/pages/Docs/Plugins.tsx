@@ -7,65 +7,78 @@ export default function Plugins() {
           Integrate ChainCSS with your favorite build tools
         </p>
       </div>
-      
+
       <h2>Vite Plugin</h2>
-      <pre className="code-block">
-        <code>{`// vite.config.js
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import chaincssVite from 'chaincss/node/plugins/vite-plugin'
+      <div className="code-block">
+        <pre>{`// vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import chaincss from 'chaincss/vite-plugin';
 
 export default defineConfig({
   plugins: [
-    react(),
-    chaincssVite({
+    chaincss({
       extension: '.jcss',
-      minify: true,
-      prefix: true
-    })
+      minify: process.env.NODE_ENV === 'production',
+      prefix: true,
+      atomic: true
+    }),
+    react()
   ]
-})`}</code>
-      </pre>
-      
+});`}</pre>
+      </div>
+
+      <h2>Next.js Plugin</h2>
+      <div className="code-block">
+        <pre>{`// next.config.js
+const withChainCSS = require('chaincss/next-plugin');
+
+module.exports = withChainCSS({
+  reactStrictMode: true,
+  chaincss: {
+    atomic: true,
+    prefixer: true
+  }
+});`}</pre>
+      </div>
+
       <h2>Webpack Plugin</h2>
-      <pre className="code-block">
-        <code>{`// webpack.config.js
-const ChainCSSPlugin = require('chaincss/node/plugins/webpack-plugin');
+      <div className="code-block">
+        <pre>{`// webpack.config.js
+const ChainCSSPlugin = require('chaincss/webpack-plugin');
 
 module.exports = {
   plugins: [
     new ChainCSSPlugin({
+      atomic: true,
       input: './src/styles/main.jcss',
-      output: './dist',
-      atomic: true
+      output: './dist'
     })
   ]
-};`}</code>
-      </pre>
-      
-      <h2>Next.js Plugin</h2>
-      <pre className="code-block">
-        <code>{`// next.config.js
-const withChainCSS = require('chaincss/node/plugins/next-plugin');
+};`}</pre>
+      </div>
 
-module.exports = withChainCSS({
-  chaincss: {
-    atomic: process.env.NODE_ENV === 'production'
-  }
-});`}</code>
-      </pre>
-      
       <h2>CLI Usage</h2>
-      <pre className="code-block">
-        <code>{`# Compile .jcss file
-chaincss src/styles/main.jcss dist/global.css
+      <div className="code-block">
+        <pre>{`# Basic compilation
+chaincss ./src/main.jcss ./dist
 
 # Watch mode
-chaincss src/styles/main.jcss dist/global.css --watch
+chaincss ./src/main.jcss ./dist --watch
 
-# Enable atomic optimization
-chaincss src/styles/main.jcss dist/global.css --atomic`}</code>
-      </pre>
+# Atomic CSS optimization
+chaincss ./src/main.jcss ./dist --atomic
+
+# With source maps
+chaincss ./src/main.jcss ./dist --source-map
+
+# Custom browser support
+chaincss ./src/main.jcss ./dist --browsers "> 1%, last 2 versions"`}</pre>
+      </div>
+
+      <div className="tip">
+        <strong>💡 Tip:</strong> Use <code className="inline-code">--watch</code> during development for instant CSS updates!
+      </div>
     </>
   );
 }

@@ -32,6 +32,7 @@
   const templateBtn = $()
     .padding('0.5rem 1rem')
     .borderRadius('0.5rem')
+    .borderStyle('none')
     .fontSize('0.875rem')
     .fontWeight('500')
     .cursor('pointer')
