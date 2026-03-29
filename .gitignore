@@ -38,3 +38,8 @@ src/styles/global.css
 src/styles/*.map
 src/global.css
 src/global.css.map
+
+.chaincss-cache
+src/styles/global.classes.*
+src/styles/global.map.json
+src/styles/chaincss-manifest.json

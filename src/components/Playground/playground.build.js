@@ -1,0 +1,148 @@
+
+  const container = $()
+    .maxWidth('80rem')
+    .margin('0 auto')
+    .padding('2rem 1.5rem')
+    .block('.playground-container');
+  
+  const header = $()
+    .textAlign('center')
+    .marginBottom('2rem')
+    .block('.playground-header');
+  
+  const title = $()
+    .fontSize('2rem')
+    .fontWeight('700')
+    .marginBottom('0.5rem')
+    .block('.playground-title');
+  
+  const description = $()
+    .color('#64748b')
+    .fontSize('1rem')
+    .block('.playground-description');
+  
+  const templateButtons = $()
+    .display('flex')
+    .gap('1rem')
+    .justifyContent('center')
+    .marginBottom('1.5rem')
+    .flexWrap('wrap')
+    .block('.template-buttons');
+  
+  const templateBtn = $()
+    .padding('0.5rem 1rem')
+    .borderRadius('0.5rem')
+    .borderStyle('none')
+    .fontSize('0.875rem')
+    .fontWeight('500')
+    .cursor('pointer')
+    .transition('all 0.2s')
+    .backgroundColor('#f1f5f9')
+    .color('#475569')
+    .hover()
+      .backgroundColor('#e2e8f0')
+    .end()
+    .block('.template-btn');
+  
+  const activeTemplate = $()
+    .backgroundColor('#667eea')
+    .color('white')
+    .hover()
+      .backgroundColor('#5a67d8')
+    .end()
+    .block('.template-btn-active');
+  
+  const playgroundGrid = $()
+    .display('grid')
+    .gridTemplateColumns('1fr 1fr')
+    .gap('1.5rem')
+    .block('.playground-grid');
+  
+  const editorSection = $()
+    .borderRadius('1rem')
+    .overflow('hidden')
+    .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
+    .block('.editor-section');
+  
+  const sectionHeader = $()
+    .backgroundColor('#1e1e1e')
+    .padding('0.75rem 1rem')
+    .color('#9ca3af')
+    .fontSize('0.875rem')
+    .fontWeight('500')
+    .display('flex')
+    .justifyContent('space-between')
+    .alignItems('center')
+    .borderBottom('1px solid #2d2d2d')
+    .block('.section-header');
+  
+  const codeEditor = $()
+    .width('100%')
+    .backgroundColor('#1e1e1e')
+    .color('#d4d4d4')
+    .fontFamily('monospace')
+    .fontSize('14px')
+    .lineHeight('1.5')
+    .padding('1rem')
+    .border('none')
+    .outline('none')
+    .resize('vertical')
+    .minHeight('400px')
+    .block('.code-editor');
+  
+  const previewSection = $()
+    .backgroundColor('#f8fafc')
+    .borderRadius('1rem')
+    .overflow('hidden')
+    .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
+    .block('.preview-section');
+  
+  const previewArea = $()
+    .padding('2rem')
+    .minHeight('400px')
+    .display('flex')
+    .flexDirection('column')
+    .alignItems('center')
+    .justifyContent('center')
+    .gap('1.5rem')
+    .backgroundColor('#f8fafc')
+    .block('.preview-area');
+  
+  const cssOutput = $()
+    .marginTop('1.5rem')
+    .backgroundColor('#1e1e1e')
+    .borderRadius('0.5rem')
+    .overflow('hidden')
+    .block('.css-output');
+  
+  const cssContent = $()
+    .padding('1rem')
+    .color('#d4d4d4')
+    .fontFamily('monospace')
+    .fontSize('12px')
+    .overflow('auto')
+    .maxHeight('200px')
+    .block('.css-content');
+
+  const chaincssButton = $()
+    .display('inline-block')
+    .cursor('pointer')
+    .block('.chaincss-button');
+  
+  const chaincssCard = $()
+    .display('block')
+    .cursor('pointer')
+    .block('.chaincss-card');
+  
+  const chaincssGradient = $()
+    .display('inline-block')
+    .block('.chaincss-gradient');
+  
+  module.exports = {
+    container, header, title, description,
+    templateButtons, templateBtn, activeTemplate,
+    playgroundGrid, editorSection, sectionHeader,
+    codeEditor, previewSection, previewArea,
+    cssOutput, cssContent, chaincssButton, chaincssCard,
+    chaincssGradient
+  };
