@@ -1,7 +1,7 @@
 import { $ } from 'chaincss';
 import { useChainStyles } from 'chaincss/react';
 import { useEffect, useState } from 'react';
-import {_container,_title,_avatarContainer,_avatar,_link,_loadingText,_errorText } from './stargazers.chain';
+import {_container,_title,_avatarContainer,_avatar,_link,_loadingText,_errorText } from './stargazers.runt';
 
 interface Stargazer {
   login: string;

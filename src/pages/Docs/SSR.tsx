@@ -1,3 +1,5 @@
+import CodeBlock from '../../components/CodeBlock';
+
 export default function SSR() {
   return (
     <>
@@ -12,11 +14,12 @@ export default function SSR() {
       <p>
         ChainCSS extracts CSS during build, so on the server, styles are already in your CSS bundle.
         No runtime CSS injection needed!
-      </p>
+      </p><br />
 
       <h2>Next.js Pages Router</h2>
-      <div className="code-block">
-        <pre>{`// pages/_document.js
+      <CodeBlock 
+        language="jsx"
+        code={`// pages/_document.js
 import { Html, Head, Main, NextScript } from 'next/document';
 
 export default function Document() {
@@ -32,12 +35,13 @@ export default function Document() {
       </body>
     </Html>
   );
-}`}</pre>
-      </div>
+}`}
+      />
 
       <h2>Manual SSR with ReactDOMServer</h2>
-      <div className="code-block">
-        <pre>{`import { renderToString } from 'react-dom/server';
+      <CodeBlock 
+        language="javascript"
+        code={`import { renderToString } from 'react-dom/server';
 import { chain } from 'chaincss';
 import App from './App';
 
@@ -58,8 +62,8 @@ const fullHtml = \`
       <div id="root">\${html}</div>
     </body>
   </html>
-\`;`}</pre>
-      </div>
+\`;`}
+      />
 
       <h2>Performance Metrics</h2>
       <div className="feature-grid">
@@ -78,7 +82,7 @@ const fullHtml = \`
       </div>
 
       <div className="warning">
-        <strong>⚠️ Important:</strong> Always use build mode for SSR to ensure styles are available on the server!
+        <strong>Important:</strong> Always use build mode for SSR to ensure styles are available on the server!
       </div>
     </>
   );

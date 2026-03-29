@@ -1,3 +1,5 @@
+import CodeBlock from '../../components/CodeBlock';
+
 export default function UpgradeGuide() {
   return (
     <>
@@ -9,8 +11,9 @@ export default function UpgradeGuide() {
       </div>
 
       <h2>From Styled Components</h2>
-      <div className="code-block">
-        <pre>{`// Before (Styled Components)
+      <CodeBlock 
+        language="javascript"
+        code={`// Before (Styled Components)
 const Button = styled.button\`
   background: blue;
   color: white;
@@ -26,12 +29,13 @@ const button = $()
   .hover()
     .backgroundColor('darkblue')
     .end()
-  .block();`}</pre>
-      </div>
+  .block();`}
+      />
 
       <h2>From Emotion</h2>
-      <div className="code-block">
-        <pre>{`// Before (Emotion)
+      <CodeBlock 
+        language="javascript"
+        code={`// Before (Emotion)
 const button = css\`
   background: blue;
   color: white;
@@ -47,12 +51,13 @@ const button = $()
   .hover()
     .backgroundColor('darkblue')
     .end()
-  .block();`}</pre>
-      </div>
+  .block();`}
+      />
 
       <h2>From Tailwind</h2>
-      <div className="code-block">
-        <pre>{`// Before (Tailwind)
+      <CodeBlock 
+        language="jsx"
+        code={`// Before (Tailwind)
 <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
 
 // After (ChainCSS)
@@ -66,11 +71,11 @@ const button = $()
     .end()
   .block();
 
-<button className={button}>`}</pre>
-      </div>
+<button className={button}>`}
+      />
 
       <div className="tip">
-        <strong>💡 Migration Tip:</strong> Start with runtime mode, then enable build mode for production!
+        <strong>Migration Tip:</strong> Start with runtime mode, then enable build mode for production!
       </div>
     </>
   );

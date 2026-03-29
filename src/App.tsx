@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Nav from './components/Nav/Nav';
 import Hero from './components/Hero/Hero';
+import ParadigmSection from './components/Paradigm/ParadigmSection';
 import Playground from './components/Playground/Playground';
 import Docs from './pages/Docs/Docs';
 import StatsFooter from './components/Stats/StatsFooter';
@@ -19,7 +20,6 @@ function App() {
   const handleModeChange = (newMode: 'build' | 'runtime') => {
     setMode(newMode);
     
-    // Scroll to mode section after state update
     setTimeout(() => {
       if (modeSectionRef.current) {
         modeSectionRef.current.scrollIntoView({ 
@@ -52,7 +52,6 @@ function App() {
     }
   };
 
-  // Scroll to top when route changes
   useEffect(() => {
     if (location.pathname === '/') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -82,23 +81,22 @@ function App() {
             <div ref={heroRef}>
               <Hero />
             </div>
+            <ParadigmSection />
             
-            {/* Mode Section with ref */}
-            <div ref={modeSectionRef}>
-              <section id="mode-section" style={{ padding: '4rem 1.5rem', textAlign: 'center', background: '#ffffff', borderTop: '1px solid #e2e8f0' }}>
-                <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                  <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1rem' }}>
-                    Current Mode: <span style={{ color: '#667eea' }}>{mode}</span>
-                  </h2>
-                  <p style={{ fontSize: '1.125rem', color: '#64748b', marginBottom: '2rem' }}>
-                    This site uses ChainCSS in <strong>{mode}</strong> mode.
-                    <br />
-                    <strong>Static styles</strong> (layout, colors) are compiled from .jcss files with atomic optimization.
-                    <br />
-                    <strong>Dynamic styles</strong> (active states, hover effects) use runtime mode.
-                  </p>
-                </div>
-              </section>
+            {/* Mode Section - Now using ChainCSS classes */}
+            <div ref={modeSectionRef} className="mode-section">
+              <div className="mode-container">
+                <h2 className="mode-title">
+                  Current Mode: <span>{mode}</span>
+                </h2>
+                <p className="mode-description">
+                  This site uses ChainCSS in <strong>{mode}</strong> mode.
+                  <br />
+                  <strong>Static styles</strong> (layout, colors) are compiled from .jcss files with atomic optimization.
+                  <br />
+                  <strong>Dynamic styles</strong> (active states, hover effects) use runtime mode.
+                </p>
+              </div>
             </div>
           </>} />
         <Route path="/docs/*" element={<Docs />} />

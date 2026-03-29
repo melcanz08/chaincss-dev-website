@@ -16,16 +16,37 @@
   const root = $()
     .minHeight('100vh')
     .block('#root');
+
+  const list = $()
+    .paddingLeft('1.5rem')
+    .marginBottom('1rem')
+    .block('ul');
+
+  const listItem = $()
+    .marginBottom('0.25rem')
+    .lineHeight('1.5')
+    .block('li');
+
   
   // Import component styles
-  const nav = get('./components/Nav/nav.jcss');
-  const hero = get('./components/Hero/hero.jcss');
-  const playground = get('./components/Playground/playground.jcss');
-  const docs = get('./pages/Docs/docs.jcss');
+  const nav = get('./components/Nav/nav.build.js');
+  const hero = get('./components/Hero/hero.build.js');
+  const playground = get('./components/Playground/playground.build.js');
+  const paradigmSection = get('./components/Paradigm/paradigm.build.js');
+  const modeSection = get('./app.build.js');
+  const docs = get('./pages/Docs/docs.build.js');
   
   // IMPORTANT: Use ONLY the static part from hero
-  const merged = Object.assign({}, nav, hero, playground, docs);
+  const componentStyles = Object.assign({}, nav, hero, playground, paradigmSection, modeSection, docs );
   
   // Compile with atomic optimization
-  compile({ reset, body, root, ...merged });
+  compile({ 
+    reset, 
+    body, 
+    root, 
+    list, 
+    listItem, 
+    ...componentStyles
+  });
 @>
+

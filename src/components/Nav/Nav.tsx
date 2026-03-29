@@ -2,7 +2,7 @@ import { $ } from 'chaincss';
 import { useChainStyles } from 'chaincss/react';
 import { Github } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
-import { _link,_activeLink,_modeButton,_activeMode,_inactiveMode} from './nav.chain.js';
+import { _link,_activeLink,_modeButton,_activeMode,_inactiveMode} from './nav.runt';
 
 interface NavProps {
   mode: 'build' | 'runtime';
