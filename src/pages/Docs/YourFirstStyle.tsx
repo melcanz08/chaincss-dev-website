@@ -213,10 +213,10 @@ run(button);
       {/* Step 3: Run the CLI */}
       <h2>Step 3: Generate CSS</h2>
       <p>Run ChainCSS to compile your styles:</p>
-      <CodeBlock language="bash" code={`npx chaincss styles/styles.jcss dist/`} />
+      <CodeBlock language="bash" code={`npx chaincss styles/styles.jcss styles/`} />
       <p>You should see output like:</p>
-      <CodeBlock language="bash" code={`CSS generated: dist/global.css
- Source map: dist/global.css.map`} />
+      <CodeBlock language="bash" code={`CSS generated: styles/global.css
+ Source map: styles/global.css.map`} />
       
       {/* Step 4: Use in HTML */}
       <h2>Step 4: Use your style in HTML</h2>
@@ -226,7 +226,7 @@ run(button);
       <CodeBlock language="html" code={`<!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="dist/global.css">
+  <link rel="stylesheet" href="style/global.css">
 </head>
 <body>
   <button class="btn">Click Me!</button>

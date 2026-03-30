@@ -31,10 +31,10 @@ run(button);
 @>`} />
       
       <h2>Generate CSS</h2>
-      <CodeBlock language="bash" code={`npx chaincss styles.jcss dist/`} />
+      <CodeBlock language="bash" code={`npx chaincss styles.jcss ./styles`} />
       
       <h2>Use in HTML</h2>
-      <CodeBlock language="html" code={`<link rel="stylesheet" href="dist/global.css">
+      <CodeBlock language="html" code={`<link rel="stylesheet" href=".styles/global.css">
 <button class="btn">Click Me</button>`} />
       
       <h2>Add interactivity</h2>
