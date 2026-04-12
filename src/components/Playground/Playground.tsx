@@ -34,7 +34,7 @@ import {
 } from './styles/playground.class.js';
 
 const templates = {
-  button: `const buttonStyle = $
+  button: `const buttonStyle = $()
   .backgroundColor('#667eea')
   .color('white')
   .padding('12px 24px')
@@ -48,9 +48,9 @@ const templates = {
     .transform('scale(1.05)')
   .end()
   .transition('all 0.2s ease')
-  .$el('.chaincss-button');`,  // Changed .block() to .$el()
+  .$el('.chaincss-button');`,  
 
-  card: `const cardStyle = $
+  card: `const cardStyle = $()
   .backgroundColor('white')
   .borderRadius('12px')
   .padding('24px')
@@ -60,15 +60,15 @@ const templates = {
     .transform('translateY(-4px)')
   .end()
   .transition('all 0.3s ease')
-  .$el('.chaincss-card');`,  // Changed .block() to .$el()
+  .$el('.chaincss-card');`,  
 
-  gradient: `const headingStyle = $
+  gradient: `const headingStyle = $()
   .background('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
   .backgroundClip('text')
   .color('transparent')
   .fontSize('2rem')
   .fontWeight('800')
-  .$el('.chaincss-gradient');`,  // Changed .block() to .$el()
+  .$el('.chaincss-gradient');`, 
 };
 
 const Playground = () => {
