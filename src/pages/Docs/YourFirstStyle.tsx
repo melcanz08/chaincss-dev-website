@@ -3,7 +3,7 @@ import CodeBlock from '../../components/CodeBlock';
 import { $, run, compile } from 'chaincss/runtime';
 
 export default function YourFirstStyle() {
-  const [code, setCode] = useState(`const button = $
+  const [code, setCode] = useState(`const button = $()
   .backgroundColor('#3b82f6')
   .color('white')
   .padding('12px 24px')
