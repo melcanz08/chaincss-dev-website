@@ -14,46 +14,46 @@ export default function CompoundVariants() {
       code: `import { recipe } from 'chaincss';
 
 const button = recipe({
-  base: $()
-    .padding('12px 24px')
-    .borderRadius('8px')
-    .fontWeight('600')
+  base: $
+    .p('12px 24px')
+    .rounded('8px')
+    .weight('600')
     .cursor('pointer')
     .transition('all 0.2s')
-    .block(),
+    .$el(),
   
   variants: {
     color: {
-      primary: $().backgroundColor('#3b82f6').color('white').block(),
-      secondary: $().backgroundColor('#6b7280').color('white').block(),
-      outline: $().backgroundColor('transparent').color('#3b82f6').block()
+      primary: $().bg('#3b82f6').c('white').$el(),
+      secondary: $().bg('#6b7280').c('white').$el(),
+      outline: $().bg('transparent').c('#3b82f6').$el()
     },
     size: {
-      small: $().padding('8px 16px').fontSize('14px').block(),
-      large: $().padding('16px 32px').fontSize('18px').block()
+      small: $().p('8px 16px').textSize('14px').$el(),
+      large: $().p('16px 32px').textSize('18px').$el()
     }
   },
   
   compoundVariants: [
     {
       variants: { color: 'outline', size: 'large' },
-      style: $()
+      style: $
         .border('2px solid #3b82f6')
         .hover()
-          .backgroundColor('#3b82f6')
-          .color('white')
-          .end()
-        .block()
+          .bg('#3b82f6')
+          .c('white')
+        .end()
+        .$el()
     },
     {
       variants: { color: 'outline', size: 'small' },
-      style: $()
+      style: $
         .border('1px solid #3b82f6')
         .hover()
-          .backgroundColor('#3b82f6')
-          .color('white')
-          .end()
-        .block()
+          .bg('#3b82f6')
+          .c('white')
+        .end()
+        .$el()
     }
   ],
   
@@ -122,7 +122,7 @@ const button = recipe({
             </button>
             {isOutline && (
               <p style={{ marginTop: '12px', fontSize: '12px', color: '#64748b' }}>
-                ✨ Compound variant active: Outline + {variant2} = special border and hover effects
+                Compound variant active: Outline + {variant2} = special border and hover effects
               </p>
             )}
           </div>
@@ -135,69 +135,69 @@ const button = recipe({
       code: `import { recipe } from 'chaincss';
 
 const card = recipe({
-  base: $()
-    .padding('24px')
-    .borderRadius('12px')
+  base: $
+    .p('24px')
+    .rounded('12px')
     .transition('all 0.2s')
-    .block(),
+    .$el(),
   
   variants: {
     variant: {
-      default: $()
-        .backgroundColor('white')
+      default: $
+        .bg('white')
         .border('1px solid #e2e8f0')
-        .block(),
-      elevated: $()
-        .backgroundColor('white')
-        .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
-        .block(),
-      outlined: $()
-        .backgroundColor('transparent')
+        .$el(),
+      elevated: $
+        .bg('white')
+        .shadow('0 4px 6px -1px rgba(0,0,0,0.1)')
+        .$el(),
+      outlined: $
+        .bg('transparent')
         .border('2px solid #3b82f6')
-        .block()
+        .$el()
     },
     interactive: {
-      true: $()
+      true: $
         .cursor('pointer')
-        .block(),
-      false: $()
+        .$el(),
+      false: $
         .cursor('default')
-        .block()
+        .$el()
     },
     size: {
-      compact: $().padding('16px').block(),
-      normal: $().padding('24px').block(),
-      large: $().padding('32px').block()
+      compact: $().p('16px').$el(),
+      normal: $().p('24px').$el(),
+      large: $().p('32px').$el()
     }
   },
   
   compoundVariants: [
     {
       variants: { variant: 'elevated', interactive: true },
-      style: $()
+      style: $
         .hover()
           .transform('translateY(-4px)')
-          .boxShadow('0 12px 24px -12px rgba(0,0,0,0.2)')
-          .end()
-        .block()
+          .shadow('0 12px 24px -12px rgba(0,0,0,0.2)')
+        .end()
+        .$el()
     },
     {
       variants: { variant: 'outlined', interactive: true },
-      style: $()
+      style: $
         .hover()
-          .backgroundColor('#3b82f6')
-          .color('white')
-          .borderColor('#3b82f6')
-          .end()
-        .block()
+          .bg('#3b82f6')
+          .c('white')
+          .borderC('#3b82f6')
+        .end()
+        .$el()
     },
     {
       variants: { variant: 'default', size: 'large', interactive: true },
-      style: $()
+      style: $
         .hover()
-          .backgroundColor('#f8fafc')
-          .end()
-        .block()
+          .bg('#f8fafc')
+        .end()
+        .$el()
     }
   ],
   
@@ -279,7 +279,7 @@ const card = recipe({
               <h3 style={{ marginBottom: '8px' }}>Compound Variant Card</h3>
               <p>Variant: {variant1} | Size: {variant2} | Interactive: {variant3 === 'true' ? 'Yes' : 'No'}</p>
               {styles.isInteractive && (
-                <p style={{ fontSize: '12px', marginTop: '8px' }}>✨ Hover to see compound effect!</p>
+                <p style={{ fontSize: '12px', marginTop: '8px' }}>Hover to see compound effect</p>
               )}
             </div>
           </div>
@@ -292,42 +292,42 @@ const card = recipe({
       code: `import { recipe } from 'chaincss';
 
 const button = recipe({
-  base: $()
-    .padding('12px 24px')
-    .borderRadius('8px')
-    .block(),
+  base: $
+    .p('12px 24px')
+    .rounded('8px')
+    .$el(),
   
   variants: {
     color: {
-      primary: $()
-        .backgroundColor('#3b82f6')
-        .color('white')
-        .block(),
-      danger: $()
-        .backgroundColor('#ef4444')
-        .color('white')
-        .block()
+      primary: $
+        .bg('#3b82f6')
+        .c('white')
+        .$el(),
+      danger: $
+        .bg('#ef4444')
+        .c('white')
+        .$el()
     },
     size: {
-      small: $().padding('8px 16px').block(),
-      large: $().padding('16px 32px').block()
+      small: $().p('8px 16px').$el(),
+      large: $().p('16px 32px').$el()
     }
   },
   
   compoundVariants: [
     {
       variants: { color: 'primary', size: 'large' },
-      style: $()
-        .backgroundColor('#2563eb')
-        .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
-        .block()
+      style: $
+        .bg('#2563eb')
+        .shadow('0 4px 6px -1px rgba(0,0,0,0.1)')
+        .$el()
     },
     {
       variants: { color: 'danger', size: 'large' },
-      style: $()
-        .backgroundColor('#dc2626')
-        .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
-        .block()
+      style: $
+        .bg('#dc2626')
+        .shadow('0 4px 6px -1px rgba(0,0,0,0.1)')
+        .$el()
     }
   ],
   
@@ -402,7 +402,7 @@ const button = recipe({
       <p>
         Compound variants allow you to apply styles when <strong>multiple variant conditions are met simultaneously</strong>.
         They're perfect for handling edge cases that require special styling.
-      </p><br />
+      </p>
       
       <div className="tip">
         <strong>When to use Compound Variants:</strong>
@@ -467,7 +467,7 @@ const button = recipe({
         <CodeBlock language="javascript" code={currentExample.code} />
         
         <div className="tip" style={{ marginTop: '16px' }}>
-          <strong>🎬 Live Preview:</strong>
+          <strong>Live Preview:</strong>
           <div style={{ marginTop: '12px' }}>
             {currentExample.preview()}
           </div>
@@ -482,17 +482,17 @@ const button = recipe({
       size: 'large',
       state: 'active'
     },
-    style: $()
-      .backgroundColor('#2563eb')
-      .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
+    style: $
+      .bg('#2563eb')
+      .shadow('0 4px 6px -1px rgba(0,0,0,0.1)')
       .transform('scale(1.02)')
-      .block()
+      .$el()
   },
   {
     variants: { color: 'outline', size: 'small' },
-    style: $()
+    style: $
       .border('1px solid #3b82f6')
-      .block()
+      .$el()
   }
 ]`} />
       
@@ -515,22 +515,6 @@ const button = recipe({
           <li>Consider using TypeScript to enforce valid variant combinations</li>
         </ul>
       </div>
-      
-      {/*
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/variants" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Variants
-        </a>
-        <a href="/docs/default-variants" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Default Variants →
-        </a>
-      </div>*/}
     </>
   );
 }

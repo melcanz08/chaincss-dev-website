@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import CodeBlock from '../../components/CodeBlock';
+import './styles/nestedselectors.class.js';
+import './styles/nestedselectors.css';
 
 export default function NestedSelectors() {
   const [activeDemo, setActiveDemo] = useState('descendant');
@@ -8,215 +10,195 @@ export default function NestedSelectors() {
     descendant: {
       title: 'Descendant Selector',
       description: 'Style elements that are descendants of a parent',
-      code: `const nav = $()
-  .select('.nav')
-    .backgroundColor('#1e293b')
-    .padding('16px')
+      code: `export const navStyles = $
+  .select('.demo-nav')
+    .bg('#1e293b')
+    .p('16px')
     .select('a')
-      .color('white')
+      .c('white')
       .textDecoration('none')
-      .padding('8px 16px')
+      .p('8px 16px')
+      .display('inline-block')
       .hover()
-        .backgroundColor('#3b82f6')
-        .borderRadius('4px')
-        .end()
-      .block()
-    .block()
-  .block('.nav');`,
-      css: `.nav {
+        .bg('#3b82f6')
+        .rounded('4px')
+      .end()
+      .$el()
+    .$el()
+  .$el('.demo-nav');`,
+      css: `.demo-nav {
   background-color: #1e293b;
   padding: 16px;
 }
-.nav a {
+.demo-nav a {
   color: white;
   text-decoration: none;
   padding: 8px 16px;
+  display: inline-block;
 }
-.nav a:hover {
+.demo-nav a:hover {
   background-color: #3b82f6;
   border-radius: 4px;
-}`,
-      html: `<nav class="nav">
-  <a href="#">Home</a>
-  <a href="#">About</a>
-  <a href="#">Contact</a>
-</nav>`
+}`
     },
     child: {
       title: 'Child Selector (>)',
       description: 'Style direct children only (not nested descendants)',
-      code: `const menu = $()
-  .select('.menu')
-    .backgroundColor('#f8fafc')
+      code: `export const menuStyles = $
+  .select('.demo-menu')
+    .bg('#f8fafc')
     .border('1px solid #e2e8f0')
-    .borderRadius('8px')
+    .rounded('8px')
     .select('> li')
-      .padding('12px 16px')
+      .p('12px 16px')
       .borderBottom('1px solid #e2e8f0')
       .hover()
-        .backgroundColor('#f1f5f9')
-        .end()
+        .bg('#f1f5f9')
+      .end()
       .select('> a')
-        .color('#1e293b')
+        .c('#1e293b')
         .textDecoration('none')
-        .block()
-      .block()
-    .block()
-  .block('.menu');`,
-      css: `.menu {
+        .$el()
+      .$el()
+    .$el()
+  .$el('.demo-menu');`,
+      css: `.demo-menu {
   background-color: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.menu > li {
+.demo-menu > li {
   padding: 12px 16px;
   border-bottom: 1px solid #e2e8f0;
 }
-.menu > li:hover {
+.demo-menu > li:hover {
   background-color: #f1f5f9;
 }
-.menu > li > a {
+.demo-menu > li > a {
   color: #1e293b;
   text-decoration: none;
-}`,
-      html: `<ul class="menu">
-  <li><a href="#">Home</a></li>
-  <li><a href="#">About</a>
-    <ul>
-      <li><a href="#">Team</a></li>
-    </ul>
-  </li>
-</ul>`
+}`
     },
     adjacent: {
       title: 'Adjacent Sibling (+)',
       description: 'Style an element that comes immediately after another',
-      code: `const form = $()
-  .select('label')
-    .fontWeight('600')
-    .marginBottom('4px')
+      code: `export const formStyles = $
+  .select('.demo-label')
+    .weight('600')
+    .mb('4px')
     .display('block')
-    .select('+ input')
-      .marginTop('0')
-      .block()
-    .block()
-  .select('input')
+    .select('+ .demo-input')
+      .mt('0')
+      .$el()
+    .$el()
+  .select('.demo-input')
     .border('1px solid #e2e8f0')
-    .borderRadius('6px')
-    .padding('8px 12px')
-    .marginBottom('16px')
-    .width('100%')
+    .rounded('6px')
+    .p('8px 12px')
+    .mb('16px')
+    .w('100%')
     .focus()
-      .borderColor('#3b82f6')
+      .borderC('#3b82f6')
       .outline('none')
-      .boxShadow('0 0 0 3px rgba(59,130,246,0.1)')
-      .end()
-    .select('+ input')
-      .marginTop('8px')
-      .block()
-    .block()
-  .block();`,
-      css: `label {
+      .shadow('0 0 0 3px rgba(59,130,246,0.1)')
+    .end()
+    .select('+ .demo-input')
+      .mt('8px')
+      .$el()
+    .$el()
+  .$el();`,
+      css: `.demo-label {
   font-weight: 600;
   margin-bottom: 4px;
   display: block;
 }
-label + input {
+.demo-label + .demo-input {
   margin-top: 0;
 }
-input {
+.demo-input {
   border: 1px solid #e2e8f0;
   border-radius: 6px;
   padding: 8px 12px;
   margin-bottom: 16px;
   width: 100%;
 }
-input:focus {
+.demo-input:focus {
   border-color: #3b82f6;
   outline: none;
   box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
 }
-input + input {
+.demo-input + .demo-input {
   margin-top: 8px;
-}`,
-      html: `<label>Name</label>
-<input type="text" placeholder="Your name">
-<label>Email</label>
-<input type="email" placeholder="Your email">`
+}`
     },
     general: {
       title: 'General Sibling (~)',
       description: 'Style all siblings that come after an element',
-      code: `const section = $()
-  .select('h2')
-    .fontSize('24px')
-    .fontWeight('bold')
-    .marginBottom('16px')
-    .select('~ p')
-      .marginLeft('20px')
-      .color('#475569')
-      .block()
-    .block()
-  .block();`,
-      css: `h2 {
+      code: `export const sectionStyles = $
+  .select('.demo-title')
+    .textSize('24px')
+    .weight('bold')
+    .mb('16px')
+    .select('~ .demo-paragraph')
+      .ml('20px')
+      .c('#475569')
+      .$el()
+    .$el()
+  .$el();`,
+      css: `.demo-title {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 16px;
 }
-h2 ~ p {
+.demo-title ~ .demo-paragraph {
   margin-left: 20px;
   color: #475569;
-}`,
-      html: `<h2>Title</h2>
-<p>This paragraph will be indented</p>
-<div>Some content</div>
-<p>This paragraph will also be indented</p>`
+}`
     },
     pseudo: {
       title: 'Pseudo-classes with Nesting',
       description: 'Combine pseudo-classes with nested selectors',
-      code: `const card = $()
-  .select('.card')
-    .backgroundColor('white')
-    .borderRadius('12px')
-    .padding('20px')
-    .boxShadow('0 1px 3px rgba(0,0,0,0.1)')
+      code: `export const cardStyles = $
+  .select('.demo-card')
+    .bg('white')
+    .rounded('12px')
+    .p('20px')
+    .shadow('0 1px 3px rgba(0,0,0,0.1)')
     .hover()
       .transform('translateY(-4px)')
-      .boxShadow('0 12px 24px -12px rgba(0,0,0,0.2)')
-      .end()
-    .select('.card-title')
-      .fontSize('18px')
-      .fontWeight('600')
-      .marginBottom('8px')
+      .shadow('0 12px 24px -12px rgba(0,0,0,0.2)')
+    .end()
+    .select('.demo-card-title')
+      .textSize('18px')
+      .weight('600')
+      .mb('8px')
       .select('&:hover')
-        .color('#3b82f6')
-        .block()
-      .block()
-    .block()
-  .block();`,
-      css: `.card {
+        .c('#3b82f6')
+        .$el()
+      .$el()
+    .$el()
+  .$el('.demo-card');`,
+      css: `.demo-card {
   background-color: white;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-.card:hover {
+.demo-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 24px -12px rgba(0,0,0,0.2);
 }
-.card .card-title {
+.demo-card .demo-card-title {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 8px;
 }
-.card .card-title:hover {
+.demo-card .demo-card-title:hover {
   color: #3b82f6;
-}`,
-      html: `<div class="card">
-  <h3 class="card-title">Card Title</h3>
-  <p>Card content goes here</p>
-</div>`
+}`
     }
   };
   
@@ -232,28 +214,27 @@ h2 ~ p {
         </p>
       </div>
       
-      {/* Basic Usage */}
       <h2>Basic Usage</h2>
       <p>
         Use the <code className="inline-code">.select()</code> method to create nested selectors.
-        Each <code className="inline-code">.select()</code> creates a new level in the selector chain:
+        Each <code className="inline-code">.select()</code> creates a new level in the selector chain.
+        Use <code className="inline-code">.$el()</code> to close each nesting level:
       </p>
-      <CodeBlock language="javascript" code={`const styles = $()
+      <CodeBlock language="javascript" code={`export const styles = $
   .select('.parent')
-    .backgroundColor('#f8fafc')
+    .bg('#f8fafc')
     .select('.child')
-      .color('#1e293b')
-      .padding('8px')
-      .block()
-    .block()
-  .block();`} />
+      .c('#1e293b')
+      .p('8px')
+      .$el()
+    .$el()
+  .$el();`} />
       
       <div className="tip">
-        <strong>Tip:</strong> Each <code className="inline-code">.select()</code> must be paired with a <code className="inline-code">.block()</code> to close the nesting level.
+        <strong>Tip:</strong> Each <code className="inline-code">.select()</code> must be paired with a <code className="inline-code">.$el()</code> to close the nesting level.
         Think of it like opening and closing braces in CSS.
       </div>
       
-      {/* Interactive Examples */}
       <h2>Selector Types</h2>
       <p>Choose a selector type to see an example:</p>
       
@@ -332,7 +313,6 @@ h2 ~ p {
         <CodeBlock language="css" code={currentDemo.css} />
       </div>
       
-      {/* Live Preview */}
       <div style={{ 
         marginTop: '24px',
         padding: '24px',
@@ -343,55 +323,20 @@ h2 ~ p {
         <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px' }}>
           Live Preview
         </h3>
-        <div dangerouslySetInnerHTML={{ __html: currentDemo.html }} />
         
         {activeDemo === 'descendant' && (
-          <nav style={{
-            backgroundColor: '#1e293b',
-            padding: '16px',
-            borderRadius: '8px'
-          }}>
-            <a href="#" style={{
-              color: 'white',
-              textDecoration: 'none',
-              padding: '8px 16px',
-              display: 'inline-block'
-            }}>Home</a>
-            <a href="#" style={{
-              color: 'white',
-              textDecoration: 'none',
-              padding: '8px 16px',
-              display: 'inline-block'
-            }}>About</a>
-            <a href="#" style={{
-              color: 'white',
-              textDecoration: 'none',
-              padding: '8px 16px',
-              display: 'inline-block'
-            }}>Contact</a>
+          <nav className="demo-nav">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
           </nav>
         )}
         
         {activeDemo === 'child' && (
-          <ul style={{
-            backgroundColor: '#f8fafc',
-            border: '1px solid #e2e8f0',
-            borderRadius: '8px',
-            padding: 0,
-            margin: 0,
-            listStyle: 'none'
-          }}>
-            <li style={{
-              padding: '12px 16px',
-              borderBottom: '1px solid #e2e8f0'
-            }}>
-              <a href="#" style={{ color: '#1e293b', textDecoration: 'none' }}>Home</a>
-            </li>
-            <li style={{
-              padding: '12px 16px',
-              borderBottom: '1px solid #e2e8f0'
-            }}>
-              <a href="#" style={{ color: '#1e293b', textDecoration: 'none' }}>About</a>
+          <ul className="demo-menu">
+            <li><a href="#">Home</a></li>
+            <li>
+              <a href="#">About</a>
               <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
                 <li><a href="#">Team</a></li>
               </ul>
@@ -401,109 +346,70 @@ h2 ~ p {
         
         {activeDemo === 'adjacent' && (
           <div>
-            <label style={{ fontWeight: '600', display: 'block', marginBottom: '4px' }}>Name</label>
-            <input type="text" placeholder="Your name" style={{
-              border: '1px solid #e2e8f0',
-              borderRadius: '6px',
-              padding: '8px 12px',
-              marginBottom: '16px',
-              width: '100%'
-            }} />
-            <label style={{ fontWeight: '600', display: 'block', marginBottom: '4px' }}>Email</label>
-            <input type="email" placeholder="Your email" style={{
-              border: '1px solid #e2e8f0',
-              borderRadius: '6px',
-              padding: '8px 12px',
-              marginBottom: '16px',
-              width: '100%'
-            }} />
+            <label className="demo-label">Name</label>
+            <input type="text" placeholder="Your name" className="demo-input" />
+            <label className="demo-label">Email</label>
+            <input type="email" placeholder="Your email" className="demo-input" />
           </div>
         )}
         
         {activeDemo === 'general' && (
           <div>
-            <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>Title</h2>
-            <p style={{ marginLeft: '20px', color: '#475569' }}>This paragraph will be indented</p>
+            <h2 className="demo-title">Title</h2>
+            <p className="demo-paragraph">This paragraph will be indented</p>
             <div>Some content</div>
-            <p style={{ marginLeft: '20px', color: '#475569' }}>This paragraph will also be indented</p>
+            <p className="demo-paragraph">This paragraph will also be indented</p>
           </div>
         )}
         
         {activeDemo === 'pseudo' && (
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '12px',
-            padding: '20px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-          }}>
-            <h3 style={{
-              fontSize: '18px',
-              fontWeight: '600',
-              marginBottom: '8px',
-              transition: 'color 0.2s'
-            }}>Card Title</h3>
-            <p>Card content goes here. Hover over the title to see the effect!</p>
+          <div className="demo-card">
+            <h3 className="demo-card-title">Card Title</h3>
+            <p>Card content goes here. Hover over the title to see the effect</p>
           </div>
         )}
       </div>
       
-      {/* Complex Example */}
       <h2>Complex Nesting Example</h2>
       <p>ChainCSS supports deeply nested selectors for complex component structures:</p>
-      <CodeBlock language="javascript" code={`const component = $()
+      <CodeBlock language="javascript" code={`export const component = $
   .select('.component')
     .border('1px solid #e2e8f0')
-    .borderRadius('8px')
-    .padding('20px')
+    .rounded('8px')
+    .p('20px')
     .select('> .header')
       .borderBottom('1px solid #e2e8f0')
-      .paddingBottom('12px')
-      .marginBottom('16px')
+      .pb('12px')
+      .mb('16px')
       .select('h2')
-        .fontSize('20px')
-        .fontWeight('600')
+        .textSize('20px')
+        .weight('600')
         .select('&:hover')
-          .color('#3b82f6')
-          .block()
-        .block()
-      .block()
+          .c('#3b82f6')
+          .$el()
+        .$el()
+      .$el()
     .select('> .content')
       .select('p')
-        .marginBottom('12px')
+        .mb('12px')
         .lineHeight('1.6')
         .select('&:last-child')
-          .marginBottom('0')
-          .block()
-        .block()
-      .block()
-    .block()
-  .block();`} />
+          .mb('0')
+          .$el()
+        .$el()
+      .$el()
+    .$el()
+  .$el();`} />
       
       <div className="tip">
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
-          <li>Use <code className="inline-code">.select()</code> and <code className="inline-code">.block()</code> like opening and closing braces</li>
+          <li>Use <code className="inline-code">.select()</code> and <code className="inline-code">.$el()</code> like opening and closing braces</li>
           <li>Indent your code to visualize the nesting level</li>
           <li>Use <code className="inline-code">&</code> to reference the parent selector inside pseudo-classes</li>
           <li>Keep nesting depth under 4 levels for maintainability</li>
         </ul>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/hover-states" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Hover & Interactive States
-        </a>
-        <a href="/docs/at-rules" style={{ color: '#667eea', textDecoration: 'none' }}>
-          At-Rules →
-        </a>
-      </div>*/}
     </>
   );
 }

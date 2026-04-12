@@ -6,11 +6,9 @@ export default function Variants() {
   const [selectedVariant, setSelectedVariant] = useState('primary');
   const [selectedSize, setSelectedSize] = useState('medium');
   
-  // State for polymorphic example
   const [polymorphicAs, setPolymorphicAs] = useState('p');
   const [polymorphicAlign, setPolymorphicAlign] = useState('left');
   
-  // State for responsive example
   const [responsiveLayout, setResponsiveLayout] = useState('auto');
   
   const examples = {
@@ -20,42 +18,42 @@ export default function Variants() {
       code: `import { recipe } from 'chaincss';
 
 const button = recipe({
-  base: $()
-    .padding('12px 24px')
-    .borderRadius('8px')
-    .fontWeight('600')
+  base: $
+    .p('12px 24px')
+    .rounded('8px')
+    .weight('600')
     .cursor('pointer')
     .transition('all 0.2s')
-    .block(),
+    .$el(),
   
   variants: {
     color: {
-      primary: $()
-        .backgroundColor('#3b82f6')
-        .color('white')
+      primary: $
+        .bg('#3b82f6')
+        .c('white')
         .hover()
-          .backgroundColor('#2563eb')
-          .end()
-        .block(),
-      secondary: $()
-        .backgroundColor('#6b7280')
-        .color('white')
+          .bg('#2563eb')
+        .end()
+        .$el(),
+      secondary: $
+        .bg('#6b7280')
+        .c('white')
         .hover()
-          .backgroundColor('#4b5563')
-          .end()
-        .block(),
-      danger: $()
-        .backgroundColor('#ef4444')
-        .color('white')
+          .bg('#4b5563')
+        .end()
+        .$el(),
+      danger: $
+        .bg('#ef4444')
+        .c('white')
         .hover()
-          .backgroundColor('#dc2626')
-          .end()
-        .block()
+          .bg('#dc2626')
+        .end()
+        .$el()
     },
     size: {
-      small: $().padding('8px 16px').fontSize('14px').block(),
-      medium: $().padding('12px 24px').fontSize('16px').block(),
-      large: $().padding('16px 32px').fontSize('18px').block()
+      small: $().p('8px 16px').textSize('14px').$el(),
+      medium: $().p('12px 24px').textSize('16px').$el(),
+      large: $().p('16px 32px').textSize('18px').$el()
     }
   },
   
@@ -118,41 +116,41 @@ const button = recipe({
       code: `import { recipe } from 'chaincss';
 
 const typography = recipe({
-  base: $()
-    .margin('0')
-    .block(),
+  base: $
+    .m('0')
+    .$el(),
   
   variants: {
     as: {
-      h1: $()
-        .fontSize('2.5rem')
-        .fontWeight('700')
+      h1: $
+        .textSize('2.5rem')
+        .weight('700')
         .lineHeight('1.2')
-        .block(),
-      h2: $()
-        .fontSize('2rem')
-        .fontWeight('600')
+        .$el(),
+      h2: $
+        .textSize('2rem')
+        .weight('600')
         .lineHeight('1.3')
-        .block(),
-      h3: $()
-        .fontSize('1.5rem')
-        .fontWeight('600')
+        .$el(),
+      h3: $
+        .textSize('1.5rem')
+        .weight('600')
         .lineHeight('1.4')
-        .block(),
-      p: $()
-        .fontSize('1rem')
+        .$el(),
+      p: $
+        .textSize('1rem')
         .lineHeight('1.5')
-        .marginBottom('1rem')
-        .block(),
-      small: $()
-        .fontSize('0.875rem')
-        .color('#64748b')
-        .block()
+        .mb('1rem')
+        .$el(),
+      small: $
+        .textSize('0.875rem')
+        .c('#64748b')
+        .$el()
     },
     align: {
-      left: $().textAlign('left').block(),
-      center: $().textAlign('center').block(),
-      right: $().textAlign('right').block()
+      left: $().textAlign('left').$el(),
+      center: $().textAlign('center').$el(),
+      right: $().textAlign('right').$el()
     }
   },
   
@@ -207,34 +205,34 @@ const typography = recipe({
     responsive: {
       title: 'Responsive Variants',
       description: 'Variants that adapt to screen size',
-      code: `import { recipe, responsive } from 'chaincss';
+      code: `import { recipe } from 'chaincss';
 
 const responsiveButton = recipe({
-  base: $()
-    .padding(responsive({
-      base: '8px 16px',
-      md: '12px 24px',
-      lg: '16px 32px'
-    }))
-    .fontSize(responsive({
-      base: '14px',
-      md: '16px',
-      lg: '18px'
-    }))
-    .borderRadius('8px')
-    .fontWeight('600')
+  base: $
+    .p('8px 16px')
+    .textSize('14px')
+    .rounded('8px')
+    .weight('600')
     .cursor('pointer')
     .transition('all 0.2s')
-    .block(),
+    .tablet((css) => css
+      .p('12px 24px')
+      .textSize('16px')
+    )
+    .desktop((css) => css
+      .p('16px 32px')
+      .textSize('18px')
+    )
+    .$el(),
   
   variants: {
     layout: {
-      full: $()
-        .width('100%')
-        .block(),
-      auto: $()
-        .width('auto')
-        .block()
+      full: $
+        .w('100%')
+        .$el(),
+      auto: $
+        .w('auto')
+        .$el()
     }
   },
   
@@ -243,12 +241,7 @@ const responsiveButton = recipe({
   }
 });`,
       preview: () => {
-        const getStyles = () => {
-          const width = responsiveLayout === 'full' ? '100%' : 'auto';
-          return { width };
-        };
-        
-        const styles = getStyles();
+        const width = responsiveLayout === 'full' ? '100%' : 'auto';
         
         return (
           <div>
@@ -268,14 +261,14 @@ const responsiveButton = recipe({
                 border: 'none',
                 cursor: 'pointer',
                 fontWeight: '600',
-                width: styles.width,
+                width: width,
                 display: 'block'
               }}>
                 Responsive Button
               </button>
             </div>
             <p style={{ marginTop: '12px', fontSize: '12px', color: '#64748b' }}>
-              Try resizing your browser window to see responsive padding and font size!
+              Try resizing your browser window to see responsive padding and font size
             </p>
           </div>
         );

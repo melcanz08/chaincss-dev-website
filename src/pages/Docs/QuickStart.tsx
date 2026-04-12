@@ -6,7 +6,7 @@ export default function QuickStart() {
       <div className="docs-header">
         <h1 className="docs-title">Quick Start</h1>
         <p className="docs-description">
-          Get up and running with ChainCSS in 5 minutes.
+          Get up and running with ChainCSS v2 in 5 minutes.
         </p>
       </div>
       
@@ -14,63 +14,68 @@ export default function QuickStart() {
          This is the fast track. For a detailed walkthrough with interactive examples, check out <a href="/docs/your-first-style">Your First Style</a>.
       </div>
       
-      <h2>Install</h2>
+      <h2>1. Install</h2>
       <CodeBlock language="bash" code={`npm install chaincss`} />
       
-      <h2>Create a style</h2>
-      <p>Create <code className="inline-code">styles.jcss</code>:</p>
-      <CodeBlock language="javascript" code={`<@
-const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
-  .block('.btn');
+      <h2>2. Initialize configuration (optional)</h2>
+      <CodeBlock language="bash" code={`npx chaincss init`} />
+      
+      <h2>3. Create a style</h2>
+      <p>Create <code className="inline-code">src/styles/button.chain.js</code>:</p>
+      <CodeBlock language="javascript" code={`import { $ } from 'chaincss';
 
-run(button);
-@>`} />
-      
-      <h2>Generate CSS</h2>
-      <CodeBlock language="bash" code={`npx chaincss styles.jcss ./styles`} />
-      
-      <h2>Use in HTML</h2>
-      <CodeBlock language="html" code={`<!-- save this in project folder as index.html then open in the browser --> 
-<link rel="stylesheet" href="styles/global.css">
-<button class="btn">Click Me</button>`} />
-      
-      <h2>Add interactivity</h2>
-      <CodeBlock language="javascript" code={`<@
-const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
+export const button = $
+  .bg('#3b82f6')      // backgroundColor
+  .c('white')         // color 
+  .p('12px 24px')     // padding
+  .rounded('8px')     // borderRadius
+  .cursor('pointer')  // cursor
   .hover()
-    .backgroundColor('#2563eb')
-    .end()
-  .block('.btn');
-
-run(button);
-@>`} />
+    .bg('#2563eb')    // hover background
+  .end()
+  .$el('.btn');       // CSS selector`} />
+      
+      <h2>4. Generate CSS</h2>
+      <CodeBlock language="bash" code={`npx chaincss build`} />
+      <p>Output:</p>
+      <CodeBlock language="text" code={`✓ Generated: src/global-style/global.css
+✓ Generated: src/styles/button.class.js
+✓ Generated: src/styles/button.css`} />
+      
+      <h2>5. Use in HTML (Vanilla JS)</h2>
+      <CodeBlock language="html" code={`<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="src/global-style/global.css">
+</head>
+<body>
+  <button class="btn">Click Me</button>
+</body>
+</html>`} />
+      
+      <h2>6. Or use in React</h2>
+      <CodeBlock language="jsx" code={`import { button } from './styles/button.class.js';
+function Button() {
+  return <button className={button}>Click Me</button>;
+}`} />
       
       <div className="tip">
-        That's it! You now have a styled button with hover effects.
+        <strong>That's it!</strong> You now have a styled button with hover effects. 
+        ChainCSS v2 works with vanilla JS, React, Vue, and any other framework!
       </div>
       
       <h2>Next Steps</h2>
       <ul>
-        <li><a href="/docs/chainable-api">Chainable API</a> - Understand the core syntax</li>
-        <li><a href="/docs/design-tokens">Design Tokens</a> - Build a design system</li>
-        <li><a href="/docs/atomic-css">Atomic CSS</a> - Optimize your CSS bundle</li>
-        <li><a href="/docs/react">React Integration</a> - Use with React</li>
-        <li><a href="/docs/vue">Vue Integration</a> - Use with Vue</li>
+        <li><a href="/docs/chainable-api">Chainable API</a> - Master the syntax</li>
+        <li><a href="/docs/responsive">Responsive Design</a> - Mobile-first breakpoints</li>
+        <li><a href="/docs/animations">Animations</a> - Built-in animation presets</li>
+        <li><a href="/docs/configuration">Configuration</a> - Customize ChainCSS</li>
       </ul>
       
-      {/* Navigation 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '48px', paddingTop: '24px', borderTop: '1px solid #e2e8f0' }}>
-        <a href="/docs/installation" style={{ color: '#667eea', textDecoration: 'none' }}>← Installation</a>
-        <a href="/docs/your-first-style" style={{ color: '#667eea', textDecoration: 'none' }}>Your First Style →</a>
-      </div>*/}
+      <div className="note" style={{ marginTop: '24px' }}>
+        <strong>💡 Pro tip:</strong> ChainCSS v2 supports both <strong>build-time</strong> (zero-runtime) and <strong>runtime</strong> modes. 
+        The example above uses build-time mode for maximum performance!
+      </div>
     </>
   );
 }

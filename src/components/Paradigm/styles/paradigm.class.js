@@ -1,0 +1,11 @@
+export const before = 'before';
+export const cardComparison = 'card-comparison';
+export const cardResult = 'card-result';
+export const paradigmCard = 'paradigm-card';
+export const paradigmContainer = 'paradigm-section .container';
+export const paradigmGrid = 'paradigm-grid';
+export const paradigmQuote = 'paradigm-quote';
+export const paradigmSection = 'paradigm-section';
+export const quote = 'blockquote';
+export const sectionSubtitle = 'section-subtitle';
+export const sectionTitle = 'section-title';

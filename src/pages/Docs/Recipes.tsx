@@ -17,42 +17,42 @@ export default function Recipes() {
       code: `import { recipe } from 'chaincss';
 
 const button = recipe({
-  base: $()
-    .padding('12px 24px')
-    .borderRadius('8px')
-    .fontWeight('600')
+  base: $
+    .p('12px 24px')
+    .rounded('8px')
+    .weight('600')
     .cursor('pointer')
     .transition('all 0.2s')
-    .block(),
+    .$el(),
   
   variants: {
     color: {
-      primary: $()
-        .backgroundColor('#3b82f6')
-        .color('white')
+      primary: $
+        .bg('#3b82f6')
+        .c('white')
         .hover()
-          .backgroundColor('#2563eb')
-          .end()
-        .block(),
-      secondary: $()
-        .backgroundColor('#6b7280')
-        .color('white')
+          .bg('#2563eb')
+        .end()
+        .$el(),
+      secondary: $
+        .bg('#6b7280')
+        .c('white')
         .hover()
-          .backgroundColor('#4b5563')
-          .end()
-        .block(),
-      danger: $()
-        .backgroundColor('#ef4444')
-        .color('white')
+          .bg('#4b5563')
+        .end()
+        .$el(),
+      danger: $
+        .bg('#ef4444')
+        .c('white')
         .hover()
-          .backgroundColor('#dc2626')
-          .end()
-        .block()
+          .bg('#dc2626')
+        .end()
+        .$el()
     },
     size: {
-      small: $().padding('8px 16px').fontSize('14px').block(),
-      medium: $().padding('12px 24px').fontSize('16px').block(),
-      large: $().padding('16px 32px').fontSize('18px').block()
+      small: $().p('8px 16px').textSize('14px').$el(),
+      medium: $().p('12px 24px').textSize('16px').$el(),
+      large: $().p('16px 32px').textSize('18px').$el()
     }
   },
   
@@ -114,46 +114,46 @@ const button = recipe({
       code: `import { recipe } from 'chaincss';
 
 const button = recipe({
-  base: $()
-    .padding('12px 24px')
-    .borderRadius('8px')
-    .fontWeight('600')
+  base: $
+    .p('12px 24px')
+    .rounded('8px')
+    .weight('600')
     .cursor('pointer')
     .transition('all 0.2s')
-    .block(),
+    .$el(),
   
   variants: {
     color: {
-      primary: $().backgroundColor('#3b82f6').color('white').block(),
-      secondary: $().backgroundColor('#6b7280').color('white').block(),
-      outline: $().backgroundColor('transparent').color('#3b82f6').block()
+      primary: $().bg('#3b82f6').c('white').$el(),
+      secondary: $().bg('#6b7280').c('white').$el(),
+      outline: $().bg('transparent').c('#3b82f6').$el()
     },
     size: {
-      small: $().padding('8px 16px').fontSize('14px').block(),
-      large: $().padding('16px 32px').fontSize('18px').block()
+      small: $().p('8px 16px').textSize('14px').$el(),
+      large: $().p('16px 32px').textSize('18px').$el()
     }
   },
   
   compoundVariants: [
     {
       variants: { color: 'outline', size: 'large' },
-      style: $()
+      style: $
         .border('2px solid #3b82f6')
         .hover()
-          .backgroundColor('#3b82f6')
-          .color('white')
-          .end()
-        .block()
+          .bg('#3b82f6')
+          .c('white')
+        .end()
+        .$el()
     },
     {
       variants: { color: 'outline', size: 'small' },
-      style: $()
+      style: $
         .border('1px solid #3b82f6')
         .hover()
-          .backgroundColor('#3b82f6')
-          .color('white')
-          .end()
-        .block()
+          .bg('#3b82f6')
+          .c('white')
+        .end()
+        .$el()
     }
   ],
   
@@ -238,40 +238,38 @@ const button = recipe({
       description: 'Compose recipes for complex components',
       code: `import { recipe } from 'chaincss';
 
-// Base button recipe
 const buttonBase = recipe({
-  base: $()
-    .padding('12px 24px')
-    .borderRadius('8px')
-    .fontWeight('600')
+  base: $
+    .p('12px 24px')
+    .rounded('8px')
+    .weight('600')
     .cursor('pointer')
     .transition('all 0.2s')
-    .block(),
+    .$el(),
   
   variants: {
     size: {
-      small: $().padding('8px 16px').fontSize('14px').block(),
-      large: $().padding('16px 32px').fontSize('18px').block()
+      small: $().p('8px 16px').textSize('14px').$el(),
+      large: $().p('16px 32px').textSize('18px').$el()
     }
   }
 });
 
-// Icon button recipe (composes base)
 const iconButton = recipe({
-  base: $()
+  base: $
     .display('inline-flex')
-    .alignItems('center')
+    .items('center')
     .gap('8px')
-    .block(),
+    .$el(),
   
   variants: {
     color: {
-      primary: $().backgroundColor('#3b82f6').color('white').block(),
-      secondary: $().backgroundColor('#6b7280').color('white').block()
+      primary: $().bg('#3b82f6').c('white').$el(),
+      secondary: $().bg('#6b7280').c('white').$el()
     },
     size: {
-      small: $().padding('8px 12px').block(),
-      large: $().padding('12px 16px').block()
+      small: $().p('8px 12px').$el(),
+      large: $().p('12px 16px').$el()
     }
   }
 });`,
@@ -335,7 +333,7 @@ const iconButton = recipe({
       <p>
         The <code className="inline-code">recipe()</code> system allows you to create component styles with variants.
         It's like a type-safe CSS-in-JS variant system that generates atomic CSS at build time.
-      </p><br />
+      </p>
       
       <div className="tip">
         <strong>Key Features:</strong>
@@ -401,7 +399,7 @@ const iconButton = recipe({
         <CodeBlock language="javascript" code={currentExample.code} />
         
         <div className="tip" style={{ marginTop: '16px' }}>
-          <strong>🎬 Live Preview:</strong>
+          <strong>Live Preview:</strong>
           <div style={{ marginTop: '12px' }}>
             {currentExample.preview()}
           </div>
@@ -414,32 +412,32 @@ const iconButton = recipe({
       <div style={{ overflowX: 'auto', marginBottom: '24px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Option</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Type</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Description</th>
-             </tr>
+            <tr>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e2e8f0', backgroundColor: '#f8fafc' }}>Option</th>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e2e8f0', backgroundColor: '#f8fafc' }}>Type</th>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e2e8f0', backgroundColor: '#f8fafc' }}>Description</th>
+            </tr>
           </thead>
           <tbody>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">base</code></td>
-              <td style={{ padding: '12px' }}>StyleObject | Function</td>
-              <td style={{ padding: '12px' }}>Base styles applied to all variants</td>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">base</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>StyleObject | Function</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Base styles applied to all variants</td>
             </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">variants</code></td>
-              <td style={{ padding: '12px' }}>Object</td>
-              <td style={{ padding: '12px' }}>Variant definitions (color, size, etc.)</td>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">variants</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Object</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Variant definitions (color, size, etc.)</td>
             </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">compoundVariants</code></td>
-              <td style={{ padding: '12px' }}>Array</td>
-              <td style={{ padding: '12px' }}>Styles applied when multiple variants match</td>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">compoundVariants</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Array</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Styles applied when multiple variants match</td>
             </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">defaultVariants</code></td>
-              <td style={{ padding: '12px' }}>Object</td>
-              <td style={{ padding: '12px' }}>Default variant values</td>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">defaultVariants</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Object</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Default variant values</td>
             </tr>
           </tbody>
         </table>
@@ -454,28 +452,24 @@ type ButtonVariants = {
 };
 
 const button = recipe<ButtonVariants>({
-  base: $().padding('12px 24px').block(),
+  base: $().p('12px 24px').$el(),
   variants: {
     color: {
-      primary: $().backgroundColor('#3b82f6').color('white').block(),
-      secondary: $().backgroundColor('#6b7280').color('white').block(),
-      danger: $().backgroundColor('#ef4444').color('white').block()
+      primary: $().bg('#3b82f6').c('white').$el(),
+      secondary: $().bg('#6b7280').c('white').$el(),
+      danger: $().bg('#ef4444').c('white').$el()
     },
     size: {
-      small: $().padding('8px 16px').block(),
-      medium: $().padding('12px 24px').block(),
-      large: $().padding('16px 32px').block()
+      small: $().p('8px 16px').$el(),
+      medium: $().p('12px 24px').$el(),
+      large: $().p('16px 32px').$el()
     }
   },
   defaultVariants: {
     color: 'primary',
     size: 'medium'
   }
-});
-
-// Type-safe usage
-const btn = button({ color: 'primary', size: 'large' }); // 
-const invalid = button({ color: 'invalid' }); //  TypeScript error`} />
+});`} />
       
       <div className="note">
         <strong>Best Practices</strong>

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import CodeBlock from '../../components/CodeBlock';
 
-// Extract preview components to avoid conditional hook calls
 const BasicSetupPreview = () => {
   return (
     <div style={{ 
@@ -18,7 +17,7 @@ const BasicSetupPreview = () => {
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
-  ➜  ChainCSS: HMR enabled for .jcss files`}
+  ➜  ChainCSS: HMR enabled for .chain.js files`}
       </pre>
     </div>
   );
@@ -46,91 +45,12 @@ const HMRPreview = () => {
       </button>
       <div style={{ marginTop: '16px' }}>
         <label style={{ fontSize: '14px', color: '#64748b' }}>
-          Try changing the color in the code editor →
+          Try changing the color in the code editor
         </label>
       </div>
       <p style={{ marginTop: '8px', fontSize: '12px', color: '#94a3b8' }}>
         With HMR, the button updates instantly without page refresh
       </p>
-    </div>
-  );
-};
-
-const DebugPreview = () => {
-  const [hovered, setHovered] = useState(false);
-  
-  return (
-    <div style={{ textAlign: 'center' }}>
-      <div
-        style={{
-          backgroundColor: '#f1f5f9',
-          padding: '20px',
-          borderRadius: '8px',
-          border: `2px solid ${hovered ? '#667eea' : '#e2e8f0'}`,
-          transition: 'all 0.2s',
-          cursor: 'pointer',
-          position: 'relative'
-        }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        <div style={{ fontWeight: '500', marginBottom: '8px' }}>
-          Hover over this element
-        </div>
-        {hovered && (
-          <div style={{
-            position: 'absolute',
-            top: '-30px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            backgroundColor: '#667eea',
-            color: 'white',
-            padding: '4px 12px',
-            borderRadius: '20px',
-            fontSize: '12px',
-            fontFamily: 'monospace',
-            whiteSpace: 'nowrap'
-          }}>
-            data-chaincss-class="c_3b82f6 c_ffffff c_1224"
-          </div>
-        )}
-        <p style={{ fontSize: '12px', color: '#64748b', marginTop: '8px' }}>
-          {hovered ? 'Showing ChainCSS classes!' : 'Hover to see atomic classes'}
-        </p>
-      </div>
-      <p style={{ marginTop: '12px', fontSize: '12px', color: '#64748b' }}>
-        Debug mode adds hover inspector and console logs
-      </p>
-    </div>
-  );
-};
-
-const TreeShakePreview = () => {
-  return (
-    <div style={{ 
-      backgroundColor: '#1e293b',
-      color: '#e2e8f0',
-      padding: '20px',
-      borderRadius: '8px',
-      fontFamily: 'monospace',
-      fontSize: '13px'
-    }}>
-      <pre style={{ margin: 0, color: '#e2e8f0' }}>
-{`Analyzing bundle for unused CSS...
-
-Total styles found: 156
-  ├── .btn-primary (used ✓)
-  ├── .btn-secondary (used ✓)
-  ├── .card (used ✓)
-  ├── .old-component (unused ✗)
-  ├── .deprecated (unused ✗)
-  └── ... (111 unused styles)
-
-Removing unused CSS...
-Bundle size reduced from 45KB to 14KB (68.9% savings)
-
-ChainCSS Tree Shaking Complete!`}
-      </pre>
     </div>
   );
 };
@@ -145,18 +65,16 @@ export default function VitePlugin() {
       code: `// vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import chaincss from 'chaincss/vite-plugin';
+import chaincss from 'chaincss/plugin/vite';
 
 export default defineConfig({
   plugins: [
     react(),
     chaincss({
-      extension: '.jcss',      // File extension to process (default: .jcss)
-      minify: true,            // Minify CSS in production (default: true)
-      prefix: true,            // Add vendor prefixes (default: true)
-      hmr: true,               // Enable Hot Module Replacement (default: true)
-      debug: false,            // Enable debug mode with element inspector (default: false)
-      treeShake: true          // Remove unused CSS (default: true in production)
+      atomic: true,           // Enable atomic CSS optimization
+      prefix: true,           // Add vendor prefixes
+      minify: true,           // Minify CSS in production
+      verbose: false          // Enable verbose logging
     })
   ]
 });`,
@@ -164,64 +82,21 @@ export default defineConfig({
     },
     hmr: {
       title: 'Hot Module Replacement (HMR)',
-      description: 'Live reload your styles as you edit .jcss files',
-      code: `// styles.jcss
-<@
-const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
-  .hover()
-    .backgroundColor('#2563eb')
-    .end()
-  .transition('all 0.2s')
-  .block('.btn');
+      description: 'Live reload your styles as you edit .chain.js files',
+      code: `// vite.config.js
+import chaincss from 'chaincss/plugin/vite';
 
-run(button);
-@>
+export default defineConfig({
+  plugins: [
+    chaincss({
+      verbose: true  // See HMR updates in console
+    })
+  ]
+});
 
-// Edit the color to #ef4444 and watch it update instantly!
-// No page reload needed!`,
+// Edit your .chain.js file and watch it update instantly
+// No page reload needed`,
       previewComponent: HMRPreview
-    },
-    debug: {
-      title: 'Debug Mode',
-      description: 'Inspect atomic classes directly in your browser',
-      code: `// vite.config.js
-export default defineConfig({
-  plugins: [
-    chaincss({
-      debug: true  // Enable debug mode
-    })
-  ]
-});
-
-// In development, hover over any element to see its ChainCSS classes
-// The console will also show class maps and atomic utilities`,
-      previewComponent: DebugPreview
-    },
-    treeShake: {
-      title: 'Tree Shaking',
-      description: 'Automatically remove unused CSS from production bundles',
-      code: `// vite.config.js
-export default defineConfig({
-  plugins: [
-    chaincss({
-      treeShake: true  // Enabled by default in production
-    })
-  ]
-});
-
-// Build output:
-// $ npm run build
-// 
-// ChainCSS Tree Shaking Results:
-// Total styles: 156
-// Used styles: 42
-// Dead code eliminated: 114 (73.1% savings)
-// CSS size reduced by 68.2%`,
-      previewComponent: TreeShakePreview
     }
   };
   
@@ -237,7 +112,6 @@ export default defineConfig({
         </p>
       </div>
       
-      {/* Features Overview */}
       <h2>Features</h2>
       <div style={{ 
         display: 'grid', 
@@ -251,9 +125,8 @@ export default defineConfig({
           borderRadius: '12px',
           backgroundColor: 'white'
         }}>
-          <div style={{ fontSize: '24px', marginBottom: '8px' }}></div>
           <h3 style={{ marginBottom: '8px' }}>Hot Module Replacement</h3>
-          <p style={{ color: '#64748b', fontSize: '14px' }}>Edit .jcss files and see changes instantly without page refresh</p>
+          <p style={{ color: '#64748b', fontSize: '14px' }}>Edit .chain.js files and see changes instantly without page refresh</p>
         </div>
         <div style={{ 
           padding: '20px', 
@@ -261,41 +134,23 @@ export default defineConfig({
           borderRadius: '12px',
           backgroundColor: 'white'
         }}>
-          <div style={{ fontSize: '24px', marginBottom: '8px' }}></div>
-          <h3 style={{ marginBottom: '8px' }}>Debug Mode</h3>
-          <p style={{ color: '#64748b', fontSize: '14px' }}>Hover over elements to see their atomic classes and inspect styles</p>
-        </div>
-        <div style={{ 
-          padding: '20px', 
-          border: '1px solid #e2e8f0', 
-          borderRadius: '12px',
-          backgroundColor: 'white'
-        }}>
-          <div style={{ fontSize: '24px', marginBottom: '8px' }}></div>
-          <h3 style={{ marginBottom: '8px' }}>Tree Shaking</h3>
-          <p style={{ color: '#64748b', fontSize: '14px' }}>Automatically remove unused CSS from production bundles</p>
-        </div>
-        <div style={{ 
-          padding: '20px', 
-          border: '1px solid #e2e8f0', 
-          borderRadius: '12px',
-          backgroundColor: 'white'
-        }}>
-          <div style={{ fontSize: '24px', marginBottom: '8px' }}></div>
           <h3 style={{ marginBottom: '8px' }}>Atomic CSS</h3>
-          <p style={{ color: '#64748b', fontSize: '14px' }}>Automatic atomic CSS optimization with --atomic flag</p>
+          <p style={{ color: '#64748b', fontSize: '14px' }}>Automatic atomic CSS optimization for smaller bundles</p>
+        </div>
+        <div style={{ 
+          padding: '20px', 
+          border: '1px solid #e2e8f0', 
+          borderRadius: '12px',
+          backgroundColor: 'white'
+        }}>
+          <h3 style={{ marginBottom: '8px' }}>TypeScript Support</h3>
+          <p style={{ color: '#64748b', fontSize: '14px' }}>Full TypeScript support with generated .d.ts files</p>
         </div>
       </div>
       
-      {/* Installation */}
       <h2>Installation</h2>
-      <CodeBlock language="bash" code={`npm install -D chaincss
-# or
-yarn add -D chaincss
-# or
-pnpm add -D chaincss`} />
+      <CodeBlock language="bash" code={`npm install -D chaincss`} />
       
-      {/* Examples */}
       <h2>Examples</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
         <button
@@ -324,32 +179,6 @@ pnpm add -D chaincss`} />
         >
           Hot Module Replacement
         </button>
-        <button
-          onClick={() => setActiveExample('debug')}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '8px',
-            border: activeExample === 'debug' ? '2px solid #667eea' : '1px solid #e2e8f0',
-            backgroundColor: activeExample === 'debug' ? '#eef2ff' : 'white',
-            color: activeExample === 'debug' ? '#667eea' : '#475569',
-            cursor: 'pointer'
-          }}
-        >
-          Debug Mode
-        </button>
-        <button
-          onClick={() => setActiveExample('treeShake')}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '8px',
-            border: activeExample === 'treeShake' ? '2px solid #667eea' : '1px solid #e2e8f0',
-            backgroundColor: activeExample === 'treeShake' ? '#eef2ff' : 'white',
-            color: activeExample === 'treeShake' ? '#667eea' : '#475569',
-            cursor: 'pointer'
-          }}
-        >
-          Tree Shaking
-        </button>
       </div>
       
       <div style={{ marginBottom: '32px' }}>
@@ -371,60 +200,42 @@ pnpm add -D chaincss`} />
         )}
       </div>
       
-      {/* Configuration Options */}
       <h2>Configuration Options</h2>
-      <div style={{ overflowX: 'auto', marginBottom: '32px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Option</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Type</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Default</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Description</th>
-                 </tr>
-          </thead>
-          <tbody>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">extension</code>              </td>
-              <td style={{ padding: '12px' }}>string</td>
-              <td style={{ padding: '12px' }}>'.jcss'</td>
-              <td style={{ padding: '12px' }}>File extension to process</td>
-             </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">minify</code></td>
-              <td style={{ padding: '12px' }}>boolean</td>
-              <td style={{ padding: '12px' }}>true (production)</td>
-              <td style={{ padding: '12px' }}>Minify CSS output</td>
-             </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">prefix</code></td>
-              <td style={{ padding: '12px' }}>boolean</td>
-              <td style={{ padding: '12px' }}>true</td>
-              <td style={{ padding: '12px' }}>Add vendor prefixes via autoprefixer</td>
-             </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">hmr</code></td>
-              <td style={{ padding: '12px' }}>boolean</td>
-              <td style={{ padding: '12px' }}>true</td>
-              <td style={{ padding: '12px' }}>Enable Hot Module Replacement</td>
-             </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">debug</code></td>
-              <td style={{ padding: '12px' }}>boolean</td>
-              <td style={{ padding: '12px' }}>false</td>
-              <td style={{ padding: '12px' }}>Enable debug mode with element inspector</td>
-             </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">treeShake</code></td>
-              <td style={{ padding: '12px' }}>boolean</td>
-              <td style={{ padding: '12px' }}>true (production)</td>
-              <td style={{ padding: '12px' }}>Remove unused CSS from production builds</td>
-             </tr>
-          </tbody>
-         </table>
+      <div style={{ marginBottom: '32px' }}>
+        <div style={{ display: 'grid', gap: '1px', backgroundColor: '#e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '150px 100px 200px 1fr', backgroundColor: '#f8fafc', fontWeight: '600', borderBottom: '2px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}>Option</div>
+            <div style={{ padding: '12px' }}>Type</div>
+            <div style={{ padding: '12px' }}>Default</div>
+            <div style={{ padding: '12px' }}>Description</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '150px 100px 200px 1fr', backgroundColor: 'white', borderBottom: '1px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}><code className="inline-code">atomic</code></div>
+            <div style={{ padding: '12px' }}>boolean</div>
+            <div style={{ padding: '12px' }}>false</div>
+            <div style={{ padding: '12px' }}>Enable atomic CSS optimization</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '150px 100px 200px 1fr', backgroundColor: 'white', borderBottom: '1px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}><code className="inline-code">prefix</code></div>
+            <div style={{ padding: '12px' }}>boolean</div>
+            <div style={{ padding: '12px' }}>true</div>
+            <div style={{ padding: '12px' }}>Add vendor prefixes via autoprefixer</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '150px 100px 200px 1fr', backgroundColor: 'white', borderBottom: '1px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}><code className="inline-code">minify</code></div>
+            <div style={{ padding: '12px' }}>boolean</div>
+            <div style={{ padding: '12px' }}>true (production)</div>
+            <div style={{ padding: '12px' }}>Minify CSS output</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '150px 100px 200px 1fr', backgroundColor: 'white' }}>
+            <div style={{ padding: '12px' }}><code className="inline-code">verbose</code></div>
+            <div style={{ padding: '12px' }}>boolean</div>
+            <div style={{ padding: '12px' }}>false</div>
+            <div style={{ padding: '12px' }}>Enable verbose logging</div>
+          </div>
+        </div>
       </div>
       
-      {/* Project Structure */}
       <h2>Project Structure</h2>
       <div style={{ 
         backgroundColor: '#1e293b',
@@ -438,109 +249,64 @@ pnpm add -D chaincss`} />
         <pre style={{ margin: 0, color: '#e2e8f0' }}>
 {`my-vite-project/
 ├── src/
-│   ├── styles/
-│   │   └── main.jcss          # Your ChainCSS styles
-│   ├── App.jsx
+│   ├── components/
+│   │   └── Button/
+│   │       └── styles/
+│   │           └── button.chain.js
+│   ├── global-style/
+│   │   └── global.chain.js
 │   └── main.jsx
 ├── index.html
-├── vite.config.js             # ChainCSS plugin configured here
+├── vite.config.js
 └── package.json`}
         </pre>
       </div>
       
-      {/* Usage Example */}
       <h2>Usage Example</h2>
-      <CodeBlock language="javascript" code={`// src/styles/main.jcss
-<@
-const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
+      <CodeBlock language="javascript" code={`// src/components/Button/styles/button.chain.js
+import { $ } from 'chaincss';
+
+export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
   .hover()
-    .backgroundColor('#2563eb')
-    .end()
+    .bg('#2563eb')
+  .end()
   .transition('all 0.2s')
-  .block('.btn');
+  .$el('.btn');`} />
+      
+      <h4>React Component</h4>
+      <CodeBlock language="jsx" code={`// src/components/Button/Button.jsx
+import { button } from './styles/button.class.js';
+import './styles/button.css';
 
-const card = $()
-  .backgroundColor('white')
-  .borderRadius('12px')
-  .padding('24px')
-  .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
-  .block('.card');
-
-run(button, card);
-@>`} />
-      <h4>HTML</h4>
-      <CodeBlock language="html" code={`<!-- my-vite-project/index.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./src/styles/global.css">
-    <title>ChainCSS - Button & Card Demo</title>
-</head>
-<body>
-    <div class="container">
-        <!-- Card Component -->
-        <div class="card">
-            <h3>Card Title</h3>
-            <p>This is a card with padding, border-radius, and shadow</p>
-        </div>
-        
-        <!-- Button Component -->
-        <button class="btn">Click Me</button>
-    </div>
-</body>
-</html>`} />
-<h4>Bash</h4>
-<CodeBlock language="bash" code={`cd ~/my-vite-project`} />
-<CodeBlock language="bash" code={`npx chaincss ./src/styles.main.jcss ./src/styles`} />
+export function Button({ children }) {
+  return <button className={button}>{children}</button>;
+}`} />
 
       <div className="tip" style={{ backgroundColor: '#e0f2fe', borderLeftColor: '#3b82f6', marginBottom: '32px' }}>
-        <p>Link the style first to your index.html &lt;link rel="stylesheet" href="./src/styles/global.css"&gt;</p>
-        <p>Check your webpage open index.html in any browser</p>
+        <p>The Vite plugin automatically processes .chain.js files and enables HMR during development.</p>
       </div>
 
-      {/* Best Practices */}
       <div className="note" style={{ marginBottom: '24px' }}>
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
-          <li>Enable <code className="inline-code">debug: true</code> during development for easier debugging</li>
-          <li>Use <code className="inline-code">treeShake: true</code> in production to reduce bundle size</li>
-          <li>Keep <code className="inline-code">hmr: true</code> for faster development iteration</li>
-          <li>Use <code className="inline-code">--atomic</code> flag in production for optimal CSS size</li>
+          <li>Enable <code className="inline-code">atomic: true</code> in production for smaller bundle sizes</li>
+          <li>Keep <code className="inline-code">verbose: true</code> during development for debugging</li>
+          <li>Use build-time compilation via CLI for larger projects</li>
         </ul>
       </div>
       
-      {/* Troubleshooting */}
       <div className="tip" style={{ backgroundColor: '#e0f2fe', borderLeftColor: '#3b82f6', marginBottom: '32px' }}>
         <strong>Troubleshooting</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
-          <li><strong>Styles not updating?</strong> Check that HMR is enabled and you're editing .jcss files</li>
-          <li><strong>Debug mode not working?</strong> Make sure <code className="inline-code">debug: true</code> is set in config</li>
-          <li><strong>Tree shaking not removing CSS?</strong> Verify your components are importing the .jcss files correctly</li>
+          <li><strong>Styles not updating?</strong> Check that HMR is enabled and you're editing .chain.js files</li>
           <li><strong>Build errors?</strong> Check the console for ChainCSS compilation errors</li>
+          <li><strong>CSS not generating?</strong> Run <code className="inline-code">npx chaincss build</code> to verify your styles compile</li>
         </ul>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/vue" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Vue Composables
-        </a>
-        <a href="/docs/webpack-plugin" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Webpack Plugin →
-        </a>
-      </div>*/}
     </>
   );
 }

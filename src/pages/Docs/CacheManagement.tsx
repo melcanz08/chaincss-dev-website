@@ -8,17 +8,12 @@ export default function CacheManagement() {
     basic: {
       title: 'Cache Configuration',
       description: 'Configure caching for faster builds',
-      code: `// chaincss.config.cjs
-module.exports = {
+      code: `// chaincss.config.js
+export default {
   atomic: {
-    // Enable caching (default: true)
+    enabled: true,
     cache: true,
-    
-    // Cache storage location
-    cachePath: './.chaincss-cache',
-    
-    // Clear cache on each build (for debugging)
-    // cache: false
+    cachePath: './.chaincss-cache'
   }
 };`,
       preview: () => (
@@ -32,12 +27,11 @@ module.exports = {
           <pre style={{ margin: 0, color: '#1e293b' }}>
 {`Cache Structure:
 .chaincss-cache/
-├── .chaincss-cache          # Main cache file
-└── (older cache files)      # Automatic rotation (keeps last 5)
+└── cache.json
 
- Cache loaded: 47 atomic classes
- Build time: 124ms (cached)
- Fresh build: 342ms`}
+Cache loaded: 47 atomic classes
+Build time: 124ms (cached)
+Fresh build: 342ms`}
           </pre>
         </div>
       )
@@ -45,9 +39,9 @@ module.exports = {
     structure: {
       title: 'Cache Structure',
       description: 'Understanding how ChainCSS caches atomic classes',
-      code: `// .chaincss-cache file structure
+      code: `// .chaincss-cache/cache.json file structure
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "timestamp": 1700000000000,
   "atomicClasses": [
     ["backgroundColor:#3b82f6", {
@@ -74,10 +68,6 @@ module.exports = {
     "atomicStyles": 8,
     "uniqueProperties": 10,
     "savings": "66.7%"
-  },
-  "config": {
-    "threshold": 3,
-    "naming": "hash"
   }
 }`,
       preview: () => {
@@ -93,16 +83,12 @@ module.exports = {
           }}>
             <pre style={{ margin: 0, color: '#e2e8f0' }}>
 {`{
-  "version": "1.0.0",
+  "version": "2.0.0",
   "timestamp": 1700000000000,
   "atomicClasses": 47,
   "componentClassMap": 12,
   "stats": {
     "savings": "73.5%"
-  },
-  "config": {
-    "threshold": 3,
-    "naming": "hash"
   }
 }`}
             </pre>
@@ -117,17 +103,16 @@ module.exports = {
 rm -rf .chaincss-cache
 
 // Method 2: Use ChainCSS API (in your build script)
-import { atomicOptimizer } from 'chaincss';
+import { clearCache } from 'chaincss';
 
-// Clear cache programmatically
-atomicOptimizer.clearCache();
-console.log('Cache cleared');
+clearCache();
 
 // Method 3: Disable cache temporarily for debugging
-// chaincss.config.cjs
-module.exports = {
+// chaincss.config.js
+export default {
   atomic: {
-    cache: false  // Disable caching
+    enabled: true,
+    cache: false
   }
 };`,
       preview: () => (
@@ -141,7 +126,7 @@ module.exports = {
           <pre style={{ margin: 0, color: '#1e293b' }}>
 {`$ rm -rf .chaincss-cache
 
-$ npx chaincss styles.jcss dist/ --atomic
+$ npx chaincss build
 -- Cache cleared
 -- Building fresh...
    Loaded 0 atomic classes from cache
@@ -150,46 +135,6 @@ $ npx chaincss styles.jcss dist/ --atomic
           </pre>
         </div>
       )
-    },
-    rotation: {
-      title: 'Automatic Cache Rotation',
-      description: 'ChainCSS automatically manages cache size',
-      code: `// ChainCSS keeps the 5 most recent cache files
-// Older cache files are automatically deleted
-
-// Example: After 6 builds, the oldest cache is removed
-Build 1: .chaincss-cache-1
-Build 2: .chaincss-cache-2
-Build 3: .chaincss-cache-3
-Build 4: .chaincss-cache-4
-Build 5: .chaincss-cache-5
-Build 6: .chaincss-cache-6 → removes cache-1
-
-// Cache rotation helps manage disk space while maintaining speed`,
-      preview: () => {
-        return (
-          <div style={{ 
-            backgroundColor: '#f8fafc', 
-            padding: '20px', 
-            borderRadius: '8px',
-            fontFamily: 'monospace',
-            fontSize: '13px'
-          }}>
-            <pre style={{ margin: 0, color: '#1e293b' }}>
-{` .chaincss-cache/
-├── .chaincss-cache-1 (oldest - deleted)
-├── .chaincss-cache-2
-├── .chaincss-cache-3
-├── .chaincss-cache-4
-├── .chaincss-cache-5
-└── .chaincss-cache-6 (newest)
-
- Automatic cleanup: keeps 5 most recent
- Disk space managed automatically`}
-            </pre>
-          </div>
-        );
-      }
     },
     troubleshooting: {
       title: 'Troubleshooting Cache',
@@ -201,21 +146,18 @@ Build 6: .chaincss-cache-6 → removes cache-1
 rm -rf .chaincss-cache
 
 // Issue: Cache version mismatch
-// Cache version (1.0.0) differs from current (2.0.0)
+// Cache version (1.x) differs from current (2.x)
 // Solution: Cache automatically recreates
 
 // Issue: Stale cache after config change
 // Solution: Delete cache when changing atomic settings
 rm -rf .chaincss-cache
 
-// Debug: See cache stats
-console.log(atomicOptimizer.getStats());
-// {
-//   totalStyles: 156,
-//   atomicStyles: 42,
-//   uniqueProperties: 89,
-//   savings: "73.1%"
-// }`,
+// Debug: See cache stats in config
+// chaincss.config.js
+export default {
+  verbose: true
+};`,
       preview: () => {
         return (
           <div style={{ 
@@ -226,13 +168,13 @@ console.log(atomicOptimizer.getStats());
             fontSize: '13px'
           }}>
             <pre style={{ margin: 0, color: '#92400e' }}>
-{` Cache threshold (3) differs from current (2)
- Solution: rm -rf .chaincss-cache
+{`Cache threshold (3) differs from current (2)
+Solution: rm -rf .chaincss-cache
 
- Cache version mismatch
- Solution: Automatic recreation
+Cache version mismatch
+Solution: Automatic recreation
 
- Cache cleared and rebuilt with new settings`}
+Cache cleared and rebuilt with new settings`}
             </pre>
           </div>
         );
@@ -251,7 +193,6 @@ console.log(atomicOptimizer.getStats());
         </p>
       </div>
       
-      {/* What is Caching */}
       <h2>What is Caching?</h2>
       <p>
         ChainCSS caches atomic classes and component mappings between builds. This dramatically speeds up
@@ -259,7 +200,7 @@ console.log(atomicOptimizer.getStats());
       </p>
       
       <div className="tip">
-         <strong>Performance Impact:</strong>
+        <strong>Performance Impact:</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
           <li>First build: ~300-500ms (generates cache)</li>
           <li>Subsequent builds: ~100-200ms (uses cache)</li>
@@ -267,7 +208,6 @@ console.log(atomicOptimizer.getStats());
         </ul>
       </div>
       
-      {/* Examples */}
       <h2>Examples</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
         <button
@@ -310,19 +250,6 @@ console.log(atomicOptimizer.getStats());
           Clear Cache
         </button>
         <button
-          onClick={() => setActiveExample('rotation')}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '8px',
-            border: activeExample === 'rotation' ? '2px solid #667eea' : '1px solid #e2e8f0',
-            backgroundColor: activeExample === 'rotation' ? '#eef2ff' : 'white',
-            color: activeExample === 'rotation' ? '#667eea' : '#475569',
-            cursor: 'pointer'
-          }}
-        >
-          Cache Rotation
-        </button>
-        <button
           onClick={() => setActiveExample('troubleshooting')}
           style={{
             padding: '8px 16px',
@@ -354,34 +281,22 @@ console.log(atomicOptimizer.getStats());
         </div>
       </div>
       
-      {/* Cache API Reference */}
       <h2>Cache API Reference</h2>
       
-      <h3>CacheManager Class</h3>
-      <CodeBlock language="javascript" code={`import { CacheManager } from 'chaincss/cache';
-
-const cache = new CacheManager('./.chaincss-cache');
-
-// Load cache from disk
-cache.load();
-
-// Get cached value
-const value = cache.get('key');
-
-// Set cached value
-cache.set('key', value);
-
-// Save cache to disk
-cache.save();
-
-// Clear all cache
-cache.clear();`} />
+      <h3>Cache Configuration</h3>
+      <CodeBlock language="javascript" code={`// chaincss.config.js
+export default {
+  atomic: {
+    enabled: true,
+    cache: true,
+    cachePath: './.chaincss-cache'
+  }
+};`} />
       
-      <h3>Atomic Optimizer Cache</h3>
-      <CodeBlock language="javascript" code={`import { atomicOptimizer } from 'chaincss';
+      <h3>Programmatic Cache Access</h3>
+      <CodeBlock language="javascript" code={`import { getStats, clearCache } from 'chaincss';
 
-// Get cache statistics
-const stats = atomicOptimizer.getStats();
+const stats = getStats();
 console.log(stats);
 // {
 //   totalStyles: 156,
@@ -390,15 +305,8 @@ console.log(stats);
 //   savings: "73.1%"
 // }
 
-// Clear atomic optimizer cache
-atomicOptimizer.clearCache();
-
-// Get all cached atomic classes
-const classes = atomicOptimizer.getAllAtomicClasses();
-console.log(classes);
-// [{ className: 'c_565ef3', prop: 'backgroundColor', value: '#3b82f6' }, ...]`} />
+clearCache();`} />
       
-      {/* Cache Best Practices */}
       <div className="note">
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
@@ -410,30 +318,13 @@ console.log(classes);
         </ul>
       </div>
       
-      {/* .gitignore Example */}
       <h2>.gitignore</h2>
       <CodeBlock language="gitignore" code={`# ChainCSS cache
 .chaincss-cache/
-chaincss-manifest.json
-*.map.json
-*.classes.js
-*.classes.d.ts`} />
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/atomic-css" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Atomic CSS
-        </a>
-        <a href="/docs/typescript" style={{ color: '#667eea', textDecoration: 'none' }}>
-          TypeScript Types →
-        </a>
-      </div>*/}
+src/**/*.class.js
+src/**/*.css
+src/global-style/*.css
+!.chain.js`} />
     </>
   );
 }

@@ -4,13 +4,16 @@ import CodeBlock from '../../components/CodeBlock';
 export default function ThemeContracts() {
   const [activeExample, setActiveExample] = useState('contract');
   
+  // Move ALL hooks to the top level (outside the examples object)
+  const [theme, setTheme] = useState('light');
+  const [testTheme, setTestTheme] = useState('valid');
+  
   const examples = {
     contract: {
       title: 'Defining a Theme Contract',
       description: 'Create a contract that defines the structure of your themes',
       code: `import { defineThemeContract } from 'chaincss';
 
-// Define what a valid theme must contain
 const themeContract = defineThemeContract({
   colors: {
     primary: '',
@@ -32,10 +35,7 @@ const themeContract = defineThemeContract({
       large: ''
     }
   }
-});
-
-// This contract ensures all themes have the same structure
-// Now any theme you create must match this shape`,
+});`,
       preview: () => (
         <div style={{ 
           backgroundColor: '#f8fafc', 
@@ -61,7 +61,7 @@ export const themeContract = {
   }
 }
 
-Contract defined - now all themes must match this shape`}
+Contract defined - all themes must match this shape`}
           </pre>
         </div>
       )
@@ -71,7 +71,6 @@ Contract defined - now all themes must match this shape`}
       description: 'Create a theme that conforms to your contract',
       code: `import { defineThemeContract, createTheme } from 'chaincss';
 
-// First, define the contract
 const contract = defineThemeContract({
   colors: {
     primary: '',
@@ -87,7 +86,6 @@ const contract = defineThemeContract({
   }
 });
 
-// Create a light theme that matches the contract
 const lightTheme = createTheme(contract, {
   colors: {
     primary: '#3b82f6',
@@ -103,7 +101,6 @@ const lightTheme = createTheme(contract, {
   }
 });
 
-// Create a dark theme
 const darkTheme = createTheme(contract, {
   colors: {
     primary: '#60a5fa',
@@ -119,7 +116,6 @@ const darkTheme = createTheme(contract, {
   }
 });`,
       preview: () => {
-        const [theme, setTheme] = useState('light');
         const isDark = theme === 'dark';
         
         const lightStyles = {
@@ -199,7 +195,6 @@ const darkTheme = createTheme(contract, {
       description: 'Automatically validate themes against your contract',
       code: `import { defineThemeContract, createTheme, validateTheme } from 'chaincss';
 
-// Define contract
 const contract = defineThemeContract({
   colors: {
     primary: '',
@@ -207,7 +202,6 @@ const contract = defineThemeContract({
   }
 });
 
-// This will work - matches the contract
 const validTheme = createTheme(contract, {
   colors: {
     primary: '#3b82f6',
@@ -215,36 +209,29 @@ const validTheme = createTheme(contract, {
   }
 });
 
-// This will throw an error - missing 'background'
 try {
   const invalidTheme = createTheme(contract, {
     colors: {
       primary: '#3b82f6'
-      // missing background!
     }
   });
 } catch (err) {
   console.error('Validation failed:', err.message);
-  // Error: Missing required token: "colors.background"
 }
 
-// Manual validation
 const isValid = validateTheme(contract, {
   colors: {
     primary: '#3b82f6',
     background: '#ffffff'
   }
-});
-// Returns true`,
+});`,
       preview: () => {
-        const [testTheme, setTestTheme] = useState('valid');
-        
         const validThemeData = {
           colors: { primary: '#3b82f6', background: '#ffffff' }
         };
         
         const invalidThemeData = {
-          colors: { primary: '#3b82f6' } // missing background
+          colors: { primary: '#3b82f6' }
         };
         
         const themeData = testTheme === 'valid' ? validThemeData : invalidThemeData;
@@ -317,7 +304,6 @@ const isValid = validateTheme(contract, {
         </p>
       </div>
       
-      {/* What are Theme Contracts */}
       <h2>What are Theme Contracts?</h2>
       <p>
         Theme contracts define the expected structure of your themes. They act as a blueprint,
@@ -334,7 +320,6 @@ const isValid = validateTheme(contract, {
         </ul>
       </div>
       
-      {/* Examples */}
       <h2>Examples</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
         <button
@@ -395,7 +380,6 @@ const isValid = validateTheme(contract, {
         </div>
       </div>
       
-      {/* API Reference */}
       <h2>API Reference</h2>
       
       <h3>defineThemeContract(contract)</h3>
@@ -430,8 +414,7 @@ const isValid = validateTheme(contract, {
       
       <h3>validateTheme(contract, theme)</h3>
       <p>Validates a theme against a contract without creating a token object.</p>
-      <CodeBlock language="javascript" code={`const isValid = validateTheme(contract, themeValues);
-// Returns true or false`} />
+      <CodeBlock language="javascript" code={`const isValid = validateTheme(contract, themeValues);`} />
       
       <h3>Theme Contract with Design Tokens</h3>
       <p>Combine theme contracts with design tokens for complete type safety:</p>
@@ -448,14 +431,13 @@ const lightTheme = createTheme(contract, {
   colors: { primary: '#3b82f6', background: '#ffffff' }
 });
 
-// Convert to design tokens
 const tokens = createTokens(lightTheme);
-const styles = $()
-  .backgroundColor('$colors.background')
-  .color('$colors.primary')
-  .block();`} />
+
+export const styles = $
+  .bg('$colors.background')
+  .c('$colors.primary')
+  .$el();`} />
       
-      {/* Best Practices */}
       <div className="note">
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
@@ -466,22 +448,6 @@ const styles = $()
           <li>Combine contracts with TypeScript for even better type safety</li>
         </ul>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/css-variables" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← CSS Variables
-        </a>
-        <a href="/docs/typescript" style={{ color: '#667eea', textDecoration: 'none' }}>
-          TypeScript Types →
-        </a>
-      </div>*/}
     </>
   );
 }

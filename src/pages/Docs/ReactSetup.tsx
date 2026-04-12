@@ -4,19 +4,13 @@ import CodeBlock from '../../components/CodeBlock';
 export default function ReactSetup() {
   const [activeExample, setActiveExample] = useState('basic');
   
-  // State for dynamic example
   const [dynamicVariant, setDynamicVariant] = useState('primary');
   const [dynamicSize, setDynamicSize] = useState('medium');
-  
-  // State for theme example
   const [themeMode, setThemeMode] = useState('light');
   const isDark = themeMode === 'dark';
-  
-  // State for performance example
   const [perfCount, setPerfCount] = useState(0);
   const [perfVariant, setPerfVariant] = useState('primary');
   
-  // Get styles for dynamic example
   const getDynamicStyles = () => {
     const bgColor = dynamicVariant === 'primary' ? '#3b82f6' : 
                    dynamicVariant === 'danger' ? '#ef4444' : '#6b7280';
@@ -32,7 +26,6 @@ export default function ReactSetup() {
   
   const dynamicStyles = getDynamicStyles();
   
-  // Get styles for performance example
   const getPerfStyles = () => ({
     bgColor: perfVariant === 'primary' ? '#3b82f6' : '#6b7280',
     hoverColor: perfVariant === 'primary' ? '#2563eb' : '#4b5563'
@@ -44,20 +37,22 @@ export default function ReactSetup() {
     basic: {
       title: 'Basic Usage',
       description: 'Use useChainStyles hook in your React components',
-      code: `import { useChainStyles } from 'chaincss/react';
+      code: `import { useChainStyles } from 'chaincss/runtime';
 
 function Button({ children }) {
   const styles = useChainStyles({
-    button: $()
-      .backgroundColor('#3b82f6')
-      .color('white')
-      .padding('12px 24px')
-      .borderRadius('8px')
-      .hover()
-        .backgroundColor('#2563eb')
-        .end()
-      .transition('all 0.2s')
-      .block()
+    button: {
+      backgroundColor: '#3b82f6',
+      color: 'white',
+      padding: '12px 24px',
+      borderRadius: '8px',
+      transition: 'all 0.2s',
+      cursor: 'pointer',
+      border: 'none',
+      hover: {
+        backgroundColor: '#2563eb'
+      }
+    }
   });
 
   return <button className={styles.button}>{children}</button>;
@@ -81,27 +76,27 @@ function Button({ children }) {
     dynamic: {
       title: 'Dynamic Props',
       description: 'Create styles based on component props',
-      code: `import { useChainStyles } from 'chaincss/react';
+      code: `import { useChainStyles } from 'chaincss/runtime';
 
 function Button({ variant = 'primary', size = 'medium', children }) {
   const styles = useChainStyles({
-    button: $()
-      .padding(size === 'large' ? '16px 32px' : 
-               size === 'small' ? '8px 16px' : '12px 24px')
-      .fontSize(size === 'large' ? '18px' : 
-                size === 'small' ? '14px' : '16px')
-      .backgroundColor(variant === 'primary' ? '#3b82f6' : 
-                      variant === 'danger' ? '#ef4444' : '#6b7280')
-      .color('white')
-      .borderRadius('8px')
-      .border('none')
-      .cursor('pointer')
-      .hover()
-        .backgroundColor(variant === 'primary' ? '#2563eb' : 
-                        variant === 'danger' ? '#dc2626' : '#4b5563')
-        .end()
-      .transition('all 0.2s')
-      .block()
+    button: {
+      padding: size === 'large' ? '16px 32px' : 
+              size === 'small' ? '8px 16px' : '12px 24px',
+      fontSize: size === 'large' ? '18px' : 
+                size === 'small' ? '14px' : '16px',
+      backgroundColor: variant === 'primary' ? '#3b82f6' : 
+                      variant === 'danger' ? '#ef4444' : '#6b7280',
+      color: 'white',
+      borderRadius: '8px',
+      border: 'none',
+      cursor: 'pointer',
+      transition: 'all 0.2s',
+      hover: {
+        backgroundColor: variant === 'primary' ? '#2563eb' : 
+                        variant === 'danger' ? '#dc2626' : '#4b5563'
+      }
+    }
   });
 
   return <button className={styles.button}>{children}</button>;
@@ -142,7 +137,7 @@ function Button({ variant = 'primary', size = 'medium', children }) {
       description: 'Use ChainCSS with React Context for theming',
       code: `// ThemeContext.tsx
 import { createContext, useContext, useState } from 'react';
-import { useChainStyles } from 'chaincss/react';
+import { useChainStyles } from 'chaincss/runtime';
 
 const ThemeContext = createContext();
 
@@ -150,19 +145,18 @@ export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('light');
   
   const styles = useChainStyles({
-    app: $()
-      .backgroundColor(theme === 'light' ? '#ffffff' : '#0f172a')
-      .color(theme === 'light' ? '#1e293b' : '#f1f5f9')
-      .minHeight('100vh')
-      .transition('all 0.3s')
-      .block(),
-    
-    card: $()
-      .backgroundColor(theme === 'light' ? '#f8fafc' : '#1e293b')
-      .borderRadius('12px')
-      .padding('24px')
-      .border(theme === 'light' ? '1px solid #e2e8f0' : '1px solid #334155')
-      .block()
+    app: {
+      backgroundColor: theme === 'light' ? '#ffffff' : '#0f172a',
+      color: theme === 'light' ? '#1e293b' : '#f1f5f9',
+      minHeight: '100vh',
+      transition: 'all 0.3s'
+    },
+    card: {
+      backgroundColor: theme === 'light' ? '#f8fafc' : '#1e293b',
+      borderRadius: '12px',
+      padding: '24px',
+      border: theme === 'light' ? '1px solid #e2e8f0' : '1px solid #334155'
+    }
   });
   
   return (
@@ -212,29 +206,29 @@ export function useTheme() {
     performance: {
       title: 'Performance Optimization',
       description: 'Use memoization to prevent unnecessary re-renders',
-      code: `import { useChainStyles } from 'chaincss/react';
+      code: `import { useChainStyles } from 'chaincss/runtime';
 import { useMemo } from 'react';
 
 function OptimizedButton({ variant, size, children }) {
   const styles = useMemo(() => ({
-    button: $()
-      .padding(size === 'large' ? '16px 32px' : '12px 24px')
-      .fontSize(size === 'large' ? '18px' : '16px')
-      .backgroundColor(variant === 'primary' ? '#3b82f6' : '#6b7280')
-      .color('white')
-      .borderRadius('8px')
-      .border('none')
-      .cursor('pointer')
-      .hover()
-        .backgroundColor(variant === 'primary' ? '#2563eb' : '#4b5563')
-        .end()
-      .transition('all 0.2s')
-      .block()
+    button: {
+      padding: size === 'large' ? '16px 32px' : '12px 24px',
+      fontSize: size === 'large' ? '18px' : '16px',
+      backgroundColor: variant === 'primary' ? '#3b82f6' : '#6b7280',
+      color: 'white',
+      borderRadius: '8px',
+      border: 'none',
+      cursor: 'pointer',
+      transition: 'all 0.2s',
+      hover: {
+        backgroundColor: variant === 'primary' ? '#2563eb' : '#4b5563'
+      }
+    }
   }), [variant, size]);
 
-  const { classes } = useChainStyles(styles);
+  const stylesObj = useChainStyles(styles);
   
-  return <button className={classes.button}>{children}</button>;
+  return <button className={stylesObj.button}>{children}</button>;
 }`,
       preview: () => (
         <div>
@@ -283,15 +277,15 @@ function OptimizedButton({ variant, size, children }) {
       <CodeBlock language="bash" code={`npm install chaincss`} />
       
       <h2>Basic Setup</h2>
-      <p>First, import the <code className="inline-code">useChainStyles</code> hook from ChainCSS:</p>
-      <CodeBlock language="javascript" code={`import { useChainStyles } from 'chaincss/react';`} />
+      <p>First, import the <code className="inline-code">useChainStyles</code> hook from ChainCSS runtime:</p>
+      <CodeBlock language="javascript" code={`import { useChainStyles } from 'chaincss/runtime';`} />
       
       <h2>Examples</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
-        <button onClick={() => setActiveExample('basic')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'basic' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'basic' ? '#eef2ff' : 'white', cursor: 'pointer' }}> Basic Usage</button>
-        <button onClick={() => setActiveExample('dynamic')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'dynamic' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'dynamic' ? '#eef2ff' : 'white', cursor: 'pointer' }}> Dynamic Props</button>
-        <button onClick={() => setActiveExample('theme')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'theme' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'theme' ? '#eef2ff' : 'white', cursor: 'pointer' }}> Theme Switching</button>
-        <button onClick={() => setActiveExample('performance')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'performance' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'performance' ? '#eef2ff' : 'white', cursor: 'pointer' }}> Performance</button>
+        <button onClick={() => setActiveExample('basic')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'basic' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'basic' ? '#eef2ff' : 'white', cursor: 'pointer' }}>Basic Usage</button>
+        <button onClick={() => setActiveExample('dynamic')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'dynamic' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'dynamic' ? '#eef2ff' : 'white', cursor: 'pointer' }}>Dynamic Props</button>
+        <button onClick={() => setActiveExample('theme')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'theme' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'theme' ? '#eef2ff' : 'white', cursor: 'pointer' }}>Theme Switching</button>
+        <button onClick={() => setActiveExample('performance')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'performance' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'performance' ? '#eef2ff' : 'white', cursor: 'pointer' }}>Performance</button>
       </div>
       
       <div style={{ marginBottom: '32px' }}>
@@ -308,58 +302,29 @@ function OptimizedButton({ variant, size, children }) {
       <h2>API Reference</h2>
       
       <h3>useChainStyles(styles, options?)</h3>
-      <div style={{ overflowX: 'auto', marginBottom: '24px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Parameter</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Type</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Description</th>
-             </tr>
-          </thead>
-          <tbody>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">styles</code></td>
-              <td style={{ padding: '12px' }}>Object | Function</td>
-              <td style={{ padding: '12px' }}>Style definitions object or function returning styles</td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">options</code></td>
-              <td style={{ padding: '12px' }}>Object</td>
-              <td style={{ padding: '12px' }}>Optional configuration (cache, namespace, atomic)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <h3>useDynamicChainStyles(styleFactory, deps, options?)</h3>
-      <div style={{ overflowX: 'auto', marginBottom: '32px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Parameter</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Type</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Description</th>
-             </tr>
-          </thead>
-          <tbody>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">styleFactory</code></td>
-              <td style={{ padding: '12px' }}>Function</td>
-              <td style={{ padding: '12px' }}>Function that returns style definitions</td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">deps</code></td>
-              <td style={{ padding: '12px' }}>Array</td>
-              <td style={{ padding: '12px' }}>Dependencies array (like useEffect)</td>
-            </tr>
-          </tbody>
-        </table>
+      <div style={{ marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gap: '1px', backgroundColor: '#e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '150px 100px 1fr', backgroundColor: '#f8fafc', fontWeight: '600', borderBottom: '2px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}>Parameter</div>
+            <div style={{ padding: '12px' }}>Type</div>
+            <div style={{ padding: '12px' }}>Description</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '150px 100px 1fr', backgroundColor: 'white', borderBottom: '1px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}><code className="inline-code">styles</code></div>
+            <div style={{ padding: '12px' }}>Object | Function</div>
+            <div style={{ padding: '12px' }}>Style definitions object or function returning styles</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '150px 100px 1fr', backgroundColor: 'white' }}>
+            <div style={{ padding: '12px' }}><code className="inline-code">options</code></div>
+            <div style={{ padding: '12px' }}>Object</div>
+            <div style={{ padding: '12px' }}>Optional configuration (cache, namespace)</div>
+          </div>
+        </div>
       </div>
       
       <h3>cx(...classes)</h3>
       <p>Utility function to conditionally join class names:</p>
-      <CodeBlock language="javascript" code={`import { cx } from 'chaincss/react';
+      <CodeBlock language="javascript" code={`import { cx } from 'chaincss/runtime';
 
 const buttonClass = cx(
   'btn',
@@ -373,26 +338,9 @@ const buttonClass = cx(
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
           <li>Use <code className="inline-code">useMemo</code> for styles that depend on props to prevent unnecessary re-renders</li>
           <li>Extract static styles outside components when possible</li>
-          <li>Use <code className="inline-code">useDynamicChainStyles</code> when styles depend on external values</li>
-          <li>Enable atomic CSS in production for smaller bundle sizes</li>
+          <li>Use build-time compilation for production to reduce runtime overhead</li>
         </ul>
       </div>
-      
-      {/*
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/vanilla-js" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Vanilla JavaScript
-        </a>
-        <a href="/docs/vue" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Vue Composables →
-        </a>
-      </div>*/}
     </>
   );
 }

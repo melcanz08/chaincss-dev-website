@@ -19,15 +19,16 @@ export default function GettingStarted() {
       {/* The Core Idea */}
       <h2>The Core Idea</h2>
       <CodeBlock language="javascript" code={`// This IS JavaScript - not a template literal, not a preprocessor
+import {$} from 'chaincss';
 const theme = getSystemTheme();
-const button = $()
-  .backgroundColor(theme === 'dark' ? '#0f172a' : '#ffffff')
-  .color(theme === 'dark' ? '#f1f5f9' : '#1e293b')
-  .padding(theme === 'mobile' ? '8px' : '16px')
+const button = $
+  .bg(theme === 'dark' ? '#0f172a' : '#ffffff') //backgroundColor
+  .c(theme === 'dark' ? '#f1f5f9' : '#1e293b')  //color
+  .p(theme === 'mobile' ? '8px' : '16px')       //padding
   .hover()
     .transform('scale(1.05)')
     .end()
-  .block('.btn');`} />
+  .$el('.btn');`} />
       <p>
         This code <strong>executes</strong> at build time or runtime. The JavaScript runs,
         computes values, and generates the final CSS. No static analysis. No limitations.

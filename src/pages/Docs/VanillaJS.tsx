@@ -4,53 +4,47 @@ import CodeBlock from '../../components/CodeBlock';
 export default function VanillaJS() {
   const [activeExample, setActiveExample] = useState('basic');
   
-  // State for basic example
   const [hovered, setHovered] = useState(false);
-  
-  // State for dynamic example
   const [theme, setTheme] = useState('light');
-  
-  // State for classmap example
   const [variant, setVariant] = useState('primary');
   
-  // Class map for classmap example
-  const classMap = {
-    '.btn-primary': 'c_3b82f6 c_ffffff c_1224 c_8px',
-    '.btn-secondary': 'c_6b7280 c_ffffff c_1224 c_8px',
-    '.btn-danger': 'c_ef4444 c_ffffff c_1224 c_8px'
+  const getClass = (variant: string) => {
+    const classes = {
+      primary: 'btn-primary',
+      secondary: 'btn-secondary',
+      danger: 'btn-danger'
+    };
+    return classes[variant as keyof typeof classes];
   };
   
-  const getClass = (selector: string) => classMap[selector as keyof typeof classMap] || '';
-  const btnClass = getClass(`.btn-${variant}`);
+  const btnClass = getClass(variant);
   
   const examples = {
     basic: {
       title: 'Basic Usage',
       description: 'Use ChainCSS directly in vanilla JavaScript',
-      code: `// styles.jcss
-<@
-const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
-  .hover()
-    .backgroundColor('#2563eb')
-    .end()
-  .transition('all 0.2s')
-  .block('.btn');
+      code: `// src/components/Button/styles/button.chain.js
+import { $ } from 'chaincss';
 
-run(button);
-@>
+export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
+  .hover()
+    .bg('#2563eb')
+  .end()
+  .transition('all 0.2s')
+  .$el('.btn');
 
 // Run the CLI
-// npx chaincss styles.jcss dist/
+// npx chaincss build
 
 // index.html
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="dist/global.css">
+  <link rel="stylesheet" href="src/global-style/global.css">
 </head>
 <body>
   <button class="btn">Click Me</button>
@@ -83,9 +77,8 @@ run(button);
       title: 'Dynamic Styles',
       description: 'Create dynamic styles with JavaScript logic',
       code: `// dynamic-styles.js
-import { $, run } from 'chaincss';
+import { createTokens } from 'chaincss';
 
-// Get theme from localStorage or system preference
 const getTheme = () => {
   const saved = localStorage.getItem('theme');
   if (saved) return saved;
@@ -93,17 +86,18 @@ const getTheme = () => {
 };
 
 const theme = getTheme();
+const tokens = createTokens({
+  colors: {
+    background: theme === 'dark' ? '#0f172a' : '#ffffff',
+    text: theme === 'dark' ? '#f1f5f9' : '#1e293b'
+  }
+});
 
-// Create dynamic styles based on theme
-const appStyles = $()
-  .backgroundColor(theme === 'dark' ? '#0f172a' : '#ffffff')
-  .color(theme === 'dark' ? '#f1f5f9' : '#1e293b')
-  .minHeight('100vh')
-  .block('.app');
+const vars = tokens.toCSSVariables();
+const style = document.createElement('style');
+style.textContent = vars;
+document.head.appendChild(style);
 
-run(appStyles);
-
-// Theme switcher
 document.getElementById('theme-toggle')?.addEventListener('click', () => {
   const newTheme = theme === 'dark' ? 'light' : 'dark';
   localStorage.setItem('theme', newTheme);
@@ -138,29 +132,24 @@ document.getElementById('theme-toggle')?.addEventListener('click', () => {
     },
     classmap: {
       title: 'Using Class Maps',
-      description: 'Access generated atomic classes programmatically',
-      code: `// After running with --atomic flag
-// npx chaincss styles.jcss dist/ --atomic
+      description: 'Access generated class names programmatically',
+      code: `// After running chaincss build
+// Generated files:
+// src/components/Button/styles/button.class.js
+// src/components/Button/styles/button.css
 
-// global.classes.js is generated
-import { classMap, getClass, applyClasses } from './dist/global.classes.js';
+import { primaryBtn, secondaryBtn, dangerBtn } from './styles/button.class.js';
+import './styles/button.css';
 
-// Get classes for a selector
-const btnClasses = classMap['.btn'];
-// "c_3b82f6 c_ffffff c_1224 c_8px"
+const buttons = {
+  primary: primaryBtn,
+  secondary: secondaryBtn,
+  danger: dangerBtn
+};
 
-// Apply classes to an element
-const button = document.querySelector('.btn');
-button.className = btnClasses;
-
-// Using helper function
-applyClasses(button, '.btn');
-
-// Dynamic class application
 const createButton = (variant) => {
   const btn = document.createElement('button');
-  const classes = classMap[\`.btn-\${variant}\`] || classMap['.btn'];
-  btn.className = classes;
+  btn.className = buttons[variant];
   btn.textContent = variant;
   return btn;
 };`,
@@ -196,7 +185,7 @@ const createButton = (variant) => {
       code: `// package.json
 {
   "scripts": {
-    "build:css": "chaincss src/styles/main.jcss dist/ --atomic",
+    "build:css": "chaincss build",
     "build": "npm run build:css && cp src/index.html dist/",
     "dev": "npm run build:css -- --watch & live-server dist/"
   },
@@ -209,14 +198,18 @@ const createButton = (variant) => {
 // Project structure
 my-project/
 ├── src/
-│   ├── styles/
-│   │   └── main.jcss
+│   ├── components/
+│   │   └── Button/styles/
+│   │       ├── button.chain.js
+│   │       ├── button.class.js
+│   │       └── button.css
+│   ├── global-style/
+│   │   └── global.css
 │   └── index.html
 ├── dist/
-│   ├── global.css
 │   └── index.html
 ├── package.json
-└── chaincss.config.cjs
+└── chaincss.config.js
 
 // Run development
 npm run dev
@@ -235,9 +228,10 @@ npm run build`,
           <pre style={{ margin: 0 }}>
 {`$ npm run dev
 
-> chaincss src/styles/main.jcss dist/ --atomic --watch
-CSS generated: dist/global.css
-Class map: dist/global.map.json
+> chaincss build --watch
+✓ Generated src/components/Button/styles/button.class.js
+✓ Generated src/components/Button/styles/button.css
+✓ Generated global.css (minified)
 
 > live-server dist/
 Serving dist/ at http://localhost:8080
@@ -266,8 +260,8 @@ Serving dist/ at http://localhost:8080
       <h2>Basic Workflow</h2>
       <div className="tip" style={{ marginBottom: '24px' }}>
         <ol style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
-          <li>Create a <code className="inline-code">.jcss</code> file with your styles</li>
-          <li>Run the ChainCSS CLI to generate CSS</li>
+          <li>Create a <code className="inline-code">.chain.js</code> file with your styles</li>
+          <li>Run <code className="inline-code">npx chaincss build</code> to generate CSS</li>
           <li>Link the generated CSS in your HTML</li>
           <li>Use the generated class names in your HTML/JS</li>
         </ol>
@@ -339,77 +333,23 @@ Serving dist/ at http://localhost:8080
         <CodeBlock language="javascript" code={currentExample.code} />
         
         <div className="tip" style={{ marginTop: '16px' }}>
-          <strong>🎬 Live Preview:</strong>
+          <strong>Live Preview:</strong>
           <div style={{ marginTop: '12px' }}>
             {currentExample.preview()}
           </div>
         </div>
       </div>
       
-      <h2>Runtime API (Browser)</h2>
-      <p>You can also use ChainCSS directly in the browser without build step:</p>
-      <CodeBlock language="html" code={`<!DOCTYPE html>
-<html>
-<head>
-  <script type="importmap">
-    {
-      "imports": {
-        "chaincss": "https://unpkg.com/chaincss@latest/browser/index.js"
-      }
-    }
-  </script>
-</head>
-<body>
-  <button id="btn">Click Me</button>
-  
-  <script type="module">
-    import { $, run } from 'chaincss';
-    
-    const button = $()
-      .backgroundColor('#3b82f6')
-      .color('white')
-      .padding('12px 24px')
-      .borderRadius('8px')
-      .hover()
-        .backgroundColor('#2563eb')
-        .end()
-      .transition('all 0.2s')
-      .block('.btn');
-    
-    run(button);
-    
-    // Styles are injected automatically
-    document.getElementById('btn').className = 'btn';
-  </script>
-</body>
-</html>`} />
-      
       <div className="note">
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
           <li>Use build-time compilation for production to minimize runtime overhead</li>
-          <li>Enable atomic CSS with <code className="inline-code">--atomic</code> for smaller bundles</li>
-          <li>Use class maps for dynamic class generation</li>
-          <li>Store generated CSS in <code className="inline-code">dist/</code> and serve statically</li>
+          <li>Enable atomic CSS in config for smaller bundles</li>
+          <li>Use generated class names for dynamic class application</li>
+          <li>Store generated CSS in component styles folders</li>
           <li>Use watch mode during development for automatic rebuilds</li>
         </ul>
       </div>
-      
-      {/*
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/css-variables" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← CSS Variables
-        </a>
-        <a href="/docs/react" style={{ color: '#667eea', textDecoration: 'none' }}>
-          React →
-        </a>
-      </div>*/}
     </>
   );
 }

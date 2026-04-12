@@ -9,23 +9,22 @@ export default function AtRules() {
     media: {
       title: 'Media Queries',
       description: 'Create responsive designs that adapt to different screen sizes',
-      code: `const responsiveCard = $()
-  .backgroundColor('white')
-  .borderRadius('12px')
-  .padding('20px')
-  .boxShadow('0 1px 3px rgba(0,0,0,0.1)')
-  .width('100%')
-  // Mobile first - base styles
+      code: `export const responsiveCard = $
+  .bg('white')
+  .rounded('12px')
+  .p('20px')
+  .shadow('0 1px 3px rgba(0,0,0,0.1)')
+  .w('100%')
   .media('(min-width: 640px)', (css) => {
-    css.width('calc(50% - 16px)')
+    css.w('calc(50% - 16px)')
   })
   .media('(min-width: 1024px)', (css) => {
-    css.width('calc(33.333% - 16px)')
+    css.w('calc(33.333% - 16px)')
   })
   .media('(min-width: 1280px)', (css) => {
-    css.width('calc(25% - 16px)')
+    css.w('calc(25% - 16px)')
   })
-  .block('.card');`,
+  .$el('.card');`,
       css: `.card {
   background-color: white;
   border-radius: 12px;
@@ -63,24 +62,16 @@ export default function AtRules() {
     keyframes: {
       title: 'Keyframes Animations',
       description: 'Create custom animations with keyframes',
-      code: `// Define the animation
-const slideIn = $()
+      code: `export const slideIn = $
   .keyframes('slideIn', (kf) => {
-    kf.from({ 
-      opacity: 0, 
-      transform: 'translateX(-50px)' 
-    });
-    kf.to({ 
-      opacity: 1, 
-      transform: 'translateX(0)' 
-    });
+    kf.from({ opacity: 0, transform: 'translateX(-50px)' })
+    kf.to({ opacity: 1, transform: 'translateX(0)' })
   })
-  .block();
+  .$el();
 
-// Use the animation
-const animatedElement = $()
+export const animatedElement = $
   .animation('slideIn 0.5s ease-out')
-  .block('.animated');`,
+  .$el('.animated');`,
       css: `@keyframes slideIn {
   from {
     opacity: 0;
@@ -106,19 +97,19 @@ const animatedElement = $()
     container: {
       title: 'Container Queries',
       description: 'Style elements based on their container size',
-      code: `const card = $()
+      code: `export const card = $
   .container('(min-width: 400px)', (css) => {
     css.display('flex')
       .gap('20px')
       .select('img')
-        .width('150px')
-        .height('150px')
-        .block()
+        .w('150px')
+        .h('150px')
+        .$el()
       .select('.content')
         .flex('1')
-        .block();
+        .$el()
   })
-  .block('.card');`,
+  .$el('.card');`,
       css: `.card {
   container-type: inline-size;
 }
@@ -147,20 +138,20 @@ const animatedElement = $()
     fontFace: {
       title: 'Custom Fonts',
       description: 'Load and use custom fonts with @font-face',
-      code: `const customFont = $()
+      code: `export const customFont = $
   .fontFace((css) => {
     css.fontFamily('CustomFont')
       .src("url('/fonts/custom.woff2') format('woff2')")
       .fontWeight('400')
       .fontStyle('normal')
-      .fontDisplay('swap');
+      .fontDisplay('swap')
   })
-  .block();
+  .$el();
 
-const text = $()
+export const text = $
   .fontFamily('CustomFont, system-ui')
-  .fontSize('24px')
-  .block('.custom-text');`,
+  .textSize('24px')
+  .$el('.custom-text');`,
       css: `@font-face {
   font-family: CustomFont;
   src: url('/fonts/custom.woff2') format('woff2');
@@ -183,18 +174,18 @@ const text = $()
     supports: {
       title: 'Feature Detection',
       description: 'Apply styles only when certain CSS features are supported',
-      code: `const gridLayout = $()
+      code: `export const gridLayout = $
   .supports('display: grid', (css) => {
     css.display('grid')
-      .gridTemplateColumns('repeat(3, 1fr)')
+      .gridCols('repeat(3, 1fr)')
       .gap('20px')
       .select('.item')
-        .padding('20px')
-        .backgroundColor('#f8fafc')
-        .borderRadius('8px')
-        .block();
+        .p('20px')
+        .bg('#f8fafc')
+        .rounded('8px')
+        .$el()
   })
-  .block('.grid-container');`,
+  .$el('.grid-container');`,
       css: `@supports (display: grid) {
   .grid-container {
     display: grid;
@@ -218,25 +209,24 @@ const text = $()
     layers: {
       title: 'CSS Layers',
       description: 'Control CSS cascade order with layers',
-      code: `// Define layers in order of precedence
-const base = $()
+      code: `export const base = $
   .layer('base', (css) => {
     css.select('button')
-      .padding('8px 16px')
-      .borderRadius('4px')
+      .p('8px 16px')
+      .rounded('4px')
       .border('none')
-      .block();
+      .$el()
   })
-  .block();
+  .$el();
 
-const components = $()
+export const components = $
   .layer('components', (css) => {
     css.select('.btn-primary')
-      .backgroundColor('#3b82f6')
-      .color('white')
-      .block();
+      .bg('#3b82f6')
+      .c('white')
+      .$el()
   })
-  .block();`,
+  .$el();`,
       css: `@layer base, components;
 @layer base {
   button {
@@ -284,14 +274,12 @@ const components = $()
         </p>
       </div>
       
-      {/* Basic Usage */}
       <h2>What are At-Rules?</h2>
       <p>
         At-rules are CSS statements that start with <code className="inline-code">@</code>. ChainCSS provides
         a fluent API for all major at-rules, making them as easy to use as regular CSS properties.
-      </p><br />
+      </p>
       
-      {/* Interactive Examples */}
       <h2>At-Rule Types</h2>
       <p>Choose an at-rule to see an example:</p>
       
@@ -383,7 +371,6 @@ const components = $()
         <CodeBlock language="css" code={currentDemo.css} />
       </div>
       
-      {/* Live Preview */}
       <div style={{ 
         marginTop: '24px',
         padding: '24px',
@@ -441,7 +428,7 @@ const components = $()
                 }, 10);
               }}
             >
-              Hover to replay animation →
+              Hover to replay animation
             </div>
           </div>
         )}
@@ -463,8 +450,7 @@ const components = $()
               </button>
             </div>
             <div style={{ ...previewStyles, width: screenSize === 'mobile' ? '250px' : '500px' }}>
-              <img src="https://via.placeholder.com/150" alt="Placeholder" style={{ width: '100%', maxWidth: '150px', borderRadius: '8px' }} />
-              <div className="content">
+              <div>
                 <h4>Container Query Demo</h4>
                 <p>Layout changes when container is larger than 400px</p>
               </div>
@@ -499,7 +485,6 @@ const components = $()
         )}
       </div>
       
-      {/* At-Rules Reference */}
       <h2>At-Rules Reference</h2>
       
       <div style={{ 
@@ -545,22 +530,6 @@ const components = $()
           </p>
         </div>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/nested-selectors" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Nested Selectors
-        </a>
-        <a href="/docs/design-tokens" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Design Tokens →
-        </a>
-      </div>*/}
     </>
   );
 }

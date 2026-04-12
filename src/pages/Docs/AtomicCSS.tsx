@@ -1,5 +1,3 @@
-// src/pages/Docs/AtomicCSS.tsx
-
 import { useState } from 'react';
 import CodeBlock from '../../components/CodeBlock';
 
@@ -28,23 +26,23 @@ export default function AtomicCSS() {
   border-radius: 8px;
 }
 .btn-secondary {
-  background-color: #3b82f6;  // ← Duplicate!
-  color: white;                // ← Duplicate!
-  padding: 12px 24px;         // ← Duplicate!
-  border-radius: 8px;         // ← Duplicate!
+  background-color: #3b82f6;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
   font-size: 14px;
 }
 
 // WITH ATOMIC CSS (Reusable utilities)
-.c_3b82f6 { background-color: #3b82f6; }  // Used by both buttons
-.c_ffffff { color: white; }              // Used by both buttons
-.c_1224 { padding: 12px 24px; }          // Used by both buttons
-.c_8px { border-radius: 8px; }           // Used by both buttons
+.bg-3b82f6 { background-color: #3b82f6; }
+.c-white { color: white; }
+.p-12-24 { padding: 12px 24px; }
+.r-8px { border-radius: 8px; }
 
-.btn-primary { font-size: 16px; }        // Only unique styles remain
+.btn-primary { font-size: 16px; }
 .btn-secondary { font-size: 14px; }
 
-// Result: 67% CSS size reduction!`,
+// Result: 67% CSS size reduction`,
       preview: () => (
         <div style={{ 
           backgroundColor: '#f8fafc', 
@@ -74,18 +72,24 @@ export default function AtomicCSS() {
     },
     cli: {
       title: 'CLI Commands',
-      description: 'Enable atomic CSS with simple CLI flags',
-      code: `# Basic atomic CSS
-npx chaincss styles.jcss ./dist --atomic
+      description: 'Enable atomic CSS with configuration',
+      code: `// chaincss.config.js
+export default {
+  atomic: {
+    enabled: true,
+    naming: 'readable',
+    verbose: true
+  }
+};
 
-# With readable class names (easier debugging)
-npx chaincss styles.jcss ./dist --atomic --atomic-naming readable
+// Build with atomic CSS
+npx chaincss build
 
-# Show optimization statistics
-npx chaincss styles.jcss ./dist --atomic --atomic-verbose
+// With readable class names (easier debugging)
+npx chaincss build --atomic-naming readable
 
-# Maximum optimization (pure atomic, no component CSS)
-npx chaincss styles.jcss ./dist --atomic --outputStrategy utility-first`,
+// Show optimization statistics
+npx chaincss build --verbose`,
       preview: () => (
         <div style={{ 
           backgroundColor: '#1e293b', 
@@ -95,14 +99,14 @@ npx chaincss styles.jcss ./dist --atomic --outputStrategy utility-first`,
           fontSize: '13px'
         }}>
           <pre style={{ margin: 0, color: '#e2e8f0' }}>
-{`$ npx chaincss styles.jcss ./dist --atomic --atomic-verbose
+{`$ npx chaincss build --verbose
 
    Atomic Optimization Stats:
    Total styles tracked: 317
    Atomic classes created: 62
    Atomic CSS length: 1835 bytes
-   Component CSS length: 0 bytes
-   Total CSS length: 4893 bytes
+   Component CSS length: 7468 bytes
+   Total CSS length: 9303 bytes
    Savings: 80.4%`}
           </pre>
         </div>
@@ -111,17 +115,22 @@ npx chaincss styles.jcss ./dist --atomic --outputStrategy utility-first`,
     modes: {
       title: 'Atomic Modes',
       description: 'Three levels of optimization',
-      code: `// HYBRID MODE (Default) - Atomic utilities + component styles
+      code: `// chaincss.config.js
+export default {
+  atomic: {
+    enabled: true,
+    mode: 'hybrid'  // 'hybrid', 'atomic', or 'standard'
+  }
+};
+
+// HYBRID MODE (Default) - Atomic utilities + component styles
 // Safe - styles work even if atomic classes aren't applied
-npx chaincss styles.jcss ./dist --atomic --atomic-mode hybrid
 
 // ATOMIC MODE - Maximum optimization
 // Best for production - smallest CSS bundle
-npx chaincss styles.jcss ./dist --atomic --atomic-mode atomic
 
 // STANDARD MODE - No atomic conversion
-// Only tracks usage, doesn't generate atomic classes
-npx chaincss styles.jcss ./dist --atomic --atomic-mode standard`,
+// Only tracks usage, doesn't generate atomic classes`,
       preview: () => {
         const stats = modeStats[modePreview];
         
@@ -153,18 +162,23 @@ npx chaincss styles.jcss ./dist --atomic --atomic-mode standard`,
     naming: {
       title: 'Class Naming',
       description: 'Choose between hash or readable class names',
-      code: `// HASH NAMING (Default) - Short, unique, guaranteed no collisions
-.c_3b82f6 { background-color: #3b82f6; }
-.c_ffffff { color: white; }
-.c_1224 { padding: 12px 24px; }
+      code: `// chaincss.config.js
+export default {
+  atomic: {
+    enabled: true,
+    naming: 'hash'  // 'hash' or 'readable'
+  }
+};
 
-// READABLE NAMING - Human-readable, like Tailwind CSS
-.bg-blue-500 { background-color: #3b82f6; }
-.text-white { color: white; }
-.p-12-24 { padding: 12px 24px; }
+// HASH NAMING (Default in production) - Short, unique
+// c_3b82f6 { background-color: #3b82f6; }
+// c_ffffff { color: white; }
+// c_1224 { padding: 12px 24px; }
 
-// Usage
-npx chaincss styles.jcss ./dist --atomic --atomic-naming readable`,
+// READABLE NAMING (Default in development) - Human-readable
+// bg-blue-500 { background-color: #3b82f6; }
+// text-white { color: white; }
+// p-12-24 { padding: 12px 24px; }`,
       preview: () => {
         return (
           <div>
@@ -184,10 +198,10 @@ npx chaincss styles.jcss ./dist --atomic --atomic-naming readable`,
 {namingPreview === 'hash' 
   ? `.c_3b82f6 { background-color: #3b82f6; }
 .c_ffffff { color: white; }
-.c_1224 { padding: 12px 24; }`
+.c_1224 { padding: 12px 24px; }`
   : `.bg-blue-500 { background-color: #3b82f6; }
 .text-white { color: white; }
-.p-12-24 { padding: 12px 24; }`}
+.p-12-24 { padding: 12px 24px; }`}
               </pre>
             </div>
             <p style={{ marginTop: '12px', fontSize: '12px', color: '#64748b' }}>
@@ -202,18 +216,18 @@ npx chaincss styles.jcss ./dist --atomic --atomic-naming readable`,
     threshold: {
       title: 'Threshold Tuning',
       description: 'Control which properties become atomic',
-      code: `// threshold: 1 → Everything becomes atomic (max optimization)
-// threshold: 2 → Properties used 2+ times become atomic
-// threshold: 3 → Properties used 3+ times become atomic (balanced)
-// threshold: 5 → Only highly reused properties become atomic
-
-// Configure in chaincss.config.cjs
-module.exports = {
+      code: `// chaincss.config.js
+export default {
   atomic: {
     enabled: true,
-    threshold: 3
+    threshold: 3  // Properties used 3+ times become atomic
   }
-};`,
+};
+
+// threshold: 1 → Everything becomes atomic (max optimization)
+// threshold: 2 → Properties used 2+ times become atomic
+// threshold: 3 → Properties used 3+ times become atomic (balanced)
+// threshold: 5 → Only highly reused properties become atomic`,
       preview: () => {
         const getSavings = () => {
           if (threshold === 1) return '89%';
@@ -259,20 +273,19 @@ module.exports = {
     outputStrategy: {
       title: 'Output Strategy',
       description: 'Control how CSS is generated',
-      code: `// COMPONENT-FIRST (Safe mode) - Keeps all styles in components
+      code: `// chaincss.config.js
+export default {
+  atomic: {
+    enabled: true,
+    outputStrategy: 'component-first'  // or 'utility-first'
+  }
+};
+
+// COMPONENT-FIRST (Safe mode) - Keeps all styles in components
 // CSS works even without atomic classes
-npx chaincss styles.jcss ./dist --atomic --outputStrategy component-first
 
 // UTILITY-FIRST (Pure atomic) - Removes component CSS
-// Only atomic utilities - must apply atomic classes manually
-npx chaincss styles.jcss ./dist --atomic --outputStrategy utility-first
-
-// Configure in chaincss.config.cjs
-module.exports = {
-  atomic: {
-    outputStrategy: 'utility-first'
-  }
-};`,
+// Only atomic utilities - must apply atomic classes manually`,
       preview: () => {
         return (
           <div>
@@ -310,22 +323,32 @@ module.exports = {
     },
     files: {
       title: 'Generated Files',
-      description: 'What files are created with --atomic',
-      code: `# With --atomic flag
-npx chaincss styles.jcss ./dist --atomic
+      description: 'What files are created with atomic CSS',
+      code: `# Build with atomic CSS
+npx chaincss build
 
-# Output:
-dist/
-├── global.css              # Main CSS with atomic utilities
-├── global.css.map          # Source map
-├── global.map.json         # Complete class mapping
-├── global.classes.js       # JS utilities + class map
-├── global.classes.d.ts     # TypeScript definitions
-└── chaincss-manifest.json  # Build manifest`,
+# Output structure:
+src/
+├── components/
+│   └── Button/styles/
+│       ├── button.chain.js
+│       ├── button.class.js
+│       └── button.css
+├── global-style/
+│   ├── global.chain.js
+│   └── global.css
+└── .chaincss-cache/          # Atomic optimization cache`,
       preview: () => {
         const files = [
-          'global.css', 'global.css.map', 'global.map.json',
-          'global.classes.js', 'global.classes.d.ts', 'chaincss-manifest.json'
+          'src/',
+          '├── components/Button/styles/',
+          '│   ├── button.chain.js',
+          '│   ├── button.class.js',
+          '│   └── button.css',
+          '├── global-style/',
+          '│   ├── global.chain.js',
+          '│   └── global.css',
+          '└── .chaincss-cache/'
         ];
         
         return (
@@ -338,8 +361,8 @@ dist/
             fontSize: '12px'
           }}>
             {files.map((file, i) => (
-              <div key={file} style={{ padding: '4px 0' }}>
-                {i === 0 ? 'dist/' : '    '}{file}
+              <div key={file} style={{ padding: '2px 0' }}>
+                {file}
               </div>
             ))}
           </div>
@@ -366,13 +389,13 @@ dist/
       
       <h2>Examples</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
-        <button onClick={() => setActiveExample('basic')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'basic' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'basic' ? '#eef2ff' : 'white', cursor: 'pointer' }}> What is Atomic CSS?</button>
-        <button onClick={() => setActiveExample('cli')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'cli' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'cli' ? '#eef2ff' : 'white', cursor: 'pointer' }}> CLI Commands</button>
-        <button onClick={() => setActiveExample('modes')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'modes' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'modes' ? '#eef2ff' : 'white', cursor: 'pointer' }}> Atomic Modes</button>
-        <button onClick={() => setActiveExample('naming')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'naming' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'naming' ? '#eef2ff' : 'white', cursor: 'pointer' }}> Class Naming</button>
+        <button onClick={() => setActiveExample('basic')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'basic' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'basic' ? '#eef2ff' : 'white', cursor: 'pointer' }}>What is Atomic CSS?</button>
+        <button onClick={() => setActiveExample('cli')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'cli' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'cli' ? '#eef2ff' : 'white', cursor: 'pointer' }}>CLI Commands</button>
+        <button onClick={() => setActiveExample('modes')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'modes' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'modes' ? '#eef2ff' : 'white', cursor: 'pointer' }}>Atomic Modes</button>
+        <button onClick={() => setActiveExample('naming')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'naming' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'naming' ? '#eef2ff' : 'white', cursor: 'pointer' }}>Class Naming</button>
         <button onClick={() => setActiveExample('threshold')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'threshold' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'threshold' ? '#eef2ff' : 'white', cursor: 'pointer' }}>Threshold Tuning</button>
         <button onClick={() => setActiveExample('outputStrategy')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'outputStrategy' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'outputStrategy' ? '#eef2ff' : 'white', cursor: 'pointer' }}>Output Strategy</button>
-        <button onClick={() => setActiveExample('files')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'files' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'files' ? '#eef2ff' : 'white', cursor: 'pointer' }}> Generated Files</button>
+        <button onClick={() => setActiveExample('files')} style={{ padding: '8px 16px', borderRadius: '8px', border: activeExample === 'files' ? '2px solid #667eea' : '1px solid #e2e8f0', backgroundColor: activeExample === 'files' ? '#eef2ff' : 'white', cursor: 'pointer' }}>Generated Files</button>
       </div>
       
       <div style={{ marginBottom: '32px' }}>
@@ -390,17 +413,12 @@ dist/
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
           <li>Start with <code>threshold: 3</code> for balanced optimization</li>
-          <li>Use <code>--atomic-verbose</code> to see what's becoming atomic</li>
-          <li>Enable <code>--atomic</code> in production builds only</li>
-          <li>Use <code>--atomic-naming readable</code> during development for easier debugging</li>
-          <li>Use <code>--outputStrategy utility-first</code> for maximum optimization</li>
+          <li>Use <code>verbose: true</code> to see what's becoming atomic</li>
+          <li>Enable atomic CSS in production builds only</li>
+          <li>Use <code>naming: 'readable'</code> during development for easier debugging</li>
+          <li>Use <code>outputStrategy: 'utility-first'</code> for maximum optimization</li>
         </ul>
       </div>
-      {/*
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '48px', paddingTop: '24px', borderTop: '1px solid #e2e8f0' }}>
-        <a href="/docs/cli" style={{ color: '#667eea', textDecoration: 'none' }}>← CLI Tool</a>
-        <a href="/docs/cache-management" style={{ color: '#667eea', textDecoration: 'none' }}>Cache Management →</a>
-      </div>*/}
     </>
   );
 }

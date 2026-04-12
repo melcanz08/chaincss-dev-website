@@ -7,111 +7,79 @@ export default function CLITool() {
   const modes = {
     basic: {
       name: 'Basic Mode',
-      command: 'npx chaincss ./styles.jcss ./dist',
-      description: 'Default mode - generates only the essential CSS files',
+      command: 'npx chaincss build',
+      description: 'Default mode - generates CSS files in the styles folder next to your components',
       files: [
-        { name: 'global.css', description: 'Main CSS file with all your styles', always: true },
-        { name: 'global.css.map', description: 'Source map for debugging', always: true }
+        { name: 'component.css', description: 'Individual CSS files for each component', always: true },
+        { name: 'component.class.js', description: 'Class name exports for each component', always: true },
+        { name: 'global.css', description: 'Combined minified CSS for production', always: true }
       ],
-      totalFiles: '1-2',
-      icon: ''
+      totalFiles: '2 per component + 1 global'
     },
     atomic: {
       name: 'Atomic Mode',
-      command: 'npx chaincss ./styles.jcss ./dist --atomic',
-      description: 'Enables atomic CSS optimization - generates additional utility files',
+      command: 'npx chaincss build --atomic',
+      description: 'Enables atomic CSS optimization - generates additional utility classes',
       files: [
-        { name: 'global.css', description: 'Main CSS file with atomic utilities + component styles', always: true },
-        { name: 'global.css.map', description: 'Source map for debugging', always: true },
-        { name: 'global.map.json', description: 'Complete atomic class mapping data', always: true },
-        { name: 'global.classes.js', description: 'JS module with class maps and helpers', always: true },
-        { name: 'global.classes.d.ts', description: 'TypeScript definitions', always: true },
-        { name: 'chaincss-manifest.json', description: 'Build manifest with metadata', always: true }
+        { name: 'component.css', description: 'Component CSS with atomic utilities', always: true },
+        { name: 'component.class.js', description: 'Class name exports', always: true },
+        { name: 'global.css', description: 'Combined minified CSS', always: true },
+        { name: 'atomic-stats.json', description: 'Atomic CSS optimization statistics', always: true }
       ],
-      totalFiles: '5-6',
-      icon: ''
+      totalFiles: '2 per component + 2 global'
     },
     react: {
-      name: 'Atomic + React',
-      command: 'npx chaincss ./styles.jcss ./dist --atomic',
-      description: 'Atomic mode with React framework output',
-      config: `// chaincss.config.cjs
-module.exports = {
-  atomic: {
-    enabled: true,
-    frameworkOutput: {
-      react: true,
-      vue: false,
-      vanilla: true
-    }
-  }
+      name: 'React Mode',
+      command: 'npx chaincss build',
+      description: 'Build mode works with any framework - imports generated class names',
+      config: `// chaincss.config.js
+export default {
+  inputs: ['src/**/*.chain.js'],
+  output: 'src',
+  verbose: true
 };`,
       files: [
-        { name: 'global.css', description: 'Main CSS file', always: true },
-        { name: 'global.css.map', description: 'Source map', always: true },
-        { name: 'global.map.json', description: 'Atomic mapping data', always: true },
-        { name: 'global.classes.js', description: 'JS module with React helpers', always: true },
-        { name: 'global.classes.d.ts', description: 'TypeScript definitions', always: true },
-        { name: 'atomic.react.js', description: 'React hooks and components', always: true },
-        { name: 'chaincss-manifest.json', description: 'Build manifest', always: true }
+        { name: 'component.css', description: 'Component CSS', always: true },
+        { name: 'component.class.js', description: 'Class name exports for React', always: true },
+        { name: 'global.css', description: 'Combined minified CSS', always: true }
       ],
-      totalFiles: '6-7',
-      icon: ''
+      totalFiles: '2 per component + 1 global'
     },
     vue: {
-      name: 'Atomic + Vue',
-      command: 'npx chaincss ./styles.jcss ./dist --atomic',
-      description: 'Atomic mode with Vue framework output',
-      config: `// chaincss.config.cjs
-module.exports = {
-  atomic: {
-    enabled: true,
-    frameworkOutput: {
-      react: false,
-      vue: true,
-      vanilla: true
-    }
-  }
+      name: 'Vue Mode',
+      command: 'npx chaincss build',
+      description: 'Build mode works with any framework - imports generated class names',
+      config: `// chaincss.config.js
+export default {
+  inputs: ['src/**/*.chain.js'],
+  output: 'src',
+  verbose: true
 };`,
       files: [
-        { name: 'global.css', description: 'Main CSS file', always: true },
-        { name: 'global.css.map', description: 'Source map', always: true },
-        { name: 'global.map.json', description: 'Atomic mapping data', always: true },
-        { name: 'global.classes.js', description: 'JS module with Vue helpers', always: true },
-        { name: 'global.classes.d.ts', description: 'TypeScript definitions', always: true },
-        { name: 'atomic.vue.js', description: 'Vue composables', always: true },
-        { name: 'chaincss-manifest.json', description: 'Build manifest', always: true }
+        { name: 'component.css', description: 'Component CSS', always: true },
+        { name: 'component.class.js', description: 'Class name exports for Vue', always: true },
+        { name: 'global.css', description: 'Combined minified CSS', always: true }
       ],
-      totalFiles: '6-7',
-      icon: ''
+      totalFiles: '2 per component + 1 global'
     },
     both: {
-      name: 'Atomic + React + Vue',
-      command: 'npx chaincss ./styles.jcss ./dist --atomic',
-      description: 'Full atomic mode with both React and Vue outputs',
-      config: `// chaincss.config.cjs
-module.exports = {
-  atomic: {
-    enabled: true,
-    frameworkOutput: {
-      react: true,
-      vue: true,
-      vanilla: true
-    }
-  }
+      name: 'Full Mode',
+      command: 'npx chaincss build --timeline',
+      description: 'Build with timeline tracking for style debugging',
+      config: `// chaincss.config.js
+export default {
+  inputs: ['src/**/*.chain.js'],
+  output: 'src',
+  timeline: true,
+  verbose: true
 };`,
       files: [
-        { name: 'global.css', description: 'Main CSS file', always: true },
-        { name: 'global.css.map', description: 'Source map', always: true },
-        { name: 'global.map.json', description: 'Atomic mapping data', always: true },
-        { name: 'global.classes.js', description: 'JS module with unified helpers', always: true },
-        { name: 'global.classes.d.ts', description: 'TypeScript definitions', always: true },
-        { name: 'atomic.react.js', description: 'React hooks and components', always: true },
-        { name: 'atomic.vue.js', description: 'Vue composables', always: true },
-        { name: 'chaincss-manifest.json', description: 'Build manifest', always: true }
+        { name: 'component.css', description: 'Component CSS', always: true },
+        { name: 'component.class.js', description: 'Class name exports', always: true },
+        { name: 'global.css', description: 'Combined minified CSS', always: true },
+        { name: '.chaincss-timeline.json', description: 'Style change timeline data', always: true }
       ],
-      totalFiles: '7-8',
-      icon: ''
+      totalFiles: '2 per component + 2 global'
     }
   };
   
@@ -126,23 +94,33 @@ module.exports = {
         </p>
       </div>
       
-      {/* Basic Usage */}
       <h2>Basic Usage</h2>
-      <CodeBlock language="bash" code={`# Compile styles.jcss to CSS
-npx chaincss ./styles.jcss ./dist
+      <CodeBlock language="bash" code={`# Initialize a configuration file
+npx chaincss init
+
+# Initialize with full configuration
+npx chaincss init --full
+
+# Build all styles from config
+npx chaincss build
+
+# Build with specific pattern
+npx chaincss build -c "src/**/*.chain.js"
 
 # Watch mode - rebuild on file changes
-npx chaincss ./styles.jcss ./dist --watch
+npx chaincss watch
 
-# Enable atomic CSS optimization
-npx chaincss ./styles.jcss ./dist --atomic --watch`} />
+# Clean generated files
+npx chaincss clean
+
+# Build with timeline tracking
+npx chaincss build --timeline`} />
       
-      {/* File Generation Explorer */}
       <h2>File Generation Explorer</h2>
       <p>
-        The number of output files depends on which CLI flags and config options you enable.
+        ChainCSS v2 generates files in the styles folder next to each component.
         Select a mode below to see what files are generated:
-      </p><br />
+      </p>
       
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
         <button
@@ -157,7 +135,7 @@ npx chaincss ./styles.jcss ./dist --atomic --watch`} />
             fontWeight: selectedMode === 'basic' ? '500' : 'normal'
           }}
         >
-          Basic Mode (1-2 files)
+          Basic Mode
         </button>
         <button
           onClick={() => setSelectedMode('atomic')}
@@ -170,7 +148,7 @@ npx chaincss ./styles.jcss ./dist --atomic --watch`} />
             cursor: 'pointer'
           }}
         >
-          Atomic Mode (5-6 files)
+          Atomic Mode
         </button>
         <button
           onClick={() => setSelectedMode('react')}
@@ -183,7 +161,7 @@ npx chaincss ./styles.jcss ./dist --atomic --watch`} />
             cursor: 'pointer'
           }}
         >
-          React (6-7 files)
+          React Mode
         </button>
         <button
           onClick={() => setSelectedMode('vue')}
@@ -196,7 +174,7 @@ npx chaincss ./styles.jcss ./dist --atomic --watch`} />
             cursor: 'pointer'
           }}
         >
-           Vue (6-7 files)
+          Vue Mode
         </button>
         <button
           onClick={() => setSelectedMode('both')}
@@ -209,7 +187,7 @@ npx chaincss ./styles.jcss ./dist --atomic --watch`} />
             cursor: 'pointer'
           }}
         >
-          React + Vue (7-8 files)
+          Full Mode (Timeline)
         </button>
       </div>
       
@@ -245,7 +223,6 @@ npx chaincss ./styles.jcss ./dist --atomic --watch`} />
             paddingBottom: '12px',
             borderBottom: '1px solid #e2e8f0'
           }}>
-            <span style={{ fontSize: '24px' }}>{currentMode.icon}</span>
             <span style={{ fontWeight: '600' }}>{currentMode.name}</span>
             <span style={{ 
               backgroundColor: '#eef2ff', 
@@ -255,7 +232,7 @@ npx chaincss ./styles.jcss ./dist --atomic --watch`} />
               fontSize: '12px',
               fontWeight: '500'
             }}>
-              {currentMode.totalFiles} files
+              {currentMode.totalFiles}
             </span>
           </div>
           
@@ -278,7 +255,6 @@ npx chaincss ./styles.jcss ./dist --atomic --watch`} />
                   alignItems: 'center',
                   gap: '12px'
                 }}>
-                  <span style={{ fontSize: '20px' }}></span>
                   <div>
                     <div style={{ fontWeight: '500', fontFamily: 'monospace', fontSize: '13px' }}>
                       {file.name}
@@ -294,8 +270,7 @@ npx chaincss ./styles.jcss ./dist --atomic --watch`} />
         </div>
       </div>
       
-      {/* File Generation Flowchart */}
-      <h2>File Generation Flowchart</h2>
+      <h2>File Structure</h2>
       <div style={{
         backgroundColor: '#f8fafc',
         borderRadius: '12px',
@@ -307,166 +282,84 @@ npx chaincss ./styles.jcss ./dist --atomic --watch`} />
         overflowX: 'auto'
       }}>
         <pre style={{ margin: 0, whiteSpace: 'pre' }}>
-{`npx chaincss input.jcss ./output
-                │
-                ▼
-         ┌─────────────┐
-         │ Base Files  │ ← ALWAYS generated (1-2 files)
-         └─────────────┘
-                │
-                ▼
-         Is --atomic flag present?
-                │
-        ┌───────┴───────┐
-        ▼               ▼
-       YES             NO
-        │               │
-        ▼               ▼
-  Atomic Files     STOP (only base files)
-  (4+ files)
-        │
-        ▼
-  Are framework outputs enabled?
-        │
-    ┌───┴───┐
-    ▼       ▼
-   YES     NO
-    │       │
-    ▼       ▼
-Framework  STOP
-Files     (atomic files only)`}
+{`src/
+├── components/
+│   └── Button/
+│       ├── Button.tsx
+│       └── styles/
+│           ├── button.chain.js    # Source styles
+│           ├── button.class.js    # Generated class names
+│           └── button.css         # Generated CSS
+├── global-style/
+│   ├── global.chain.js             # Global styles source
+│   └── global.css                  # Combined minified CSS
+└── chaincss.config.js              # Configuration file`}
         </pre>
       </div>
       
-      {/* Complete File Generation Table */}
-      <h2>Complete File Generation Table</h2>
-      <div style={{ overflowX: 'auto', marginBottom: '32px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>CLI Command</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Files Generated</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Count</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">npx chaincss input.jcss ./output</code></td>
-              <td style={{ padding: '12px' }}><code className="inline-code">global.css</code> + <code className="inline-code">global.css.map</code></td>
-              <td style={{ padding: '12px' }}>1-2</td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">npx chaincss input.jcss ./output --atomic</code></td>
-              <td style={{ padding: '12px' }}>Base files + Atomic files (map.json, classes.js, classes.d.ts, manifest)</td>
-              <td style={{ padding: '12px' }}>5-6</td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">--atomic + React config</code></td>
-              <td style={{ padding: '12px' }}>Atomic files + <code className="inline-code">atomic.react.js</code></td>
-              <td style={{ padding: '12px' }}>6-7</td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">--atomic + Vue config</code></td>
-              <td style={{ padding: '12px' }}>Atomic files + <code className="inline-code">atomic.vue.js</code></td>
-              <td style={{ padding: '12px' }}>6-7</td>
-            </tr>
-            <tr>
-              <td style={{ padding: '12px' }}><code className="inline-code">--atomic + React + Vue config</code></td>
-              <td style={{ padding: '12px' }}>Atomic files + <code className="inline-code">atomic.react.js</code> + <code className="inline-code">atomic.vue.js</code></td>
-              <td style={{ padding: '12px' }}>7-8</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      {/* CLI Options Reference */}
       <h2>CLI Options Reference</h2>
       <div style={{ overflowX: 'auto', marginBottom: '32px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Flag</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Description</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Example</th>
+            <tr>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e2e8f0', backgroundColor: '#f8fafc' }}>Command</th>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e2e8f0', backgroundColor: '#f8fafc' }}>Description</th>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e2e8f0', backgroundColor: '#f8fafc' }}>Example</th>
             </tr>
           </thead>
           <tbody>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">--watch</code></td>
-              <td style={{ padding: '12px' }}>Watch for file changes and rebuild automatically</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">npx chaincss input.jcss output/ --watch</code></td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">--atomic</code></td>
-              <td style={{ padding: '12px' }}>Enable atomic CSS optimization</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">npx chaincss input.jcss output/ --atomic</code></td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">--atomic-mode</code></td>
-              <td style={{ padding: '12px' }}>Atomic mode: 'atomic', 'standard', or 'hybrid'</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">--atomic-mode atomic</code></td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">--atomic-naming</code></td>
-              <td style={{ padding: '12px' }}>Class naming: 'hash' or 'readable'</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">--atomic-naming readable</code></td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">--atomic-verbose</code></td>
-              <td style={{ padding: '12px' }}>Show detailed atomic optimization stats</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">--atomic-verbose</code></td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">--preserve-selectors</code></td>
-              <td style={{ padding: '12px' }}>Keep original selector names in comments for debugging</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">--preserve-selectors</code></td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">--no-source-map</code></td>
-              <td style={{ padding: '12px' }}>Disable source map generation</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">--no-source-map</code></td>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">init</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Create configuration file</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">npx chaincss init --full</code></td>
             </tr>
             <tr>
-              <td style={{ padding: '12px' }}><code className="inline-code">--no-prefix</code></td>
-              <td style={{ padding: '12px' }}>Disable autoprefixer</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">--no-prefix</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">build</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Build all styles from configuration</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">npx chaincss build</code></td>
+            </tr>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">watch</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Watch for file changes and rebuild</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">npx chaincss watch</code></td>
+            </tr>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">clean</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Remove generated files</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">npx chaincss clean</code></td>
+            </tr>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">-c, --components</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Components pattern (glob)</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">-c "src/**/*.chain.js"</code></td>
+            </tr>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">-t, --timeline</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Enable style timeline tracking</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">npx chaincss build --timeline</code></td>
+            </tr>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">-v, --verbose</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Verbose output</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">npx chaincss build --verbose</code></td>
             </tr>
           </tbody>
         </table>
       </div>
       
-      {/* Quick Summary */}
       <div className="note">
         <strong>Quick Summary</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
-          <li><strong>Basic:</strong> <code className="inline-code">chaincss input output</code> → 1-2 files</li>
-          <li><strong>Atomic:</strong> <code className="inline-code">chaincss input output --atomic</code> → 5-6 files</li>
-          <li><strong>Atomic + React:</strong> <code className="inline-code">--atomic</code> + React config → 6-7 files</li>
-          <li><strong>Atomic + Vue:</strong> <code className="inline-code">--atomic</code> + Vue config → 6-7 files</li>
-          <li><strong>Atomic + Both:</strong> <code className="inline-code">--atomic</code> + React + Vue config → 7-8 files</li>
+          <li><strong>Basic:</strong> <code className="inline-code">npx chaincss build</code> → Generates CSS files next to each component</li>
+          <li><strong>Watch:</strong> <code className="inline-code">npx chaincss watch</code> → Auto-rebuild on changes</li>
+          <li><strong>Timeline:</strong> <code className="inline-code">npx chaincss build --timeline</code> → Track style changes</li>
+          <li><strong>Clean:</strong> <code className="inline-code">npx chaincss clean</code> → Remove generated files</li>
         </ul>
       </div>
       
       <div className="tip">
-        <strong>Pro tip:</strong> The <code className="inline-code">--atomic</code> flag is the main trigger for generating atomic files.
-        Framework files are optional extras that only appear when explicitly enabled in the config.
+        <strong>Pro tip:</strong> Use <code className="inline-code">npx chaincss init --full</code> to generate a configuration file with all available options documented.
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/configuration" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Configuration
-        </a>
-        <a href="/docs/atomic-css" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Atomic CSS →
-        </a>
-      </div>*/}
     </>
   );
 }

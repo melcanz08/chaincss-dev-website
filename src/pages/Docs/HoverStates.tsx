@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import CodeBlock from '../../components/CodeBlock';
+import { demoBtn, demoInput, demoCard } from './styles/hoverStates.class.js';
+
 
 export default function HoverStates() {
   const [activeDemo, setActiveDemo] = useState('hover');
@@ -8,188 +10,140 @@ export default function HoverStates() {
     hover: {
       title: 'Hover State',
       description: 'Change styles when the user hovers over an element',
-      code: `const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
+      code: `export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
   .transition('all 0.2s')
   .hover()
-    .backgroundColor('#2563eb')
+    .bg('#2563eb')
     .transform('scale(1.05)')
-    .end()
-  .block('.btn');`,
-      css: `.btn {
+  .end()
+  .$el('.demo-hover-btn');`,
+      css: `.demo-hover-btn {
   background-color: #3b82f6;
   color: white;
   padding: 12px 24px;
   border-radius: 8px;
   transition: all 0.2s;
 }
-.btn:hover {
+.demo-hover-btn:hover {
   background-color: #2563eb;
   transform: scale(1.05);
 }`,
-      demoElement: (hovered: boolean) => ({
-        backgroundColor: hovered ? '#2563eb' : '#3b82f6',
-        transform: hovered ? 'scale(1.05)' : 'scale(1)',
-        color: 'white',
-        padding: '12px 24px',
-        borderRadius: '8px',
-        transition: 'all 0.2s',
-        cursor: 'pointer'
-      })
+      className: 'demo-hover-btn'
     },
     focus: {
       title: 'Focus State',
       description: 'Style elements when they receive keyboard focus',
-      code: `const input = $()
+      code: `export const input = $
   .border('1px solid #e2e8f0')
-  .borderRadius('8px')
-  .padding('12px 16px')
-  .fontSize('16px')
+  .rounded('8px')
+  .p('12px 16px')
+  .textSize('16px')
   .transition('all 0.2s')
   .focus()
-    .borderColor('#3b82f6')
+    .borderC('#3b82f6')
     .outline('none')
-    .boxShadow('0 0 0 3px rgba(59,130,246,0.2)')
-    .end()
-  .block('.input');`,
-      css: `.input {
+    .shadow('0 0 0 3px rgba(59,130,246,0.2)')
+  .end()
+  .$el('.demo-focus-input');`,
+      css: `.demo-focus-input {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 12px 16px;
   font-size: 16px;
   transition: all 0.2s;
 }
-.input:focus {
+.demo-focus-input:focus {
   border-color: #3b82f6;
   outline: none;
   box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
 }`,
-      demoElement: (focused: boolean) => ({
-        border: focused ? '1px solid #3b82f6' : '1px solid #e2e8f0',
-        borderRadius: '8px',
-        padding: '12px 16px',
-        fontSize: '16px',
-        transition: 'all 0.2s',
-        outline: focused ? 'none' : 'none',
-        boxShadow: focused ? '0 0 0 3px rgba(59,130,246,0.2)' : 'none'
-      })
+      className: 'demo-focus-input'
     },
     active: {
       title: 'Active State',
       description: 'Styles applied while the element is being clicked',
-      code: `const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
+      code: `export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
   .transition('all 0.1s')
   .hover()
-    .backgroundColor('#2563eb')
-    .end()
+    .bg('#2563eb')
+  .end()
   .active()
     .transform('scale(0.98)')
-    .backgroundColor('#1e40af')
-    .end()
-  .block('.btn');`,
-      css: `.btn {
+    .bg('#1e40af')
+  .end()
+  .$el('.demo-active-btn');`,
+      css: `.demo-active-btn {
   background-color: #3b82f6;
   color: white;
   padding: 12px 24px;
   border-radius: 8px;
   transition: all 0.1s;
 }
-.btn:hover {
+.demo-active-btn:hover {
   background-color: #2563eb;
 }
-.btn:active {
+.demo-active-btn:active {
   transform: scale(0.98);
   background-color: #1e40af;
 }`,
-      demoElement: (active: boolean) => ({
-        backgroundColor: active ? '#1e40af' : '#3b82f6',
-        transform: active ? 'scale(0.98)' : 'scale(1)',
-        color: 'white',
-        padding: '12px 24px',
-        borderRadius: '8px',
-        transition: 'all 0.1s',
-        cursor: 'pointer'
-      })
+      className: 'demo-active-btn'
     },
     multiple: {
       title: 'Multiple States',
       description: 'Combine hover, focus, and active states together',
-      code: `const card = $()
-  .backgroundColor('white')
+      code: `export const card = $
+  .bg('white')
   .border('1px solid #e2e8f0')
-  .borderRadius('12px')
-  .padding('24px')
+  .rounded('12px')
+  .p('24px')
   .transition('all 0.2s')
   .hover()
     .transform('translateY(-4px)')
-    .boxShadow('0 12px 24px -12px rgba(0,0,0,0.2)')
-    .borderColor('#cbd5e1')
-    .end()
+    .shadow('0 12px 24px -12px rgba(0,0,0,0.2)')
+    .borderC('#cbd5e1')
+  .end()
   .focus()
     .outline('none')
-    .borderColor('#3b82f6')
-    .boxShadow('0 0 0 3px rgba(59,130,246,0.2)')
-    .end()
+    .borderC('#3b82f6')
+    .shadow('0 0 0 3px rgba(59,130,246,0.2)')
+  .end()
   .active()
     .transform('translateY(0)')
-    .end()
-  .block('.card');`,
-      css: `.card {
+  .end()
+  .$el('.demo-card');`,
+      css: `.demo-card {
   background-color: white;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 24px;
   transition: all 0.2s;
 }
-.card:hover {
+.demo-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 24px -12px rgba(0,0,0,0.2);
   border-color: #cbd5e1;
 }
-.card:focus {
+.demo-card:focus {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
 }
-.card:active {
+.demo-card:active {
   transform: translateY(0);
 }`,
-      demoElement: (state: { hover: boolean; focus: boolean; active: boolean }) => ({
-        backgroundColor: 'white',
-        border: state.focus ? '1px solid #3b82f6' : (state.hover ? '1px solid #cbd5e1' : '1px solid #e2e8f0'),
-        borderRadius: '12px',
-        padding: '24px',
-        transition: 'all 0.2s',
-        transform: state.active ? 'translateY(0)' : (state.hover ? 'translateY(-4px)' : 'translateY(0)'),
-        boxShadow: state.focus ? '0 0 0 3px rgba(59,130,246,0.2)' : (state.hover ? '0 12px 24px -12px rgba(0,0,0,0.2)' : 'none'),
-        outline: 'none'
-      })
+      className: 'demo-card'
     }
   };
   
-  const [hoverState, setHoverState] = useState(false);
-  const [focusState, setFocusState] = useState(false);
-  const [activeState, setActiveState] = useState(false);
-  const [cardState, setCardState] = useState({ hover: false, focus: false, active: false });
-  
   const currentDemo = demos[activeDemo];
-  
-  const getDemoStyles = () => {
-    if (activeDemo === 'hover') return currentDemo.demoElement(hoverState);
-    if (activeDemo === 'focus') return currentDemo.demoElement(focusState);
-    if (activeDemo === 'active') return currentDemo.demoElement(activeState);
-    if (activeDemo === 'multiple') return currentDemo.demoElement(cardState);
-    return {};
-  };
-  
-  const demoStyles = getDemoStyles();
   
   return (
     <>
@@ -200,29 +154,28 @@ export default function HoverStates() {
         </p>
       </div>
       
-      {/* Basic Usage */}
       <h2>Basic Usage</h2>
       <p>
         Use the <code className="inline-code">.hover()</code> method to start a hover block,
         then chain your hover-specific styles, and finish with <code className="inline-code">.end()</code>:
       </p>
-      <CodeBlock language="javascript" code={`const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .hover()           // Start hover block
-    .backgroundColor('#2563eb')
+      <CodeBlock language="javascript" code={`export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
+  .hover()
+    .bg('#2563eb')
     .transform('scale(1.05)')
-    .end()           // End hover block
+  .end()
   .transition('all 0.2s')
-  .block('.btn');`} />
+  .$el('.btn');`} />
       
       <div className="tip">
         <strong>Tip:</strong> Always call <code className="inline-code">.end()</code> to exit the hover block.
         ChainCSS needs to know where the hover styles end.
       </div>
       
-      {/* Interactive Examples */}
       <h2>Interactive Examples</h2>
       <p>Choose a state to see it in action:</p>
       
@@ -252,7 +205,6 @@ export default function HoverStates() {
         <CodeBlock language="css" code={currentDemo.css} />
       </div>
       
-      {/* Live Demo */}
       <div style={{ 
         marginTop: '24px',
         padding: '32px',
@@ -262,52 +214,32 @@ export default function HoverStates() {
         textAlign: 'center'
       }}>
         <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px' }}>
-          Live Demo - Try it yourself!
+          Live Demo
         </h3>
         
         {activeDemo === 'hover' && (
-          <button
-            style={demoStyles}
-            onMouseEnter={() => setHoverState(true)}
-            onMouseLeave={() => setHoverState(false)}
-          >
-            Hover over me!
+          <button className={currentDemo.className}>
+            Hover over me
           </button>
         )}
         
         {activeDemo === 'focus' && (
-          <input
-            type="text"
-            placeholder="Click or tab to focus..."
-            style={demoStyles}
-            onFocus={() => setFocusState(true)}
-            onBlur={() => setFocusState(false)}
+          <input 
+            type="text" 
+            className={currentDemo.className}
+            placeholder="Click or tab to focus"
           />
         )}
         
         {activeDemo === 'active' && (
-          <button
-            style={demoStyles}
-            onMouseDown={() => setActiveState(true)}
-            onMouseUp={() => setActiveState(false)}
-            onMouseLeave={() => setActiveState(false)}
-          >
-            Click and hold!
+          <button className={currentDemo.className}>
+            Click and hold
           </button>
         )}
         
         {activeDemo === 'multiple' && (
-          <div
-            tabIndex={0}
-            style={demoStyles}
-            onMouseEnter={() => setCardState(prev => ({ ...prev, hover: true }))}
-            onMouseLeave={() => setCardState(prev => ({ ...prev, hover: false, active: false }))}
-            onFocus={() => setCardState(prev => ({ ...prev, focus: true }))}
-            onBlur={() => setCardState(prev => ({ ...prev, focus: false }))}
-            onMouseDown={() => setCardState(prev => ({ ...prev, active: true }))}
-            onMouseUp={() => setCardState(prev => ({ ...prev, active: false }))}
-          >
-            <p style={{ margin: 0 }}>Hover, focus, or click me!</p>
+          <div className={currentDemo.className} tabIndex={0}>
+            <p style={{ margin: 0 }}>Hover, focus, or click me</p>
             <p style={{ margin: '8px 0 0 0', fontSize: '12px', color: '#64748b' }}>
               Try all three interactions
             </p>
@@ -315,7 +247,6 @@ export default function HoverStates() {
         )}
       </div>
       
-      {/* More Pseudo-classes */}
       <h2>More Pseudo-classes</h2>
       <p>ChainCSS supports all standard CSS pseudo-classes. Here are some common ones:</p>
       
@@ -346,7 +277,7 @@ export default function HoverStates() {
         <div style={{ padding: '16px', border: '1px solid #e2e8f0', borderRadius: '12px' }}>
           <code className="inline-code">.checked()</code>
           <p style={{ fontSize: '14px', color: '#64748b', marginTop: '8px' }}>
-            Styles checked checkboxes/radios
+            Styles checked checkboxes or radios
           </p>
         </div>
         <div style={{ padding: '16px', border: '1px solid #e2e8f0', borderRadius: '12px' }}>
@@ -363,29 +294,27 @@ export default function HoverStates() {
         </div>
       </div>
       
-      {/* Example: Multiple States */}
       <h2>Combining Multiple States</h2>
       <p>You can chain multiple interactive states together:</p>
-      <CodeBlock language="javascript" code={`const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
+      <CodeBlock language="javascript" code={`export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
   .transition('all 0.2s')
   .hover()
-    .backgroundColor('#2563eb')
+    .bg('#2563eb')
     .transform('scale(1.05)')
-    .end()
+  .end()
   .focus()
     .outline('none')
-    .boxShadow('0 0 0 3px rgba(59,130,246,0.2)')
-    .end()
+    .shadow('0 0 0 3px rgba(59,130,246,0.2)')
+  .end()
   .active()
     .transform('scale(0.98)')
-    .end()
-  .block('.btn');`} />
+  .end()
+  .$el('.btn');`} />
       
-      {/* Performance Tips */}
       <div className="note">
         <strong>Performance Tips</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
@@ -396,30 +325,13 @@ export default function HoverStates() {
         </ul>
       </div>
       
-      {/* Accessibility */}
-      <div className="tip" style={{ backgroundColor: '#e0f2fe', borderLeftColor: '#3b82f6' }}>
+      <div className="tip">
         <strong>Accessibility Tip</strong>
         <p style={{ marginTop: '8px', marginBottom: 0 }}>
-          Always style <code className="inline-code">:focus</code> states! Users navigating with keyboards
+          Always style <code className="inline-code">:focus</code> states. Users navigating with keyboards
           need to see which element is focused. A visible focus ring is essential for accessibility.
         </p>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/selectors" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Selectors
-        </a>
-        <a href="/docs/at-rules" style={{ color: '#667eea', textDecoration: 'none' }}>
-          At-Rules →
-        </a>
-      </div>*/}
     </>
   );
 }

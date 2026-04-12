@@ -1,0 +1,72 @@
+import { $ } from 'chaincss';
+
+export const demoHoverBtn = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
+  .border('none')
+  .cursor('pointer')
+  .textSize('14px')
+  .weight('500')
+  .transition('all 0.2s')
+  .hover()
+    .bg('#2563eb')
+    .transform('scale(1.05)')
+  .end()
+  .$el('.demo-hover-btn');
+
+export const demoFocusInput = $
+  .border('1px solid #e2e8f0')
+  .rounded('8px')
+  .p('12px 16px')
+  .textSize('16px')
+  .bg('white')
+  .transition('all 0.2s')
+  .focus()
+    .borderC('#3b82f6')
+    .outline('none')
+    .shadow('0 0 0 3px rgba(59,130,246,0.2)')
+  .end()
+  .$el('.demo-focus-input');
+
+export const demoActiveBtn = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
+  .border('none')
+  .cursor('pointer')
+  .textSize('14px')
+  .weight('500')
+  .transition('all 0.1s')
+  .hover()
+    .bg('#2563eb')
+  .end()
+  .active()
+    .transform('scale(0.98)')
+    .bg('#1e40af')
+  .end()
+  .$el('.demo-active-btn');
+
+export const demoCard = $
+  .bg('white')
+  .border('1px solid #e2e8f0')
+  .rounded('12px')
+  .p('24px')
+  .transition('all 0.2s')
+  .cursor('pointer')
+  .hover()
+    .transform('translateY(-4px)')
+    .shadow('0 12px 24px -12px rgba(0,0,0,0.2)')
+    .borderC('#cbd5e1')
+  .end()
+  .focus()
+    .outline('none')
+    .borderC('#3b82f6')
+    .shadow('0 0 0 3px rgba(59,130,246,0.2)')
+  .end()
+  .active()
+    .transform('translateY(0)')
+  .end()
+  .$el('.demo-card');

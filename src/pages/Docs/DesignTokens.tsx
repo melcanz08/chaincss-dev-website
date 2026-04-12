@@ -44,11 +44,10 @@ export default function DesignTokens() {
         <h1 className="docs-title">Design Tokens</h1>
         <p className="docs-description">
           Create a consistent design system with tokens for colors, spacing, typography, and more.
-          Use them in build-time with the <code>:token.path</code> syntax or at runtime with CSS variables.
+          Use them in build-time with the <code>$token.path</code> syntax or at runtime with CSS variables.
         </p>
       </div>
       
-      {/* Mode Toggle */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', justifyContent: 'center' }}>
         <button
           onClick={() => setActiveMode('build')}
@@ -80,12 +79,12 @@ export default function DesignTokens() {
         </button>
       </div>
       
-      {/* Build-Time Mode */}
       {activeMode === 'build' && (
         <>
           <h2>Creating Tokens (Build-Time)</h2>
-          <CodeBlock language="javascript" code={`<@
-createTokens({
+          <CodeBlock language="javascript" code={`import { createTokens } from 'chaincss';
+
+const tokens = createTokens({
   colors: {
     primary: '#3b82f6',
     secondary: '#6b7280',
@@ -97,36 +96,33 @@ createTokens({
     md: '16px',
     lg: '24px'
   }
-});
-@>`} />
+});`} />
 
-          <h2>Using Tokens with <code>:token.path</code></h2>
+          <h2>Using Tokens with <code>$token.path</code></h2>
           <p>Use the <code>$token.path</code> syntax anywhere in your CSS values:</p>
-          <CodeBlock language="javascript" code={`<@
-createTokens({
+          <CodeBlock language="javascript" code={`import { $, createTokens } from 'chaincss';
+
+const tokens = createTokens({
   colors: { primary: '#3b82f6', secondary: '#6b7280' },
   spacing: { sm: '8px', md: '16px', lg: '24px' }
 });
 
-const card = $()
-  .backgroundColor('$colors.background')
-  .color('$:colors.text')
+export const card = $
+  .bg('$colors.background')
+  .c('$colors.text')
   .border(\`1px solid $colors.primary\`)
   .margin(\`$spacing.md $spacing.lg\`)
   .padding(\`$spacing.sm $spacing.md $spacing.lg\`)
-  .boxShadow(\`0 0 0 3px $colors.primary\`)
-  .background(\`linear-gradient(135deg, $colors.primary, $colors.secondary)\`)
-  .block('.card');
-
-run(card);
-@>`} />
+  .shadow(\`0 0 0 3px $colors.primary\`)
+  .bg(\`linear-gradient(135deg, $colors.primary, $colors.secondary)\`)
+  .$el('.card');`} />
 
           <div className="tip">
-            <strong>Works everywhere!</strong> Tokens work in:
+            <strong>Works everywhere</strong> Tokens work in:
             <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
               <li>Simple values: <code>$colors.primary</code></li>
               <li>Mixed with static text: <code>1px solid $colors.primary</code></li>
-              <li>Multiple tokens: <code>:spacing.sm $spacing.md $spacing.lg</code></li>
+              <li>Multiple tokens: <code>$spacing.sm $spacing.md $spacing.lg</code></li>
               <li>Complex functions: <code>linear-gradient(135deg, $colors.primary, $colors.secondary)</code></li>
             </ul>
           </div>
@@ -144,15 +140,15 @@ run(card);
 
           <h2>Alternative: tokens.get()</h2>
           <p>You can also use the explicit <code>tokens.get()</code> method when you need the value in JavaScript logic:</p>
-          <CodeBlock language="javascript" code={`<@
+          <CodeBlock language="javascript" code={`import { $, createTokens } from 'chaincss';
+
 const myTokens = createTokens({
   colors: { primary: '#3b82f6' }
 });
 
-const card = $()
-  .backgroundColor(myTokens.get('colors.primary'))
-  .block('.card');
-@>`} />
+export const card = $
+  .bg(myTokens.get('colors.primary'))
+  .$el('.card');`} />
 
           <div className="note">
             <strong>Tip:</strong> The <code>$token.path</code> syntax is cleaner for CSS values,
@@ -161,7 +157,6 @@ const card = $()
         </>
       )}
       
-      {/* Runtime Mode */}
       {activeMode === 'runtime' && (
         <>
           <h2>Creating Tokens (Runtime)</h2>
@@ -180,40 +175,44 @@ const tokens = createTokens({
 });`} />
 
           <h2>Using Tokens in Styles</h2>
-          <CodeBlock language="javascript" code={`const card = $()
-  .backgroundColor(tokens.get('colors.background'))
-  .color(tokens.get('colors.text'))
-  .padding(tokens.get('spacing.md'))
-  .block('.card');
+          <CodeBlock language="javascript" code={`import { $, createTokens } from 'chaincss/runtime';
 
-run(card);`} />
+const tokens = createTokens({
+  colors: { primary: '#3b82f6', background: '#ffffff', text: '#1e293b' }
+});
+
+const card = $()
+  .bg(tokens.get('colors.background'))
+  .c(tokens.get('colors.text'))
+  .p(tokens.get('spacing.md'))
+  .$el('.card');`} />
 
           <h2>CSS Variables for Runtime Theming</h2>
           <p>Generate CSS variables from your tokens for dynamic theme switching:</p>
-          <CodeBlock language="javascript" code={`const tokens = createTokens({
+          <CodeBlock language="javascript" code={`import { createTokens } from 'chaincss';
+
+const tokens = createTokens({
   colors: {
     primary: '#3b82f6',
     background: '#ffffff'
   }
 });
 
-// Generate CSS variables
 const cssVariables = tokens.toCSSVariables();
-
 // Output:
 // :root {
 //   --colors-primary: #3b82f6;
 //   --colors-background: #ffffff;
 // }
 
-// Inject into document
 const style = document.createElement('style');
 style.textContent = cssVariables;
 document.head.appendChild(style);`} />
 
           <h2>Runtime Theme Switching</h2>
           <p>Switch themes dynamically using CSS variables:</p>
-          <CodeBlock language="javascript" code={`// Define themes
+          <CodeBlock language="javascript" code={`import { createTokens } from 'chaincss';
+
 const lightTheme = createTokens({
   colors: { primary: '#3b82f6', background: '#ffffff', text: '#1e293b' }
 });
@@ -222,7 +221,6 @@ const darkTheme = createTokens({
   colors: { primary: '#60a5fa', background: '#0f172a', text: '#f1f5f9' }
 });
 
-// Theme switcher
 function switchTheme(theme) {
   const vars = theme.toCSSVariables();
   const style = document.getElementById('theme-vars') || document.createElement('style');
@@ -231,17 +229,15 @@ function switchTheme(theme) {
   document.head.appendChild(style);
 }
 
-// Use CSS variables in your styles
-const card = $()
-  .backgroundColor('var(--colors-background)')
-  .color('var(--colors-text)')
-  .block('.card');`} />
+const card = $
+  .bg('var(--colors-background)')
+  .c('var(--colors-text)')
+  .$el('.card');`} />
 
           <div className="tip">
-            <strong>Live Theme Demo:</strong> Click the buttons below to see runtime theming in action!
+            <strong>Live Theme Demo:</strong> Click the buttons below to see runtime theming in action
           </div>
           
-          {/* Live Theme Demo */}
           <div style={{ marginTop: '24px', marginBottom: '32px' }}>
             <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
               <button
@@ -283,7 +279,7 @@ const card = $()
               <h3 style={{ color: currentTheme.colors.primary, marginBottom: '12px' }}>
                 Theme Preview
               </h3>
-              <p>This card uses CSS variables for colors and spacing.</p>
+              <p>This card uses CSS variables for colors and spacing</p>
               <button style={{
                 backgroundColor: currentTheme.colors.primary,
                 color: 'white',
@@ -300,13 +296,11 @@ const card = $()
         </>
       )}
       
-      {/* Token Structure Example */}
       <h2>Recommended Token Structure</h2>
       <CodeBlock language="javascript" code={`// tokens/index.js
 import { createTokens } from 'chaincss';
 
 export const tokens = createTokens({
-  // Colors
   colors: {
     primary: '#3b82f6',
     secondary: '#6b7280',
@@ -321,7 +315,6 @@ export const tokens = createTokens({
     border: '#e2e8f0'
   },
   
-  // Spacing scale
   spacing: {
     0: '0',
     1: '4px',
@@ -335,7 +328,6 @@ export const tokens = createTokens({
     12: '96px'
   },
   
-  // Typography
   typography: {
     fontFamily: {
       sans: 'system-ui, -apple-system, sans-serif',
@@ -359,7 +351,6 @@ export const tokens = createTokens({
     }
   },
   
-  // Border radius
   borderRadius: {
     none: '0',
     sm: '0.125rem',
@@ -371,7 +362,6 @@ export const tokens = createTokens({
     full: '9999px'
   },
   
-  // Shadows
   shadows: {
     sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
     base: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
@@ -381,7 +371,6 @@ export const tokens = createTokens({
   }
 });`} />
       
-      {/* Best Practices */}
       <div className="note">
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
@@ -392,22 +381,6 @@ export const tokens = createTokens({
           <li>Keep tokens in a single source of truth file</li>
         </ul>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/css-properties" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← CSS Properties
-        </a>
-        <a href="/docs/recipe" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Recipe System →
-        </a>
-      </div>*/}
     </>
   );
 }

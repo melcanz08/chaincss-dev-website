@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import CodeBlock from '../../components/CodeBlock';
+import { buttonExample, cardExample, inputExample } from './styles/selectors.class.js';
+import './styles/selectors.css';
 
 export default function Selectors() {
   const [activeTab, setActiveTab] = useState('single');
   
   const examples = {
     single: {
-      code: `const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
-  .block('.btn');  // Single class selector`,
+      code: `export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
+  .$el('.btn');`,
       css: `.btn {
   background-color: #3b82f6;
   color: white;
@@ -20,13 +22,12 @@ export default function Selectors() {
 }`
     },
     multiple: {
-      code: `// Multiple selectors - all get the same styles
-const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
-  .block('.btn', '.button', '[type="button"]');  // Multiple selectors!`,
+      code: `export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
+  .$el('.btn', '.button', '[type="button"]');`,
       css: `.btn, .button, [type="button"] {
   background-color: #3b82f6;
   color: white;
@@ -35,13 +36,12 @@ const button = $()
 }`
     },
     element: {
-      code: `// Element selectors
-const headings = $()
-  .fontSize('24px')
-  .fontWeight('bold')
-  .color('#1e293b')
-  .marginBottom('16px')
-  .block('h1', 'h2', 'h3');  // All headings`,
+      code: `export const headings = $
+  .textSize('24px')
+  .weight('bold')
+  .c('#1e293b')
+  .mb('16px')
+  .$el('h1', 'h2', 'h3');`,
       css: `h1, h2, h3 {
   font-size: 24px;
   font-weight: bold;
@@ -50,12 +50,11 @@ const headings = $()
 }`
     },
     id: {
-      code: `// ID selectors
-const header = $()
-  .backgroundColor('#f8fafc')
+      code: `export const header = $
+  .bg('#f8fafc')
   .borderBottom('1px solid #e2e8f0')
-  .padding('20px')
-  .block('#main-header');  // ID selector`,
+  .p('20px')
+  .$el('#main-header');`,
       css: `#main-header {
   background-color: #f8fafc;
   border-bottom: 1px solid #e2e8f0;
@@ -63,16 +62,15 @@ const header = $()
 }`
     },
     attribute: {
-      code: `// Attribute selectors
-const inputs = $()
+      code: `export const inputs = $
   .border('1px solid #e2e8f0')
-  .borderRadius('6px')
-  .padding('8px 12px')
+  .rounded('6px')
+  .p('8px 12px')
   .focus()
-    .borderColor('#3b82f6')
+    .borderC('#3b82f6')
     .outline('none')
-    .end()
-  .block('input[type="text"]', 'input[type="email"]', 'input[type="password"]');`,
+  .end()
+  .$el('input[type="text"]', 'input[type="email"]', 'input[type="password"]');`,
       css: `input[type="text"], input[type="email"], input[type="password"] {
   border: 1px solid #e2e8f0;
   border-radius: 6px;
@@ -84,13 +82,12 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focu
 }`
     },
     combination: {
-      code: `// Combining different selector types
-const special = $()
-  .backgroundColor('#fef3c7')
-  .color('#b45309')
-  .padding('8px 16px')
-  .borderRadius('8px')
-  .block('.warning', '#alert-box', 'div[role="alert"]');  // Mixed selectors!`,
+      code: `export const special = $
+  .bg('#fef3c7')
+  .c('#b45309')
+  .p('8px 16px')
+  .rounded('8px')
+  .$el('.warning', '#alert-box', 'div[role="alert"]');`,
       css: `.warning, #alert-box, div[role="alert"] {
   background-color: #fef3c7;
   color: #b45309;
@@ -105,23 +102,27 @@ const special = $()
       <div className="docs-header">
         <h1 className="docs-title">Selectors</h1>
         <p className="docs-description">
-          Target elements with precision using ChainCSS selectors. Combine classes, IDs, elements, and attributes.
+          Target elements with precision using ChainCSS v2 selectors. Combine classes, IDs, elements, and attributes.
         </p>
       </div>
+
+      <div className="tip" style={{ marginBottom: '24px' }}>
+        <strong>v2 Update:</strong> <code className="inline-code">.block()</code> is now <code className="inline-code">.$el()</code>. The functionality remains the same.
+      </div>
       
-      {/* Basic Usage */}
       <h2>Basic Usage</h2>
       <p>
-        Use the <code className="inline-code">.block()</code> method to attach your styles to selectors.
+        Use the <code className="inline-code">.$el()</code> method to attach your styles to selectors.
         You can pass one or multiple selectors as arguments:
       </p>
-      <CodeBlock language="javascript" code={`// Single selector
-.block('.btn')
+      <CodeBlock language="javascript" code={`export const styles = $
+  .c('red')
+  .$el('.btn')
 
-// Multiple selectors
-.block('.btn', '.button', 'button')`} />
+export const styles = $
+  .c('red')
+  .$el('.btn', '.button', 'button')`} />
       
-      {/* Interactive Examples */}
       <h2>Selector Types</h2>
       <p>Choose a selector type to see an example:</p>
       
@@ -208,12 +209,12 @@ const special = $()
       </div>
       
       <CodeBlock language="javascript" code={examples[activeTab].code} />
+      
       <div className="tip">
         <strong>Generated CSS:</strong>
         <CodeBlock language="css" code={examples[activeTab].css} />
       </div>
       
-      {/* Practical Examples */}
       <h2>Practical Examples</h2>
       
       <div style={{ 
@@ -222,7 +223,6 @@ const special = $()
         gap: '24px',
         marginBottom: '32px'
       }}>
-        {/* Button Example */}
         <div style={{ 
           padding: '20px', 
           border: '1px solid #e2e8f0', 
@@ -230,32 +230,24 @@ const special = $()
           backgroundColor: 'white'
         }}>
           <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
-             Button Component
+            Button Component
           </h3>
-          <CodeBlock language="javascript" code={`const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
+          <CodeBlock language="javascript" code={`export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
   .hover()
-    .backgroundColor('#2563eb')
-    .end()
-  .block('.btn', 'button[type="button"]');`} />
+    .bg('#2563eb')
+  .end()
+  .$el('.demo-btn');`} />
           <div style={{ marginTop: '16px', textAlign: 'center' }}>
-            <button style={{
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              padding: '12px 24px',
-              borderRadius: '8px',
-              border: 'none',
-              cursor: 'pointer'
-            }}>
+            <button className="demo-btn">
               Styled Button
             </button>
           </div>
         </div>
         
-        {/* Card Example */}
         <div style={{ 
           padding: '20px', 
           border: '1px solid #e2e8f0', 
@@ -265,37 +257,21 @@ const special = $()
           <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
             Card Component
           </h3>
-          <CodeBlock language="javascript" code={`const card = $()
-  .backgroundColor('white')
-  .borderRadius('12px')
-  .padding('20px')
-  .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
+          <CodeBlock language="javascript" code={`export const card = $
+  .bg('white')
+  .rounded('12px')
+  .p('20px')
+  .shadow('0 4px 6px -1px rgba(0,0,0,0.1)')
   .hover()
     .transform('translateY(-4px)')
-    .boxShadow('0 12px 24px -12px rgba(0,0,0,0.2)')
-    .end()
-  .block('.card', '.card-component');`} />
-          <div style={{ 
-            marginTop: '16px', 
-            padding: '16px', 
-            backgroundColor: 'white', 
-            borderRadius: '8px',
-            border: '1px solid #e2e8f0',
-            transition: 'all 0.2s'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 12px 24px -12px rgba(0,0,0,0.2)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'none';
-          }}>
-            <p>Hover over me!</p>
+    .shadow('0 12px 24px -12px rgba(0,0,0,0.2)')
+  .end()
+  .$el('.demo-card');`} />
+          <div className="demo-card" style={{ transition: 'all 0.2s' }}>
+            <p>Hover over me</p>
           </div>
         </div>
         
-        {/* Form Example */}
         <div style={{ 
           padding: '20px', 
           border: '1px solid #e2e8f0', 
@@ -303,84 +279,68 @@ const special = $()
           backgroundColor: 'white'
         }}>
           <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
-             Form Inputs
+            Form Inputs
           </h3>
-          <CodeBlock language="javascript" code={`const inputs = $()
+          <CodeBlock language="javascript" code={`export const inputs = $
   .border('1px solid #e2e8f0')
-  .borderRadius('6px')
-  .padding('8px 12px')
+  .rounded('6px')
+  .p('8px 12px')
   .focus()
-    .borderColor('#3b82f6')
+    .borderC('#3b82f6')
     .outline('none')
-    .boxShadow('0 0 0 3px rgba(59,130,246,0.1)')
-    .end()
-  .block('input[type="text"]', 'input[type="email"]', 'textarea');`} />
+    .shadow('0 0 0 3px rgba(59,130,246,0.1)')
+  .end()
+  .$el('.demo-input');`} />
           <div style={{ marginTop: '16px' }}>
             <input 
               type="text" 
-              placeholder="Type something..." 
-              style={{
-                width: '100%',
-                padding: '8px 12px',
-                border: '1px solid #e2e8f0',
-                borderRadius: '6px',
-                outline: 'none'
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#3b82f6';
-                e.target.style.boxShadow = '0 0 0 3px rgba(59,130,246,0.1)';
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#e2e8f0';
-                e.target.style.boxShadow = 'none';
-              }}
+              placeholder="Type something" 
+              className="demo-input"
             />
           </div>
         </div>
       </div>
       
-      {/* Selector Combinations Table */}
-      <h2> Selector Reference</h2>
+      <h2>Selector Reference</h2>
       <div style={{ overflowX: 'auto', marginBottom: '32px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Selector Type</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Syntax</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Example</th>
+            <tr>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e2e8f0', backgroundColor: '#f8fafc' }}>Selector Type</th>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e2e8f0', backgroundColor: '#f8fafc' }}>Syntax</th>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e2e8f0', backgroundColor: '#f8fafc' }}>Example</th>
             </tr>
           </thead>
           <tbody>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}>Class Selector</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">.className</code></td>
-              <td style={{ padding: '12px' }}><code className="inline-code">.block('.btn')</code></td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}>ID Selector</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">#idName</code></td>
-              <td style={{ padding: '12px' }}><code className="inline-code">.block('#header')</code></td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}>Element Selector</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">element</code></td>
-              <td style={{ padding: '12px' }}><code className="inline-code">.block('button', 'div')</code></td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}>Attribute Selector</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">[attr="value"]</code></td>
-              <td style={{ padding: '12px' }}><code className="inline-code">.block('input[type="text"]')</code></td>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Class Selector</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">.className</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">.$el('.btn')</code></td>
             </tr>
             <tr>
-              <td style={{ padding: '12px' }}>Multiple Selectors</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">.class, #id, element</code></td>
-              <td style={{ padding: '12px' }}><code className="inline-code">.block('.btn', '#submit', 'button')</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>ID Selector</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">#idName</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">.$el('#header')</code></td>
+            </tr>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Element Selector</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">element</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">.$el('button', 'div')</code></td>
+            </tr>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Attribute Selector</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">[attr="value"]</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">.$el('input[type="text"]')</code></td>
+            </tr>
+            <tr>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}>Multiple Selectors</td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">.class, #id, element</code></td>
+              <td style={{ padding: '12px', borderBottom: '1px solid #e2e8f0' }}><code className="inline-code">.$el('.btn', '#submit', 'button')</code></td>
             </tr>
           </tbody>
         </table>
       </div>
       
-      {/* Best Practices */}
       <div className="tip">
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
@@ -390,22 +350,15 @@ const special = $()
           <li>Combine selectors when elements share the same styles</li>
         </ul>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/css-properties" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← CSS Properties
-        </a>
-        <a href="/docs/hover-states" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Hover & Interactive States →
-        </a>
-      </div>*/}
+
+      <div className="note">
+        <strong>v2 Migration Notes:</strong>
+        <ul>
+          <li><code>.block()</code> → <code>.$el()</code></li>
+          <li><code>.focus()</code> works the same as <code>.hover()</code> for focus states</li>
+          <li>All selector types work exactly the same in v2</li>
+        </ul>
+      </div>
     </>
   );
 }

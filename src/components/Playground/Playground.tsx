@@ -1,10 +1,40 @@
+// src/components/Playground/Playground.tsx
 import { useState, useEffect, useRef } from 'react';
-import { $ } from 'chaincss';
-import { useChainStyles } from 'chaincss/react';
+import { $ } from 'chaincss/runtime';
 import { Copy, Check, AlertCircle } from 'lucide-react';
+import { CodeInput } from '@srsholmes/react-code-input';
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+import 'highlight.js/styles/vs2015.css';
+import CodeBlock from '../CodeBlock';
+
+hljs.registerLanguage('javascript', javascript);
+
+import {
+  container,
+  header,
+  title,
+  description,
+  templateButtons,
+  templateBtn,
+  activeTemplateBtn,
+  playgroundGrid,
+  editorSection,
+  sectionHeader,
+  codeEditor,
+  previewSection,
+  previewArea,
+  cssOutputSection,
+  cssContent,
+  chaincssButton,
+  chaincssCard,
+  chaincssGradient,
+  codeInputDark,
+  copyBtn
+} from './styles/playground.class.js';
 
 const templates = {
-  button: `const buttonStyle = $()
+  button: `const buttonStyle = $
   .backgroundColor('#667eea')
   .color('white')
   .padding('12px 24px')
@@ -18,9 +48,9 @@ const templates = {
     .transform('scale(1.05)')
   .end()
   .transition('all 0.2s ease')
-  .block();`,
+  .$el('.chaincss-button');`,  // Changed .block() to .$el()
 
-  card: `const cardStyle = $()
+  card: `const cardStyle = $
   .backgroundColor('white')
   .borderRadius('12px')
   .padding('24px')
@@ -30,15 +60,15 @@ const templates = {
     .transform('translateY(-4px)')
   .end()
   .transition('all 0.3s ease')
-  .block();`,
+  .$el('.chaincss-card');`,  // Changed .block() to .$el()
 
-  gradient: `const headingStyle = $()
+  gradient: `const headingStyle = $
   .background('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
   .backgroundClip('text')
   .color('transparent')
   .fontSize('2rem')
   .fontWeight('800')
-  .block();`,
+  .$el('.chaincss-gradient');`,  // Changed .block() to .$el()
 };
 
 const Playground = () => {
@@ -48,24 +78,6 @@ const Playground = () => {
   const [cssOutput, setCssOutput] = useState('');
   const [error, setError] = useState('');
   const styleRef = useRef<HTMLStyleElement | null>(null);
-
-  const uiStyles = useChainStyles(() => ({
-    copyBtn: $()
-      .backgroundColor('transparent')
-      .border('none')
-      .color('#9ca3af')
-      .cursor('pointer')
-      .padding('0.25rem 0.5rem')
-      .borderRadius('0.25rem')
-      .display('flex')
-      .alignItems('center')
-      .gap('0.25rem')
-      .hover()
-        .color('#ffffff')
-        .backgroundColor('rgba(255,255,255,0.1)')
-      .end()
-      .block(),
-  }), []);
 
   const loadTemplate = (template: string) => {
     setActiveTemplate(template);
@@ -87,7 +99,7 @@ const Playground = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Evaluation logic - generate CSS from ChainCSS code
+  // Evaluation logic - generate CSS from ChainCSS code (runtime)
   useEffect(() => {
     try {
       const sandbox: any = {
@@ -132,7 +144,6 @@ const Playground = () => {
       const className = activeTemplate === 'button' ? 'chaincss-button' : 
                         activeTemplate === 'card' ? 'chaincss-card' : 'chaincss-gradient';
       
-      // Generate base styles
       generatedCSS = `.${className} {\n`;
       for (let prop in styleObj) {
         if (prop !== 'selectors' && prop !== 'hover') {
@@ -142,7 +153,6 @@ const Playground = () => {
       }
       generatedCSS += `}\n`;
       
-      // Generate hover styles
       if (styleObj.hover && typeof styleObj.hover === 'object') {
         generatedCSS += `.${className}:hover {\n`;
         for (let prop in styleObj.hover) {
@@ -155,12 +165,10 @@ const Playground = () => {
       setCssOutput(generatedCSS);
       setError('');
       
-      // Remove old style element
       if (styleRef.current) {
         styleRef.current.remove();
       }
       
-      // Add new style element
       const styleElement = document.createElement('style');
       styleElement.textContent = generatedCSS;
       styleElement.setAttribute('data-playground', className);
@@ -180,55 +188,59 @@ const Playground = () => {
   }, [code, activeTemplate]);
 
   return (
-    <div id="playground" className="playground-container">
-      <div className="playground-header">
-        <h1 className="playground-title">Interactive Playground</h1>
-        <p className="playground-description">Write ChainCSS code and see the results in real-time</p>
+    <div id="playground" className={container}>
+      <div className={header}>
+        <h1 className={title}>Interactive Playground</h1>
+        <p className={description}>Write ChainCSS code and see the results in real-time</p>
       </div>
 
-      <div className="template-buttons">
+      <div className={templateButtons}>
         <button 
-          className={`template-btn ${activeTemplate === 'button' ? 'template-btn-active' : ''}`}
+          className={`${templateBtn} ${activeTemplate === 'button' ? activeTemplateBtn : ''}`}
           onClick={() => loadTemplate('button')}
         >
           Button
         </button>
         <button 
-          className={`template-btn ${activeTemplate === 'card' ? 'template-btn-active' : ''}`}
+          className={`${templateBtn} ${activeTemplate === 'card' ? activeTemplateBtn : ''}`}
           onClick={() => loadTemplate('card')}
         >
           Card
         </button>
         <button 
-          className={`template-btn ${activeTemplate === 'gradient' ? 'template-btn-active' : ''}`}
+          className={`${templateBtn} ${activeTemplate === 'gradient' ? activeTemplateBtn : ''}`}
           onClick={() => loadTemplate('gradient')}
         >
           Gradient Text
         </button>
       </div>
 
-      <div className="playground-grid">
-        <div className="editor-section">
-          <div className="section-header">
+      <div className={playgroundGrid}>
+        <div className={editorSection}>
+          <div className={sectionHeader}>
             <span>ChainCSS Code</span>
-            <button className={uiStyles.copyBtn} onClick={copyCode}>
+            <button className={copyBtn} onClick={copyCode}>
               {copied ? <Check size={14} /> : <Copy size={14} />}
               {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
-          <textarea
-            className="code-editor"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            spellCheck={false}
-          />
+          <div className="code-input-dark">
+            <CodeInput
+              value={code}
+              onChange={setCode}
+              language="javascript"
+              highlightjs={hljs}
+              placeholder="Write your ChainCSS code here..."
+              autoHeight={true}
+            />
+          </div>
         </div>
 
-        <div className="preview-section">
-          <div className="section-header">
+        <div className={previewSection}>
+          <div className={sectionHeader}>
             <span>Live Preview</span>
           </div>
-          <div className="preview-area">
+          <div className={previewArea}>
             {error ? (
               <div style={{ 
                 display: 'flex', 
@@ -252,12 +264,12 @@ const Playground = () => {
                 minHeight: '300px'
               }}>
                 {activeTemplate === 'button' && (
-                  <button className="chaincss-button">
+                  <button className={chaincssButton}>
                     ChainCSS Button
                   </button>
                 )}
                 {activeTemplate === 'card' && (
-                  <div className="chaincss-card">
+                  <div className={chaincssCard}>
                     <h3 style={{ marginBottom: '0.5rem', fontSize: '1.25rem', fontWeight: 600 }}>
                       ChainCSS Card
                     </h3>
@@ -268,7 +280,7 @@ const Playground = () => {
                   </div>
                 )}
                 {activeTemplate === 'gradient' && (
-                  <h2 className="chaincss-gradient">
+                  <h2 className={chaincssGradient}>
                     ChainCSS Gradient Text
                   </h2>
                 )}
@@ -279,16 +291,18 @@ const Playground = () => {
       </div>
 
       {cssOutput && !error && (
-        <div className="css-output">
-          <div className="section-header">
+        <div className={cssOutputSection}>
+          <div className={sectionHeader}>
             <span>Generated CSS</span>
-            <button className={uiStyles.copyBtn} onClick={copyCSS}>
+            <button className={copyBtn} onClick={copyCSS}>
               <Copy size={14} /> Copy CSS
             </button>
           </div>
-          <pre className="css-content">
-            <code>{cssOutput}</code>
-          </pre>
+          <CodeBlock 
+            code={cssOutput} 
+            language="css" 
+            showCopy={false}
+          />
         </div>
       )}
     </div>

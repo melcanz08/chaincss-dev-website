@@ -8,10 +8,14 @@ export default function Minification() {
     basic: {
       title: 'Basic Minification',
       description: 'Minify CSS for smaller file sizes and faster loading',
-      code: `// Minification is enabled by default
-npx chaincss ./styles.jcss ./dist
+      code: `# chaincss.config.js
+export default {
+  atomic: {
+    minify: true
+  }
+};
 
-// Output: minified CSS`,
+npx chaincss build`,
       input: `.btn {
   background-color: #3b82f6;
   color: white;
@@ -28,13 +32,14 @@ npx chaincss ./styles.jcss ./dist
     disabled: {
       title: 'Disable Minification',
       description: 'Keep CSS readable for debugging',
-      code: `// Disable minification via config
-// chaincss.config.cjs
-module.exports = {
+      code: `# chaincss.config.js
+export default {
   atomic: {
-    minify: false  // Disable minification
+    minify: false
   }
-};`,
+};
+
+npx chaincss build`,
       input: `.btn {
   background-color: #3b82f6;
   color: white;
@@ -51,20 +56,8 @@ module.exports = {
     comparison: {
       title: 'Size Comparison',
       description: 'See the difference minification makes',
-      code: `// With minification
-.btn{background-color:#3b82f6;color:#fff;padding:12px 24px;border-radius:8px}
-// Size: 78 bytes
-
-// Without minification
-.btn {
-  background-color: #3b82f6;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-}
-// Size: 95 bytes
-
-// Savings: ~18% smaller`,
+      code: `# Minification is enabled by default in production
+npx chaincss build`,
       stats: {
         original: 95,
         minified: 78,
@@ -74,23 +67,12 @@ module.exports = {
     advanced: {
       title: 'Advanced Minification',
       description: 'ChainCSS uses CleanCSS for advanced optimizations',
-      code: `// CleanCSS optimizations include:
-// - Removing unnecessary whitespace
-// - Shortening color values (#ffffff → #fff)
-// - Removing redundant units (0px → 0)
-// - Merging duplicate rules
-// - Removing unused selectors
-// - Optimizing calc() expressions
-
-// Example input:
-.btn {
-  margin: 0px;
-  color: #ffffff;
-  background: linear-gradient(90deg, #ff0000, #00ff00);
-}
-
-// Minified output:
-.btn{margin:0;color:#fff;background:linear-gradient(90deg,red,#0f0)}`,
+      code: `# chaincss.config.js
+export default {
+  atomic: {
+    minify: true
+  }
+};`,
       output: `.btn{margin:0;color:#fff;background:linear-gradient(90deg,red,#0f0)}`
     }
   };
@@ -106,7 +88,6 @@ module.exports = {
         </p>
       </div>
       
-      {/* What is Minification */}
       <h2>What is Minification?</h2>
       <p>
         Minification removes unnecessary characters from CSS without changing how it works.
@@ -123,7 +104,6 @@ module.exports = {
         </ul>
       </div>
       
-      {/* Visual Comparison */}
       <h2>Visual Comparison</h2>
       <div style={{
         display: 'grid',
@@ -156,7 +136,6 @@ module.exports = {
         </div>
       </div>
       
-      {/* Examples */}
       <h2>Examples</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
         <button
@@ -223,14 +202,12 @@ module.exports = {
         <CodeBlock language="bash" code={currentExample.code} />
         
         {currentExample.input && (
-          <>
-            <div style={{ marginTop: '16px' }}>
-              <div className="tip" style={{ backgroundColor: '#f1f5f9', borderLeftColor: '#94a3b8' }}>
-                <strong>Input CSS:</strong>
-                <CodeBlock language="css" code={currentExample.input} />
-              </div>
+          <div style={{ marginTop: '16px' }}>
+            <div className="tip" style={{ backgroundColor: '#f1f5f9', borderLeftColor: '#94a3b8' }}>
+              <strong>Input CSS:</strong>
+              <CodeBlock language="css" code={currentExample.input} />
             </div>
-          </>
+          </div>
         )}
         
         {currentExample.output && (
@@ -252,46 +229,17 @@ module.exports = {
         )}
       </div>
       
-      {/* Configuration Options */}
       <h2>Configuration</h2>
-      <p>Control minification behavior in your <code className="inline-code">chaincss.config.cjs</code>:</p>
-      <CodeBlock language="javascript" code={`// chaincss.config.cjs
-module.exports = {
+      <p>Control minification behavior in your <code className="inline-code">chaincss.config.js</code>:</p>
+      <CodeBlock language="javascript" code={`// chaincss.config.js
+export default {
   atomic: {
-    // Enable/disable minification (default: true)
-    minify: true,
-    
-    // Other minification settings (via CleanCSS)
-    // All CleanCSS options are supported
+    minify: true
   }
 };`} />
       
-      {/* CLI Options */}
-      <h2>CLI Options</h2>
-      <div style={{ overflowX: 'auto', marginBottom: '32px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Flag</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Description</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Default</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Example</th>
-              </tr>
-          </thead>
-          <tbody>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">--no-minify</code></td>
-              <td style={{ padding: '12px' }}>Disable CSS minification</td>
-              <td style={{ padding: '12px' }}>false</td>
-              <td style={{ padding: '12px' }}><code className="inline-code">--no-minify</code></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      {/* CleanCSS Optimizations */}
       <h2>CleanCSS Optimizations</h2>
-      <p>ChainCSS uses <a href="https://github.com/clean-css/clean-css" target="_blank" rel="noopener noreferrer">CleanCSS</a> for minification, which includes these optimizations:</p>
+      <p>ChainCSS uses CleanCSS for minification, which includes these optimizations:</p>
       
       <div style={{
         display: 'grid',
@@ -325,7 +273,6 @@ module.exports = {
         </div>
       </div>
       
-      {/* Best Practices */}
       <div className="note">
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
@@ -336,7 +283,6 @@ module.exports = {
         </ul>
       </div>
       
-      {/* Performance Impact */}
       <h2>Performance Impact</h2>
       <div style={{
         display: 'grid',
@@ -358,31 +304,14 @@ module.exports = {
         </div>
       </div>
       
-      {/* Troubleshooting */}
       <div className="tip" style={{ backgroundColor: '#e0f2fe', borderLeftColor: '#3b82f6', marginBottom: '32px' }}>
         <strong>Troubleshooting</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
           <li><strong>Minification not working?</strong> Check that <code className="inline-code">minify: true</code> in your config</li>
-          <li><strong>CSS looks broken after minification?</strong> Run with <code className="inline-code">--no-minify</code> to see if it's a minification issue</li>
+          <li><strong>CSS looks broken after minification?</strong> Set <code className="inline-code">minify: false</code> to see if it's a minification issue</li>
           <li><strong>Need to debug minified CSS?</strong> Use source maps to see original source</li>
         </ul>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/source-maps" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Source Maps
-        </a>
-        <a href="/docs/atomic-css" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Atomic CSS →
-        </a>
-      </div>*/}
     </>
   );
 }

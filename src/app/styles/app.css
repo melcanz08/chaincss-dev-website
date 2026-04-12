@@ -1,0 +1,24 @@
+.mode-container  {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.mode-description  {
+  font-size: 1.125rem;
+  color: #64748b;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+.mode-section  {
+  padding: 4rem 1.5rem;
+  text-align: center;
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+.mode-title  {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.mode-title span  {
+  color: #667eea;
+}

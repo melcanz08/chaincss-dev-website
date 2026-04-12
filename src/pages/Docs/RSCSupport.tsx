@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import CodeBlock from '../../components/CodeBlock';
 
-// Extract preview components to avoid conditional hook calls
 const RSCBasicsPreview = () => {
   return (
     <div style={{
@@ -21,7 +20,7 @@ const RSCBasicsPreview = () => {
       }}>
         React Server Components
       </h1>
-      <p>This page is rendered on the server. No client-side JavaScript needed!</p>
+      <p>This page is rendered on the server. No client-side JavaScript needed</p>
       <div className="tip" style={{ marginTop: '16px', textAlign: 'left' }}>
         No JavaScript bundle for these styles
       </div>
@@ -72,7 +71,7 @@ const StaticExtractionPreview = () => {
         padding: '40px 20px'
       }}>
         <h2 style={{ marginBottom: '16px' }}>Static Style Extraction</h2>
-        <p>These styles are extracted at build time:</p>
+        <p>These styles are extracted at build time</p>
         <ul style={{ marginTop: '12px', paddingLeft: '20px' }}>
           <li>No runtime JavaScript for styles</li>
           <li>Styles are in the HTML from the start</li>
@@ -88,7 +87,7 @@ const StaticExtractionPreview = () => {
           fontSize: '12px',
           overflowX: 'auto'
         }}>
-          {`$ npx chaincss app/styles/layout.jcss app/styles/ --atomic
+          {`$ npx chaincss build
 CSS generated at build time
 No runtime overhead`}
         </pre>
@@ -161,23 +160,16 @@ export default function RSCSupport() {
 import { $ } from 'chaincss';
 import './styles/global.css';
 
-// Server Component - styles are compiled at build time
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  // This runs on the server only
-  // Styles are extracted and included in the HTML
-  const layoutStyles = $()
-    .fontFamily('system-ui')
-    .backgroundColor('#f8fafc')
-    .color('#1e293b')
-    .minHeight('100vh')
-    .block();
+export default function RootLayout({ children }) {
+  const layoutStyles = {
+    fontFamily: 'system-ui',
+    backgroundColor: '#f8fafc',
+    color: '#1e293b',
+    minHeight: '100vh'
+  };
   
   return (
-    <html lang="en" className={layoutStyles}>
+    <html lang="en" style={layoutStyles}>
       <body>{children}</body>
     </html>
   );
@@ -185,26 +177,25 @@ export default function RootLayout({
 
 // app/page.tsx - Server Component
 export default function HomePage() {
-  // Server-only styles - no JavaScript sent to client
-  const containerStyles = $()
-    .maxWidth('1200px')
-    .margin('0 auto')
-    .padding('40px 20px')
-    .block();
+  const containerStyles = {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '40px 20px'
+  };
   
-  const titleStyles = $()
-    .fontSize('48px')
-    .fontWeight('700')
-    .marginBottom('16px')
-    .background('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
-    .backgroundClip('text')
-    .color('transparent')
-    .block();
+  const titleStyles = {
+    fontSize: '48px',
+    fontWeight: '700',
+    marginBottom: '16px',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    backgroundClip: 'text',
+    color: 'transparent'
+  };
   
   return (
-    <div className={containerStyles}>
-      <h1 className={titleStyles}>React Server Components</h1>
-      <p>This page is rendered on the server. No client-side JavaScript needed!</p>
+    <div style={containerStyles}>
+      <h1 style={titleStyles}>React Server Components</h1>
+      <p>This page is rendered on the server. No client-side JavaScript needed</p>
     </div>
   );
 }`,
@@ -216,23 +207,25 @@ export default function HomePage() {
       code: `// app/components/InteractiveButton.tsx
 'use client';
 
-import { useChainStyles } from 'chaincss/react';
+import { useChainStyles } from 'chaincss/runtime';
 import { useState } from 'react';
 
 export function InteractiveButton() {
   const [count, setCount] = useState(0);
   
   const styles = useChainStyles({
-    button: $()
-      .backgroundColor('#3b82f6')
-      .color('white')
-      .padding('12px 24px')
-      .borderRadius('8px')
-      .hover()
-        .backgroundColor('#2563eb')
-        .end()
-      .transition('all 0.2s')
-      .block()
+    button: {
+      backgroundColor: '#3b82f6',
+      color: 'white',
+      padding: '12px 24px',
+      borderRadius: '8px',
+      transition: 'all 0.2s',
+      cursor: 'pointer',
+      border: 'none',
+      hover: {
+        backgroundColor: '#2563eb'
+      }
+    }
   });
   
   return (
@@ -246,16 +239,15 @@ export function InteractiveButton() {
 import { InteractiveButton } from './components/InteractiveButton';
 
 export default function Page() {
-  // Server-only styles
-  const containerStyles = $()
-    .textAlign('center')
-    .padding('40px')
-    .block();
+  const containerStyles = {
+    textAlign: 'center',
+    padding: '40px'
+  };
   
   return (
-    <div className={containerStyles}>
+    <div style={containerStyles}>
       <h1>Server Component</h1>
-      <InteractiveButton /> {/* Client Component */}
+      <InteractiveButton />
     </div>
   );
 }`,
@@ -264,37 +256,30 @@ export default function Page() {
     staticExtraction: {
       title: 'Static Style Extraction',
       description: 'Extract styles at build time for optimal performance',
-      code: `// app/styles/layout.jcss
-<@
-// These styles are extracted at build time
-const layoutStyles = $()
+      code: `// src/components/Layout/styles/layout.chain.js
+import { $ } from 'chaincss';
+
+export const layoutStyles = $
   .fontFamily('system-ui')
-  .backgroundColor('#f8fafc')
-  .color('#1e293b')
-  .minHeight('100vh')
-  .block();
+  .bg('#f8fafc')
+  .c('#1e293b')
+  .minH('100vh')
+  .$el();
 
-const containerStyles = $()
-  .maxWidth('1200px')
-  .margin('0 auto')
-  .padding('40px 20px')
-  .block();
+export const containerStyles = $
+  .maxW('1200px')
+  .m('0 auto')
+  .p('40px 20px')
+  .$el();
 
-compile({ layoutStyles, containerStyles });
-@>
-
-// app/layout.tsx - Import compiled CSS
-import './styles/layout.css'; // Generated by ChainCSS build
+// app/layout.tsx
+import { layoutStyles, containerStyles } from '@/components/Layout/styles/layout.class.js';
+import '@/components/Layout/styles/layout.css';
 
 export default function RootLayout({ children }) {
-  // No runtime style generation!
   return (
-    <html lang="en">
-      <body className="layoutStyles">
-        <div className="containerStyles">
-          {children}
-        </div>
-      </body>
+    <html lang="en" className={layoutStyles}>
+      <body className={containerStyles}>{children}</body>
     </html>
   );
 }`,
@@ -306,15 +291,15 @@ export default function RootLayout({ children }) {
       code: `// app/components/HeavyComponent.tsx
 'use client';
 
-import { useChainStyles } from 'chaincss/react';
+import { useChainStyles } from 'chaincss/runtime';
 
 export function HeavyComponent() {
   const styles = useChainStyles({
-    container: $()
-      .padding('20px')
-      .backgroundColor('#f1f5f9')
-      .borderRadius('12px')
-      .block()
+    container: {
+      padding: '20px',
+      backgroundColor: '#f1f5f9',
+      borderRadius: '12px'
+    }
   });
   
   return (
@@ -329,29 +314,23 @@ export function HeavyComponent() {
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 
-// Lazy load the component - its styles are loaded with it
 const HeavyComponent = dynamic(
   () => import('./components/HeavyComponent').then(mod => mod.HeavyComponent),
-  { 
-    loading: () => <div>Loading...</div>,
-    ssr: false // Optional: disable SSR for this component
-  }
+  { loading: () => <div>Loading...</div>, ssr: false }
 );
 
 export default function Page() {
   const [show, setShow] = useState(false);
   
-  const styles = $()
-    .textAlign('center')
-    .padding('40px')
-    .block();
+  const styles = {
+    textAlign: 'center',
+    padding: '40px'
+  };
   
   return (
-    <div className={styles}>
+    <div style={styles}>
       <h1>Dynamic Imports</h1>
-      <button onClick={() => setShow(true)}>
-        Load Heavy Component
-      </button>
+      <button onClick={() => setShow(true)}>Load Heavy Component</button>
       {show && <HeavyComponent />}
     </div>
   );
@@ -372,12 +351,11 @@ export default function Page() {
         </p>
       </div>
       
-      {/* What are RSC */}
       <h2>What are React Server Components?</h2>
       <p>
         React Server Components (RSC) allow you to render components on the server with zero client-side JavaScript.
         ChainCSS is the perfect companion for RSC because styles can be compiled at build time or rendered on the server.
-      </p><br />
+      </p>
       
       <div className="tip">
         <strong>Key Benefits with ChainCSS:</strong>
@@ -389,7 +367,6 @@ export default function Page() {
         </ul>
       </div>
       
-      {/* Examples */}
       <h2>Examples</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
         <button
@@ -465,7 +442,6 @@ export default function Page() {
         )}
       </div>
       
-      {/* Architecture Diagram */}
       <h2>RSC + ChainCSS Architecture</h2>
       <div style={{
         backgroundColor: '#f8fafc',
@@ -502,7 +478,7 @@ export default function Page() {
 │                              ▼                                  │
 │  ┌─────────────────────────────────────────────────────────────┐│
 │  │  Build-Time Compilation                                     ││
-│  │  • npx chaincss src/styles/ dist/ --atomic                  ││
+│  │  • npx chaincss build                                       ││
 │  │  • Static CSS extracted                                     ││
 │  │  • Optimized bundles                                        ││
 │  └─────────────────────────────────────────────────────────────┘│
@@ -510,69 +486,46 @@ export default function Page() {
         </pre>
       </div>
       
-      {/* Best Practices */}
       <div className="note">
         <strong>Best Practices for RSC + ChainCSS</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
           <li>Use <strong>build-time compilation</strong> for server components</li>
           <li>Mark interactive components with <code className="inline-code">'use client'</code></li>
-          <li>Extract static styles to <code className="inline-code">.jcss</code> files</li>
+          <li>Extract static styles to <code className="inline-code">.chain.js</code> files</li>
           <li>Use <code className="inline-code">dynamic()</code> for lazy loading heavy components</li>
-          <li>Enable <code className="inline-code">--atomic</code> for optimal bundle size</li>
         </ul>
       </div>
       
-      {/* Performance Comparison */}
       <h2>Performance Comparison</h2>
-      <div style={{ overflowX: 'auto', marginBottom: '32px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Metric</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Runtime CSS-in-JS</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>ChainCSS + RSC</th>
-                </tr>
-          </thead>
-          <tbody>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}>Initial HTML Size</td>
-              <td style={{ padding: '12px' }}>Contains only markup</td>
-              <td style={{ padding: '12px' }}><strong>Includes CSS</strong> </td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}>JavaScript Bundle</td>
-              <td style={{ padding: '12px' }}>Includes style injection code</td>
-              <td style={{ padding: '12px' }}><strong>Zero runtime JS</strong> </td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}>FOUC (Flash of Unstyled Content)</td>
-              <td style={{ padding: '12px' }}>Common issue</td>
-              <td style={{ padding: '12px' }}><strong>No FOUC</strong> </td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}>SEO Impact</td>
-              <td style={{ padding: '12px' }}>Lower (styles load after)</td>
-              <td style={{ padding: '12px' }}><strong>Optimal</strong> </td>
-            </tr>
-          </tbody>
-        </table>
+      <div style={{ marginBottom: '32px' }}>
+        <div style={{ display: 'grid', gap: '1px', backgroundColor: '#e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 250px 250px', backgroundColor: '#f8fafc', fontWeight: '600', borderBottom: '2px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}>Metric</div>
+            <div style={{ padding: '12px' }}>Runtime CSS-in-JS</div>
+            <div style={{ padding: '12px' }}>ChainCSS + RSC</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 250px 250px', backgroundColor: 'white', borderBottom: '1px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}>Initial HTML Size</div>
+            <div style={{ padding: '12px' }}>Contains only markup</div>
+            <div style={{ padding: '12px' }}><strong>Includes CSS</strong></div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 250px 250px', backgroundColor: 'white', borderBottom: '1px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}>JavaScript Bundle</div>
+            <div style={{ padding: '12px' }}>Includes style injection code</div>
+            <div style={{ padding: '12px' }}><strong>Zero runtime JS</strong></div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 250px 250px', backgroundColor: 'white', borderBottom: '1px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}>FOUC</div>
+            <div style={{ padding: '12px' }}>Common issue</div>
+            <div style={{ padding: '12px' }}><strong>No FOUC</strong></div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 250px 250px', backgroundColor: 'white' }}>
+            <div style={{ padding: '12px' }}>SEO Impact</div>
+            <div style={{ padding: '12px' }}>Lower (styles load after)</div>
+            <div style={{ padding: '12px' }}><strong>Optimal</strong></div>
+          </div>
+        </div>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/nextjs" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Next.js
-        </a>
-        <a href="/docs/headless" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Headless Components →
-        </a>
-      </div>*/}
     </>
   );
 }

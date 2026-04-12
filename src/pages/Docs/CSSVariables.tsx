@@ -103,10 +103,8 @@ const tokens = createTokens({
   }
 });
 
-// Generate CSS variables
 const cssVariables = tokens.toCSSVariables();
 
-console.log(cssVariables);
 // Output:
 // :root {
 //   --colors-primary: #3b82f6;
@@ -124,27 +122,25 @@ console.log(cssVariables);
     usage: {
       title: 'Using CSS Variables in Styles',
       description: 'Reference CSS variables in your ChainCSS styles',
-      code: `const button = $()
-  .backgroundColor('var(--colors-primary)')
-  .color('white')
-  .padding('var(--spacing-md) var(--spacing-lg)')
-  .borderRadius('8px')
-  .fontSize('var(--typography-fontSize-base)')
+      code: `export const button = $
+  .bg('var(--colors-primary)')
+  .c('white')
+  .p('var(--spacing-md) var(--spacing-lg)')
+  .rounded('8px')
+  .textSize('var(--typography-fontSize-base)')
   .hover()
-    .backgroundColor('var(--colors-primary-dark)')
-    .end()
+    .bg('var(--colors-primary-dark)')
+  .end()
   .transition('all 0.2s')
-  .block('.btn');`
+  .$el('.btn');`
     },
     runtime: {
       title: 'Runtime Theme Switching',
       description: 'Swap themes dynamically by changing CSS variables',
-      code: `// Apply light theme
-document.documentElement.style.setProperty('--colors-primary', '#3b82f6');
+      code: `document.documentElement.style.setProperty('--colors-primary', '#3b82f6');
 document.documentElement.style.setProperty('--colors-background', '#ffffff');
 document.documentElement.style.setProperty('--colors-text', '#1e293b');
 
-// Apply dark theme
 document.documentElement.style.setProperty('--colors-primary', '#60a5fa');
 document.documentElement.style.setProperty('--colors-background', '#0f172a');
 document.documentElement.style.setProperty('--colors-text', '#f1f5f9');`
@@ -154,7 +150,6 @@ document.documentElement.style.setProperty('--colors-text', '#f1f5f9');`
   const [activeTab, setActiveTab] = useState('basic');
   const currentExample = examples[activeTab];
   
-  // Apply theme variables to demo container
   const demoStyle = {
     backgroundColor: `var(--color-background)`,
     color: `var(--color-text)`,
@@ -171,7 +166,6 @@ document.documentElement.style.setProperty('--colors-text', '#f1f5f9');`
         </p>
       </div>
       
-      {/* What are CSS Variables */}
       <h2>What are CSS Variables?</h2>
       <p>
         CSS variables (custom properties) allow you to store values that can be reused throughout your styles.
@@ -188,7 +182,6 @@ document.documentElement.style.setProperty('--colors-text', '#f1f5f9');`
         </ul>
       </div>
       
-      {/* Interactive Theme Demo */}
       <h2>Live Theme Demo</h2>
       <p>Toggle between light and dark mode to see CSS variables in action:</p>
       
@@ -235,7 +228,6 @@ document.documentElement.style.setProperty('--colors-text', '#f1f5f9');`
           </button>
         </div>
         
-        {/* Apply CSS variables to demo */}
         <style>
           {Object.entries(currentTheme.variables).map(([key, value]) => `
             .theme-demo {
@@ -323,7 +315,6 @@ document.documentElement.style.setProperty('--colors-text', '#f1f5f9');`
         </div>
       </div>
       
-      {/* CSS Variables Display */}
       {showVariables && (
         <div style={{ marginBottom: '32px' }}>
           <h3>Current CSS Variables</h3>
@@ -346,7 +337,6 @@ document.documentElement.style.setProperty('--colors-text', '#f1f5f9');`
         </div>
       )}
       
-      {/* Code Examples */}
       <h2>Examples</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
         <button
@@ -401,25 +391,22 @@ document.documentElement.style.setProperty('--colors-text', '#f1f5f9');`
         </p>
       </div>
       
-      {/* Advanced: Scoped Variables */}
       <h2>Scoped CSS Variables</h2>
       <p>You can scope CSS variables to specific components for better encapsulation:</p>
-      <CodeBlock language="javascript" code={`// Component-scoped variables
-const cardStyles = $()
+      <CodeBlock language="javascript" code={`export const cardStyles = $
   .select('.card')
     .setProperty('--card-padding', '20px')
     .setProperty('--card-bg', 'white')
-    .padding('var(--card-padding)')
-    .backgroundColor('var(--card-bg)')
-    .borderRadius('12px')
+    .p('var(--card-padding)')
+    .bg('var(--card-bg)')
+    .rounded('12px')
     .select('.card-title')
-      .fontSize('18px')
-      .marginBottom('8px')
-      .block()
-    .block()
-  .block();`} />
+      .textSize('18px')
+      .mb('8px')
+      .$el()
+    .$el()
+  .$el();`} />
       
-      {/* Best Practices */}
       <div className="note">
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
@@ -427,11 +414,10 @@ const cardStyles = $()
           <li><strong>Fallback Values:</strong> Always provide fallback values: <code className="inline-code">var(--color-primary, #3b82f6)</code></li>
           <li><strong>Scope Appropriately:</strong> Use <code className="inline-code">:root</code> for global variables, component classes for scoped variables</li>
           <li><strong>Performance:</strong> CSS variables are lightweight and performant - use them freely</li>
-          <li><strong>Browser Support:</strong> CSS variables work in all modern browsers (IE11 not supported)</li>
+          <li><strong>Browser Support:</strong> CSS variables work in all modern browsers</li>
         </ul>
       </div>
       
-      {/* CSS Variables vs Tokens */}
       <h2>CSS Variables vs Design Tokens</h2>
       <div style={{ 
         display: 'grid', 
@@ -444,7 +430,7 @@ const cardStyles = $()
           <p style={{ fontSize: '14px', color: '#64748b' }}>
             Used during build to generate CSS. Cannot be changed at runtime.
           </p>
-          <code className="inline-code">:colors.primary</code>
+          <code className="inline-code">$colors.primary</code>
         </div>
         <div style={{ padding: '16px', border: '1px solid #e2e8f0', borderRadius: '12px' }}>
           <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px' }}>CSS Variables (Runtime)</h3>
@@ -461,22 +447,6 @@ const cardStyles = $()
           <code className="inline-code">tokens.toCSSVariables()</code>
         </div>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/responsive-values" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Responsive Values
-        </a>
-        <a href="/docs/recipe" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Recipe System →
-        </a>
-      </div>*/}
     </>
   );
 }

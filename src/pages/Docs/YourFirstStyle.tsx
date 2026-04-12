@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import CodeBlock from '../../components/CodeBlock';
-import { $, run, compile,chain } from 'chaincss';
+import { $, run, compile } from 'chaincss/runtime';
 
 export default function YourFirstStyle() {
-  const [code, setCode] = useState(`const button = $()
+  const [code, setCode] = useState(`const button = $
   .backgroundColor('#3b82f6')
   .color('white')
   .padding('12px 24px')
@@ -16,7 +16,7 @@ export default function YourFirstStyle() {
     .backgroundColor('#2563eb')
     .end()
   .transition('all 0.2s')
-  .block('.btn');`);
+  .$el('.btn');`); 
   
   const [generatedCSS, setGeneratedCSS] = useState('');
   const [error, setError] = useState('');
@@ -35,45 +35,41 @@ export default function YourFirstStyle() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const chaincssLoadedRef = useRef(false);
 
-  // Load ChainCSS into iframe
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
-
-    const initializeChainCSS = async () => {
-      try {
-        await new Promise<void>((resolve) => {
-          if (iframe.contentWindow) {
-            resolve();
-          } else {
-            iframe.addEventListener('load', () => resolve(), { once: true });
-          }
-        });
-
-        const iframeWindow = iframe.contentWindow;
-        if (!iframeWindow) return;
-
-        
-        iframeWindow.$ = $;
-        iframeWindow.run = run;
-        iframeWindow.compile = compile;
-        iframeWindow.chain = chain;
-        
-        iframeWindow.chain.cssOutput = '';
-        
-        chaincssLoadedRef.current = true;
-        
-        // Run initial code
-        runCode();
-      } catch (err) {
-        console.error('Failed to load ChainCSS:', err);
-        setError('Failed to load ChainCSS runtime. Please refresh the page.');
+  // Helper to generate CSS from style object (runtime)
+  const generateCSSFromStyle = (styleObj: any): string => {
+    if (!styleObj) return '';
+    
+    let css = '';
+    const className = 'btn';
+    
+    // Normal styles
+    let normalStyles = '';
+    for (const [key, value] of Object.entries(styleObj)) {
+      if (key === 'selectors' || key === 'hover') continue;
+      const kebabKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+      normalStyles += `  ${kebabKey}: ${value};\n`;
+    }
+    
+    if (normalStyles) {
+      css += `.${className} {\n${normalStyles}}\n`;
+    }
+    
+    // Hover styles
+    if (styleObj.hover && typeof styleObj.hover === 'object') {
+      let hoverStylesContent = '';
+      for (const [key, value] of Object.entries(styleObj.hover)) {
+        const kebabKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+        hoverStylesContent += `  ${kebabKey}: ${value};\n`;
       }
-    };
+      if (hoverStylesContent) {
+        css += `.${className}:hover {\n${hoverStylesContent}}\n`;
+      }
+    }
+    
+    return css;
+  };
 
-    initializeChainCSS();
-  }, []);
-
+  // Parse CSS string to React styles
   const parseCSSToStyles = (css: string) => {
     const styles: React.CSSProperties = {};
     const hoverStylesObj: React.CSSProperties = {};
@@ -105,27 +101,88 @@ export default function YourFirstStyle() {
     return { styles, hoverStyles: hoverStylesObj };
   };
 
-  const runCode = () => {
-    if (!chaincssLoadedRef.current) return;
+  // Execute user code and get style object
+  const executeCode = (codeToRun: string): any => {
+    // Create a sandbox function that returns the style object
+    const sandbox: any = {};
+    
+    const fn = new Function('$', 'sandbox', `
+      try {
+        ${codeToRun}
+        if (typeof button !== 'undefined') sandbox.button = button;
+      } catch(e) {
+        sandbox.error = e.message;
+      }
+    `);
+    
+    fn($, sandbox);
+    
+    if (sandbox.error) {
+      throw new Error(sandbox.error);
+    }
+    
+    return sandbox.button;
+  };
 
+  // Load ChainCSS into iframe (runtime only)
+  useEffect(() => {
     const iframe = iframeRef.current;
     if (!iframe) return;
 
-    try {
-      const iframeWindow = iframe.contentWindow;
-      if (!iframeWindow || !iframeWindow.chain) return;
+    const initializeChainCSS = async () => {
+      try {
+        await new Promise<void>((resolve) => {
+          if (iframe.contentWindow) {
+            resolve();
+          } else {
+            iframe.addEventListener('load', () => resolve(), { once: true });
+          }
+        });
 
-      iframeWindow.chain.cssOutput = '';
-
-      let codeToRun = code.trim();
-      if (!codeToRun.includes('run(') && !codeToRun.includes('compile(')) {
-        codeToRun = `${codeToRun}\nrun(button);`;
+        const iframeWindow = iframe.contentWindow;
+        if (!iframeWindow) return;
+        
+        // Only expose runtime functions, not compiler
+        iframeWindow.$ = $;
+        iframeWindow.run = run;
+        iframeWindow.compile = compile;
+        
+        chaincssLoadedRef.current = true;
+        
+        // Run initial code
+        runCode();
+      } catch (err) {
+        console.error('Failed to load ChainCSS:', err);
+        setError('Failed to load ChainCSS runtime. Please refresh the page.');
       }
+    };
 
-      iframeWindow.eval(codeToRun);
+    initializeChainCSS();
+  }, []);
+
+  const runCode = () => {
+    if (!chaincssLoadedRef.current) return;
+
+    try {
+      // Execute code and get style object
+      let codeToRun = code.trim();
       
-      const css = iframeWindow.chain.cssOutput || '';
-
+      // Ensure the code defines a 'button' variable
+      if (!codeToRun.includes('const button') && !codeToRun.includes('let button') && !codeToRun.includes('var button')) {
+        codeToRun = `const button = ${codeToRun}`;
+      }
+      
+      const styleObj = executeCode(codeToRun);
+      
+      if (!styleObj) {
+        setError('No style defined. Make sure you create a variable named "button" with $.$el(\'.btn\')');
+        setGeneratedCSS('');
+        return;
+      }
+      
+      // Generate CSS from the style object
+      const css = generateCSSFromStyle(styleObj);
+      
       console.log('Generated CSS:', css);
       setGeneratedCSS(css);
       
@@ -133,14 +190,11 @@ export default function YourFirstStyle() {
         const { styles, hoverStyles: parsedHoverStyles } = parseCSSToStyles(css);
         setLiveStyles(prev => ({ ...prev, ...styles }));
         setHoverStyles(parsedHoverStyles);
-      }
-      
-      if (!css) {
-        setError('No CSS generated. Make sure you have run() or compile() in your code.');
-      } else {
         setError('');
+      } else {
+        setError('No CSS generated. Make sure you use .$el(\'.btn\') to define the selector.');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Execution error:', err);
       setError(err.message);
       setGeneratedCSS('');
@@ -155,7 +209,7 @@ export default function YourFirstStyle() {
       if (code.trim()) {
         runCode();
       }
-    }, 300); // Even faster response: 300ms
+    }, 300);
     
     return () => clearTimeout(timer);
   }, [code]);
@@ -179,59 +233,61 @@ export default function YourFirstStyle() {
       </div>
       
       {/* Step 1: Create the file */}
-      <h2>Step 1: Create your first .jcss file</h2>
+      <h2>Step 1: Create your first .chain.js file</h2>
       <p>
-        Create a new file called <code className="inline-code">styles.jcss</code> in your project:
+        Create a new file called <code className="inline-code">button.chain.js</code> in your project:
       </p>
-      <CodeBlock language="bash" code={`mkdir styles
-touch styles/styles.jcss`} />
+      <CodeBlock language="bash" code={`mkdir -p src/components/Button/styles
+touch src/components/Button/styles/button.chain.js`} />
       
       {/* Step 2: Write your first style */}
       <h2>Step 2: Write your first style</h2>
       <p>
-        Open <code className="inline-code">styles.jcss</code> and add the following code:
+        Open <code className="inline-code">button.chain.js</code> and add the following code:
       </p>
-      <CodeBlock language="javascript" code={`<@
-const button = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
-  .block('.btn');
+      <CodeBlock language="javascript" code={`import { $ } from 'chaincss';
 
-run(button);
-@>`} />
+export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
+  .cursor('pointer')
+  .hover()
+    .bg('#2563eb')
+  .end()
+  .$el('.btn');`} />
       
       <div className="tip">
         <strong>What's happening?</strong><br />
-        • <code className="inline-code">$()</code> starts a new style chain<br />
-        • <code className="inline-code">.backgroundColor()</code> sets the background color<br />
-        • <code className="inline-code">.block('.btn')</code> assigns the style to a CSS class<br />
-        • <code className="inline-code">run(button)</code> generates the CSS
+        • <code className="inline-code">$</code> starts a new style chain<br />
+        • <code className="inline-code">.bg()</code> sets the background color<br />
+        • <code className="inline-code">.$el('.btn')</code> assigns the style to a CSS class<br />
+        • The style will be compiled at build time
       </div>
       
       {/* Step 3: Run the CLI */}
       <h2>Step 3: Generate CSS</h2>
       <p>Run ChainCSS to compile your styles:</p>
-      <CodeBlock language="bash" code={`npx chaincss styles/styles.jcss ./styles`} />
-      <p>You should see output like:</p>
-      <CodeBlock language="bash" code={`CSS generated: styles/global.css
- Source map: styles/global.css.map`} />
+      <CodeBlock language="bash" code={`npx chaincss build`} />
+
+      <div className="tip">
+        <strong>You should see output like:</strong><br />
+        • ✓ Generated <code className="inline-code">src/components/Button/styles/button.class.js</code><br />
+        • ✓ Generated <code className="inline-code">src/components/Button/styles/button.css</code><br />
+        • ✓ Generated <code className="inline-code">global.css (minified)</code> <br />
+      </div>
       
-      {/* Step 4: Use in HTML */}
-      <h2>Step 4: Use your style in HTML</h2>
+      {/* Step 4: Use in React */}
+      <h2>Step 4: Use your style in React</h2>
       <p>
-        Create an <code className="inline-code">index.html</code> file and link your CSS:
+        Import the generated class name and CSS in your component:
       </p>
-      <CodeBlock language="html" code={`<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="style/global.css">
-</head>
-<body>
-  <button class="btn">Click Me!</button>
-</body>
-</html>`} />
+      <CodeBlock language="tsx" code={`import { button } from './styles/button.class.js';
+function MyButton() {
+  return <button className={button}>Click Me!</button>;
+}`} />
+      
       <div className="tip" style={{ backgroundColor: '#e0f2fe', borderLeftColor: '#3b82f6', marginTop: '12px' }}>
          <strong>Live Preview:</strong> The button below updates automatically as you type!
       </div>
@@ -239,7 +295,7 @@ run(button);
       {/* Step 5: Live Preview Button */}
       <h2>Step 5: See your styled button!</h2>
       <p>
-        Open <code className="inline-code">index.html</code> in your browser. Or try it live below:
+        Try editing the code below and watch the button change instantly:
       </p>
       
       {/* LIVE PREVIEW BUTTON - Updates as you type */}
@@ -267,12 +323,12 @@ run(button);
           Click Me!
         </button>
         <p style={{ marginTop: '16px', fontSize: '14px', color: '#64748b' }}>
-           The button updates instantly as you edit the code below! 
+          The button updates instantly as you edit the code below!
         </p>
       </div>
       
-      {/* Interactive Editor - No Run Button Needed */}
-      <h2> Try it yourself</h2>
+      {/* Interactive Editor */}
+      <h2>Try it yourself</h2>
       <p>Edit the code below and watch the button above change instantly:</p>
       
       <div style={{ 
@@ -289,7 +345,7 @@ run(button);
           fontSize: '12px',
           color: '#475569'
         }}>
-           Edit ChainCSS Code (auto-updates)
+          Edit ChainCSS Code (auto-updates)
         </div>
         <textarea
           value={code}
@@ -313,14 +369,14 @@ run(button);
       {/* Generated CSS Output */}
       {generatedCSS && !error && (
         <div className="tip" style={{ backgroundColor: '#ecfdf5', borderLeftColor: '#10b981' }}>
-          <strong> Generated CSS (auto-updated):</strong>
+          <strong>Generated CSS (auto-updated):</strong>
           <CodeBlock language="css" code={generatedCSS} />
         </div>
       )}
       
       {error && (
         <div className="tip" style={{ backgroundColor: '#fee2e2', borderLeftColor: '#ef4444' }}>
-          <strong> Error:</strong>
+          <strong>Error:</strong>
           <pre style={{ marginTop: '8px', color: '#991b1b', overflow: 'auto', whiteSpace: 'pre-wrap' }}>
             {error}
           </pre>
@@ -329,42 +385,27 @@ run(button);
       
       {/* Tips for experimentation */}
       <div className="note" style={{ marginTop: '24px' }}>
-        <strong> Try experimenting:</strong>
+        <strong>Try experimenting:</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
           <li>Change <code className="inline-code">.backgroundColor('#3b82f6')</code> to <code className="inline-code">.backgroundColor('#ef4444')</code> → Button turns red instantly!</li>
           <li>Modify <code className="inline-code">.padding('12px 24px')</code> to <code className="inline-code">.padding('20px 40px')</code> → Button gets bigger!</li>
           <li>Add <code className="inline-code">.boxShadow('0 4px 6px rgba(0,0,0,0.1)')</code> → Button gets a shadow!</li>
           <li>Change hover color to <code className="inline-code">.backgroundColor('#dc2626')</code> → Hover becomes darker red!</li>
+          <li>Change the selector: <code className="inline-code">.$el('.btn')</code> → to <code className="inline-code">.$el('.my-button')</code></li>
         </ul>
       </div>
       
       {/* What's next */}
       <div className="note" style={{ backgroundColor: '#eff6ff', borderLeftColor: '#3b82f6' }}>
-        <strong> What's next?</strong>
+        <strong>What's next?</strong>
         <p>
           Now that you've created your first style, learn about the{' '}
           <a href="/docs/chainable-api" style={{ color: '#667eea' }}>Chainable API</a> 
           to understand how to chain multiple properties, or explore{' '}
-          <a href="/docs/selectors" style={{ color: '#667eea' }}>Selectors</a> 
-          to style multiple elements at once.
+          <a href="/docs/responsive" style={{ color: '#667eea' }}>Responsive Design</a> 
+          to make your styles mobile-friendly.
         </p>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/installation" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Installation
-        </a>
-        <a href="/docs/chainable-api" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Chainable API →
-        </a>
-      </div>*/}
     </>
   );
 }

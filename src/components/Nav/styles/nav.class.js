@@ -1,0 +1,9 @@
+export const activeLink = 'nav-link-active';
+export const hideOnMobile = 'hide-on-mobile';
+export const link = 'nav-link';
+export const logo = 'logo';
+export const nav = 'nav';
+export const navContainer = 'nav-container';
+export const navLinks = 'nav-links';
+export const navLinksOpen = 'nav-links-open';
+export const showOnMobile = 'show-on-mobile';

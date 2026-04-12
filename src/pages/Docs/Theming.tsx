@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import CodeBlock from '../../components/CodeBlock';
 
 export default function Theming() {
@@ -9,7 +9,6 @@ export default function Theming() {
   const themes = {
     light: {
       name: 'Light',
-      icon: '',
       colors: {
         primary: '#3b82f6',
         secondary: '#6b7280',
@@ -25,7 +24,6 @@ export default function Theming() {
     },
     dark: {
       name: 'Dark',
-      icon: '',
       colors: {
         primary: '#60a5fa',
         secondary: '#9ca3af',
@@ -41,7 +39,6 @@ export default function Theming() {
     },
     forest: {
       name: 'Forest',
-      icon: '',
       colors: {
         primary: '#10b981',
         secondary: '#34d399',
@@ -57,7 +54,6 @@ export default function Theming() {
     },
     sunset: {
       name: 'Sunset',
-      icon: '',
       colors: {
         primary: '#f97316',
         secondary: '#ef4444',
@@ -79,7 +75,6 @@ export default function Theming() {
       description: 'Create a theme-aware component using design tokens',
       code: `import { createTokens } from 'chaincss';
 
-// Define theme tokens
 const lightTheme = createTokens({
   colors: {
     primary: '#3b82f6',
@@ -100,21 +95,13 @@ const darkTheme = createTokens({
   }
 });
 
-// Component that uses theme tokens
-const card = $()
-  .backgroundColor('$colors.surface')
-  .color('$colors.text')
+export const card = $
+  .bg('$colors.surface')
+  .c('$colors.text')
   .border(\`1px solid $colors.border\`)
-  .borderRadius('12px')
-  .padding('24px')
-  .block('.card');
-
-// Apply theme based on user preference
-const theme = window.matchMedia('(prefers-color-scheme: dark)').matches 
-  ? darkTheme 
-  : lightTheme;
-
-run(card);`,
+  .rounded('12px')
+  .p('24px')
+  .$el('.card');`,
       preview: () => {
         const theme = themes[currentTheme];
         
@@ -128,58 +115,22 @@ run(card);`,
             border: `1px solid ${theme.colors.border}`
           }}>
             <div style={{ marginBottom: '20px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <button 
-                onClick={() => setCurrentTheme('light')}
-                style={{
-                  padding: '6px 12px',
-                  backgroundColor: currentTheme === 'light' ? theme.colors.primary : 'transparent',
-                  color: currentTheme === 'light' ? 'white' : theme.colors.text,
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: '8px',
-                  cursor: 'pointer'
-                }}
-              >
-                Light
-              </button>
-              <button 
-                onClick={() => setCurrentTheme('dark')}
-                style={{
-                  padding: '6px 12px',
-                  backgroundColor: currentTheme === 'dark' ? theme.colors.primary : 'transparent',
-                  color: currentTheme === 'dark' ? 'white' : theme.colors.text,
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: '8px',
-                  cursor: 'pointer'
-                }}
-              >
-                Dark
-              </button>
-              <button 
-                onClick={() => setCurrentTheme('forest')}
-                style={{
-                  padding: '6px 12px',
-                  backgroundColor: currentTheme === 'forest' ? theme.colors.primary : 'transparent',
-                  color: currentTheme === 'forest' ? 'white' : theme.colors.text,
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: '8px',
-                  cursor: 'pointer'
-                }}
-              >
-                Forest
-              </button>
-              <button 
-                onClick={() => setCurrentTheme('sunset')}
-                style={{
-                  padding: '6px 12px',
-                  backgroundColor: currentTheme === 'sunset' ? theme.colors.primary : 'transparent',
-                  color: currentTheme === 'sunset' ? 'white' : theme.colors.text,
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: '8px',
-                  cursor: 'pointer'
-                }}
-              >
-                Sunset
-              </button>
+              {['light', 'dark', 'forest', 'sunset'].map((themeName) => (
+                <button 
+                  key={themeName}
+                  onClick={() => setCurrentTheme(themeName)}
+                  style={{
+                    padding: '6px 12px',
+                    backgroundColor: currentTheme === themeName ? theme.colors.primary : 'transparent',
+                    color: currentTheme === themeName ? 'white' : theme.colors.text,
+                    border: `1px solid ${theme.colors.border}`,
+                    borderRadius: '8px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {themeName.charAt(0).toUpperCase() + themeName.slice(1)}
+                </button>
+              ))}
             </div>
             <div style={{
               backgroundColor: theme.colors.surface,
@@ -210,9 +161,8 @@ run(card);`,
     tokens: {
       title: 'Design Tokens',
       description: 'Create reusable design tokens for consistent theming',
-      code: `import { createTokens, responsive } from 'chaincss';
+      code: `import { createTokens } from 'chaincss';
 
-// Create comprehensive design tokens
 const tokens = createTokens({
   colors: {
     primary: {
@@ -226,18 +176,6 @@ const tokens = createTokens({
       700: '#1d4ed8',
       800: '#1e40af',
       900: '#1e3a8a'
-    },
-    gray: {
-      50: '#f9fafb',
-      100: '#f3f4f6',
-      200: '#e5e7eb',
-      300: '#d1d5db',
-      400: '#9ca3af',
-      500: '#6b7280',
-      600: '#4b5563',
-      700: '#374151',
-      800: '#1f2937',
-      900: '#111827'
     }
   },
   spacing: {
@@ -245,29 +183,15 @@ const tokens = createTokens({
     sm: '8px',
     md: '16px',
     lg: '24px',
-    xl: '32px',
-    '2xl': '48px',
-    '3xl': '64px'
+    xl: '32px'
   },
   typography: {
-    fontFamily: {
-      sans: 'system-ui, -apple-system, sans-serif',
-      mono: 'monospace'
-    },
     fontSize: {
       xs: '0.75rem',
       sm: '0.875rem',
       base: '1rem',
       lg: '1.125rem',
-      xl: '1.25rem',
-      '2xl': '1.5rem',
-      '3xl': '1.875rem'
-    },
-    fontWeight: {
-      normal: '400',
-      medium: '500',
-      semibold: '600',
-      bold: '700'
+      xl: '1.25rem'
     }
   },
   borderRadius: {
@@ -276,21 +200,17 @@ const tokens = createTokens({
     base: '0.25rem',
     md: '0.375rem',
     lg: '0.5rem',
-    xl: '0.75rem',
-    '2xl': '1rem',
     full: '9999px'
   }
 });
 
-// Use tokens in components
-const button = $()
-  .backgroundColor('$colors.primary.500')
-  .color('white')
-  .padding('$spacing.md $spacing.lg')
-  .borderRadius('$borderRadius.md')
-  .fontSize('$typography.fontSize.base')
-  .fontWeight('$typography.fontWeight.semibold')
-  .block('.btn');`,
+export const button = $
+  .bg('$colors.primary.500')
+  .c('white')
+  .p('$spacing.md $spacing.lg')
+  .rounded('$borderRadius.md')
+  .textSize('$typography.fontSize.base')
+  .$el('.btn');`,
       preview: () => {
         const theme = themes[currentTheme];
         
@@ -336,66 +256,30 @@ const button = $()
     runtime: {
       title: 'Runtime Theme Switching',
       description: 'Switch themes dynamically without rebuilding',
-      code: `// ThemeContext.tsx
-import { createContext, useContext, useState } from 'react';
-import { createTokens } from 'chaincss';
+      code: `import { createTokens } from 'chaincss';
 
 const themes = {
   light: createTokens({
-    colors: {
-      primary: '#3b82f6',
-      background: '#ffffff',
-      text: '#1e293b'
-    }
+    colors: { primary: '#3b82f6', background: '#ffffff', text: '#1e293b' }
   }),
   dark: createTokens({
-    colors: {
-      primary: '#60a5fa',
-      background: '#0f172a',
-      text: '#f1f5f9'
-    }
+    colors: { primary: '#60a5fa', background: '#0f172a', text: '#f1f5f9' }
   })
 };
 
-const ThemeContext = createContext();
-
-export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('light');
-  
-  const value = {
-    theme,
-    setTheme,
-    tokens: themes[theme]
-  };
-  
-  return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
-  );
+function switchTheme(themeName) {
+  const theme = themes[themeName];
+  const vars = theme.toCSSVariables();
+  const style = document.getElementById('theme-vars') || document.createElement('style');
+  style.id = 'theme-vars';
+  style.textContent = vars;
+  document.head.appendChild(style);
 }
 
-export function useTheme() {
-  return useContext(ThemeContext);
-}
-
-// App.tsx
-function App() {
-  const { theme, setTheme, tokens } = useTheme();
-  
-  const styles = $()
-    .backgroundColor('$colors.background')
-    .color('$colors.text')
-    .block('.app');
-  
-  return (
-    <div className={styles.app}>
-      <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-        Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
-      </button>
-    </div>
-  );
-}`,
+export const card = $
+  .bg('var(--colors-background)')
+  .c('var(--colors-text)')
+  .$el('.card');`,
       preview: () => {
         const theme = themes[currentTheme];
         const isDark = currentTheme === 'dark';
@@ -425,7 +309,7 @@ function App() {
               </button>
             </div>
             <p>Theme is now: <strong>{theme.name}</strong></p>
-            <p>No rebuild needed! Theme switches at runtime.</p>
+            <p>No rebuild needed. Theme switches at runtime.</p>
           </div>
         );
       }
@@ -433,26 +317,22 @@ function App() {
     custom: {
       title: 'Custom Theme Builder',
       description: 'Let users build their own custom themes',
-      code: `// CustomThemeBuilder.tsx
-import { useState } from 'react';
+      code: `import { useState } from 'react';
 import { createTokens } from 'chaincss';
 
 function CustomThemeBuilder() {
   const [customTheme, setCustomTheme] = useState({
     primary: '#3b82f6',
-    secondary: '#6b7280',
     background: '#ffffff',
     text: '#1e293b'
   });
   
-  const tokens = createTokens({
-    colors: customTheme
-  });
+  const tokens = createTokens({ colors: customTheme });
   
-  const styles = $()
-    .backgroundColor('$colors.background')
-    .color('$colors.text')
-    .block('.app');
+  const styles = $
+    .bg('$colors.background')
+    .c('$colors.text')
+    .$el('.app');
   
   return (
     <div className={styles.app}>
@@ -512,7 +392,7 @@ function CustomThemeBuilder() {
               </button>
             </div>
             <p style={{ fontSize: '12px', color: theme.colors.textMuted, marginTop: '12px' }}>
-              Pick any color to create your own theme!
+              Pick any color to create your own theme
             </p>
           </div>
         );
@@ -532,7 +412,6 @@ function CustomThemeBuilder() {
         </p>
       </div>
       
-      {/* What is Theming */}
       <h2>What is Dynamic Theming?</h2>
       <p>
         Dynamic theming allows you to change the look of your entire application
@@ -549,7 +428,6 @@ function CustomThemeBuilder() {
         </ul>
       </div>
       
-      {/* Examples */}
       <h2>Examples</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
         <button
@@ -623,19 +501,15 @@ function CustomThemeBuilder() {
         </div>
       </div>
       
-      {/* System Theme Detection */}
       <h2>System Theme Detection</h2>
-      <CodeBlock language="javascript" code={`// Detect system color scheme preference
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      <CodeBlock language="javascript" code={`const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 const initialTheme = prefersDark ? 'dark' : 'light';
 
-// Listen for changes
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
   const newTheme = e.matches ? 'dark' : 'light';
   applyTheme(newTheme);
 });`} />
       
-      {/* CSS Variables Output */}
       <h2>CSS Variables Output</h2>
       <p>ChainCSS can output your design tokens as CSS variables for runtime theming:</p>
       <CodeBlock language="javascript" code={`const tokens = createTokens({
@@ -646,7 +520,6 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
   }
 });
 
-// Generate CSS variables
 const cssVariables = tokens.toCSSVariables();
 // Output:
 // :root {
@@ -655,7 +528,6 @@ const cssVariables = tokens.toCSSVariables();
 //   --colors-text: #1e293b;
 // }`} />
       
-      {/* Best Practices */}
       <div className="note">
         <strong>Best Practices</strong>
         <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
@@ -666,22 +538,6 @@ const cssVariables = tokens.toCSSVariables();
           <li>Test themes for accessibility (contrast ratios)</li>
         </ul>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/css-variables" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← CSS Variables
-        </a>
-        <a href="/docs/recipes" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Recipe System →
-        </a>
-      </div>*/}
     </>
   );
 }

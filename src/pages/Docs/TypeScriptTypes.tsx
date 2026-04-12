@@ -9,43 +9,49 @@ export default function TypeScriptTypes() {
       title: 'Basic Types',
       description: 'TypeScript definitions for ChainCSS core API',
       code: `// Types are automatically available with ChainCSS
-import { $, run, compile, recipe } from 'chaincss';
+import { $ } from 'chaincss';
 
-// StyleDefinition type
-const button: StyleDefinition = $()
-  .backgroundColor('#3b82f6')
-  .color('white')
-  .padding('12px 24px')
-  .block('.btn');
+// Style definition with shorthands
+export const button = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
+  .$el('.btn');
 
-// ChainBuilder type - all CSS properties as methods
-const chain: ChainBuilder = $()
-  .color('red')
-  .padding('10px')
-  .margin('20px');
+// Chain builder - all CSS properties as methods
+export const container = $
+  .maxW('1200px')
+  .m('0 auto')
+  .p('20px')
+  .$el('.container');
 
 // Recipe with typed variants
-const buttonRecipe = recipe<{
+import { recipe } from 'chaincss';
+
+type ButtonVariants = {
   color: 'primary' | 'secondary' | 'danger';
   size: 'small' | 'medium' | 'large';
-}>({
-  base: $().padding('12px 24px').block(),
+};
+
+const buttonRecipe = recipe<ButtonVariants>({
+  base: $.p('12px 24px').rounded('8px').$el(),
   variants: {
     color: {
-      primary: $().backgroundColor('#3b82f6').block(),
-      secondary: $().backgroundColor('#6b7280').block(),
-      danger: $().backgroundColor('#ef4444').block()
+      primary: $.bg('#3b82f6').c('white').$el(),
+      secondary: $.bg('#6b7280').c('white').$el(),
+      danger: $.bg('#ef4444').c('white').$el()
     },
     size: {
-      small: $().padding('8px 16px').block(),
-      medium: $().padding('12px 24px').block(),
-      large: $().padding('16px 32px').block()
+      small: $.p('8px 16px').textSize('14px').$el(),
+      medium: $.p('12px 24px').textSize('16px').$el(),
+      large: $.p('16px 32px').textSize('18px').$el()
     }
   }
 });
 
 // Type-safe usage
-const primaryButton = buttonRecipe({ color: 'primary', size: 'large' });
+const primaryBtn = buttonRecipe({ color: 'primary', size: 'large' });
 // const invalid = buttonRecipe({ color: 'invalid' }); // TypeScript error!`,
       preview: () => (
         <div style={{ 
@@ -60,7 +66,7 @@ const primaryButton = buttonRecipe({ color: 'primary', size: 'large' });
 {`// TypeScript error when using invalid variant
 const invalid = buttonRecipe({ color: 'invalid' });
 // Argument of type '{ color: string; }' is not assignable
-// to parameter of type 'Partial<{ color: "primary" | "secondary" | "danger"; size: "small" | "medium" | "large"; }>'.
+// to parameter of type 'Partial<ButtonVariants>'.
 //   Types of property 'color' are incompatible.
 //     Type 'string' is not assignable to type '"primary" | "secondary" | "danger"'.
 
@@ -72,9 +78,8 @@ TypeScript catches errors at compile time!`}
     tokens: {
       title: 'Design Token Types',
       description: 'Type-safe design tokens with TypeScript',
-      code: `import { createTokens, DesignTokens } from 'chaincss';
+      code: `import { createTokens } from 'chaincss';
 
-// Define your token structure with TypeScript
 interface AppTokens {
   colors: {
     primary: string;
@@ -89,8 +94,7 @@ interface AppTokens {
   };
 }
 
-// Create tokens with type safety
-const tokens: DesignTokens<AppTokens> = createTokens({
+const tokens = createTokens<AppTokens>({
   colors: {
     primary: '#3b82f6',
     secondary: '#6b7280',
@@ -120,11 +124,11 @@ const spacing = tokens.get('spacing.md'); // string
           }}>
             <pre style={{ margin: 0, color: '#e2e8f0' }}>
 {`// Token access with type safety
-const primary = tokens.get('colors.primary');     //  string
-const spacing = tokens.get('spacing.md');          //  string
-const invalid = tokens.get('colors.invalid');      //  TypeScript error
+const primary = tokens.get('colors.primary');     // string
+const spacing = tokens.get('spacing.md');          // string
+const invalid = tokens.get('colors.invalid');      // TypeScript error
 
-// TypeScript knows the shape of your tokens!
+// TypeScript knows the shape of your tokens
 // Autocomplete works for all token paths`}
             </pre>
           </div>
@@ -134,37 +138,35 @@ const invalid = tokens.get('colors.invalid');      //  TypeScript error
     recipe: {
       title: 'Recipe Types',
       description: 'Type-safe recipe variants with TypeScript',
-      code: `import { recipe, Recipe } from 'chaincss';
+      code: `import { recipe } from 'chaincss';
 
-// Define variant types
 type ButtonVariants = {
   color: 'primary' | 'secondary' | 'danger';
   size: 'small' | 'medium' | 'large';
   rounded: boolean;
 };
 
-// Create type-safe recipe
-const button: Recipe<ButtonVariants> = recipe({
-  base: $()
-    .padding('12px 24px')
-    .borderRadius('8px')
-    .fontWeight('600')
-    .block(),
+const button = recipe<ButtonVariants>({
+  base: $
+    .p('12px 24px')
+    .rounded('8px')
+    .weight('600')
+    .$el(),
   
   variants: {
     color: {
-      primary: $().backgroundColor('#3b82f6').color('white').block(),
-      secondary: $().backgroundColor('#6b7280').color('white').block(),
-      danger: $().backgroundColor('#ef4444').color('white').block()
+      primary: $.bg('#3b82f6').c('white').$el(),
+      secondary: $.bg('#6b7280').c('white').$el(),
+      danger: $.bg('#ef4444').c('white').$el()
     },
     size: {
-      small: $().padding('8px 16px').fontSize('14px').block(),
-      medium: $().padding('12px 24px').fontSize('16px').block(),
-      large: $().padding('16px 32px').fontSize('18px').block()
+      small: $.p('8px 16px').textSize('14px').$el(),
+      medium: $.p('12px 24px').textSize('16px').$el(),
+      large: $.p('16px 32px').textSize('18px').$el()
     },
     rounded: {
-      true: $().borderRadius('9999px').block(),
-      false: $().borderRadius('8px').block()
+      true: $.rounded('9999px').$el(),
+      false: $.rounded('8px').$el()
     }
   },
   
@@ -176,8 +178,7 @@ const button: Recipe<ButtonVariants> = recipe({
 });
 
 // Type-safe usage
-const btn = button({ color: 'primary', size: 'large', rounded: true });
-// All props are type-checked!`,
+const btn = button({ color: 'primary', size: 'large', rounded: true });`,
       preview: () => {
         return (
           <div style={{ 
@@ -191,14 +192,14 @@ const btn = button({ color: 'primary', size: 'large', rounded: true });
             <pre style={{ margin: 0, color: '#e2e8f0' }}>
 {`// TypeScript provides autocomplete for variants
 button({
-  color: 'primary',    //  "primary" | "secondary" | "danger"
-  size: 'medium',      //  "small" | "medium" | "large"
-  rounded: true        //  boolean
+  color: 'primary',    // "primary" | "secondary" | "danger"
+  size: 'medium',      // "small" | "medium" | "large"
+  rounded: true        // boolean
 });
 
 // Invalid variant causes error
 button({ color: 'invalid' });
-//  Type '"invalid"' is not assignable to type '"primary" | "secondary" | "danger"'`}
+// Type '"invalid"' is not assignable to type '"primary" | "secondary" | "danger"'`}
             </pre>
           </div>
         );
@@ -207,9 +208,8 @@ button({ color: 'invalid' });
     hooks: {
       title: 'React Hook Types',
       description: 'Type-safe React hooks with ChainCSS',
-      code: `import { useChainStyles } from 'chaincss/react';
+      code: `import { useChainStyles } from 'chaincss/runtime';
 
-// Define your styles with types
 interface ButtonStyles {
   button: string;
   icon: string;
@@ -218,18 +218,24 @@ interface ButtonStyles {
 
 function Button({ variant }: { variant: 'primary' | 'secondary' }) {
   const styles = useChainStyles<ButtonStyles>({
-    button: $()
-      .backgroundColor(variant === 'primary' ? '#3b82f6' : '#6b7280')
-      .color('white')
-      .padding('12px 24px')
-      .borderRadius('8px')
-      .block(),
-    icon: $()
-      .marginRight('8px')
-      .block(),
-    label: $()
-      .fontWeight('600')
-      .block()
+    button: {
+      backgroundColor: variant === 'primary' ? '#3b82f6' : '#6b7280',
+      color: 'white',
+      padding: '12px 24px',
+      borderRadius: '8px',
+      transition: 'all 0.2s',
+      cursor: 'pointer',
+      border: 'none',
+      hover: {
+        backgroundColor: variant === 'primary' ? '#2563eb' : '#4b5563'
+      }
+    },
+    icon: {
+      marginRight: '8px'
+    },
+    label: {
+      fontWeight: '600'
+    }
   });
   
   return (
@@ -238,9 +244,7 @@ function Button({ variant }: { variant: 'primary' | 'secondary' }) {
       <span className={styles.label}>Click</span>
     </button>
   );
-}
-
-// styles.button, styles.icon, styles.label are all typed as string`,
+}`,
       preview: () => {
         return (
           <div style={{ 
@@ -255,10 +259,10 @@ function Button({ variant }: { variant: 'primary' | 'secondary' }) {
 {`// TypeScript knows all class names
 const styles = useChainStyles<ButtonStyles>({...});
 
-styles.button  //  string
-styles.icon    //  string
-styles.label   //  string
-// styles.invalid //  Property 'invalid' does not exist on type 'ButtonStyles'`}
+styles.button  // string
+styles.icon    // string
+styles.label   // string
+// styles.invalid // Property 'invalid' does not exist on type 'ButtonStyles'`}
             </pre>
           </div>
         );
@@ -278,25 +282,22 @@ styles.label   //  string
         </p>
       </div>
       
-      {/* Installation */}
       <h2>Installation</h2>
       <p>TypeScript types are included automatically with ChainCSS. No additional packages needed.</p>
-      <CodeBlock language="bash" code={`npm install chaincss
-# TypeScript types are automatically available`} />
+      <CodeBlock language="bash" code={`npm install chaincss`} />
       
-      {/* TypeScript Configuration */}
       <h2>TypeScript Configuration</h2>
       <p>Make sure your <code className="inline-code">tsconfig.json</code> has these settings:</p>
       <CodeBlock language="json" code={`{
   "compilerOptions": {
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "strict": true
   }
 }`} />
       
-      {/* Examples */}
       <h2>Examples</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
         <button
@@ -370,54 +371,39 @@ styles.label   //  string
         </div>
       </div>
       
-      {/* Type Definitions Reference */}
       <h2>Type Definitions Reference</h2>
       
       <h3>Core Types</h3>
-      <div style={{ overflowX: 'auto', marginBottom: '24px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Type</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Description</th>
-                  </tr>
-          </thead>
-          <tbody>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">StyleDefinition</code></td>
-              <td style={{ padding: '12px' }}>Object returned by <code className="inline-code">.block()</code></td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">ChainBuilder</code></td>
-              <td style={{ padding: '12px' }}>Type for the chainable <code className="inline-code">$()</code> API</td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">Recipe&lt;T&gt;</code></td>
-              <td style={{ padding: '12px' }}>Type-safe recipe with variants</td>
-            </tr>
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '12px' }}><code className="inline-code">DesignTokens&lt;T&gt;</code></td>
-              <td style={{ padding: '12px' }}>Type-safe design tokens</td>
-            </tr>
-          </tbody>
-        </table>
+      <div style={{ marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gap: '1px', backgroundColor: '#e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', backgroundColor: '#f8fafc', fontWeight: '600', borderBottom: '2px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}>Type</div>
+            <div style={{ padding: '12px' }}>Description</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', backgroundColor: 'white', borderBottom: '1px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}><code className="inline-code">StyleDefinition</code></div>
+            <div style={{ padding: '12px' }}>Object returned by <code className="inline-code">.$el()</code></div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', backgroundColor: 'white', borderBottom: '1px solid #e2e8f0' }}>
+            <div style={{ padding: '12px' }}><code className="inline-code">Recipe&lt;T&gt;</code></div>
+            <div style={{ padding: '12px' }}>Type-safe recipe with variants</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', backgroundColor: 'white' }}>
+            <div style={{ padding: '12px' }}><code className="inline-code">DesignTokens&lt;T&gt;</code></div>
+            <div style={{ padding: '12px' }}>Type-safe design tokens</div>
+          </div>
+        </div>
       </div>
       
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/theme-contracts" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Theme Contracts
-        </a>
-        <a href="/docs/api" style={{ color: '#667eea', textDecoration: 'none' }}>
-          API Reference →
-        </a>
-      </div>*/}
+      <div className="note">
+        <strong>Best Practices</strong>
+        <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
+          <li>Define interfaces for your design tokens</li>
+          <li>Use generic types with <code className="inline-code">recipe&lt;T&gt;</code> for variant type safety</li>
+          <li>Type your <code className="inline-code">useChainStyles</code> calls for better IntelliSense</li>
+          <li>Enable <code className="inline-code">strict</code> mode in tsconfig.json for maximum type safety</li>
+        </ul>
+      </div>
     </>
   );
 }

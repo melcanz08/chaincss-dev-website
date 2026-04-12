@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import CodeBlock from '../../components/CodeBlock';
 
 export default function ModularDesign() {
@@ -16,7 +15,7 @@ export default function ModularDesign() {
 
       <h2>Why Modular?</h2>
       <p>
-        ChainCSS allows you to separate your styles from your components, making your codebase:
+        ChainCSS v2 allows you to separate your styles from your components, making your codebase:
       </p>
       <ul>
         <li><strong>More organized</strong> - Styles in dedicated files</li>
@@ -27,9 +26,10 @@ export default function ModularDesign() {
 
       <h2>Core Principle</h2>
       <div className="tip">
-        Main Static file → <code className="inline-code">main.jcss</code> (build mode)<br />
-        Module static file → <code className="inline-code">nav.build.js</code> (build mode)<br />
-        Module dynamic file → <code className="inline-code">nav.runt.js</code> (runtime mode)<br />
+        <strong>v2 Structure:</strong><br />
+        Static styles → <code className="inline-code">src/components/Component/styles/component.chain.js</code><br />
+        Generated class names → <code className="inline-code">src/components/Component/styles/component.class.js</code><br />
+        Generated CSS → <code className="inline-code">src/components/Component/styles/component.css</code>
       </div>
 
       <h2>Before vs After</h2>
@@ -69,32 +69,40 @@ export default function ModularDesign() {
           <h3>Before: All styles in Component</h3>
           <CodeBlock 
             language="tsx"
-            code={`// Hero.tsx - All styles inside component
-import { useChainStyles } from 'chaincss/react';
+            code={`// Hero.tsx - All styles inside component (v2)
+import { useChainStyles } from 'chaincss/runtime';
 
 const Hero = () => {
-  const styles = useChainStyles(() => ({
-    primaryButton: $()
-      .backgroundColor('white')
-      .color('#667eea')
-      .padding('0.875rem 2rem')
-      .borderRadius('9999px')
-      .hover()
-        .backgroundColor('#f1f5f9')
-        .scale(1.05)
-        .end()
-      .block(),
-    secondaryButton: $()
-      .backgroundColor('transparent')
-      .color('white')
-      .border('2px solid white')
-      .padding('0.875rem 2rem')
-      .hover()
-        .backgroundColor('rgba(255,255,255,0.1)')
-        .scale(1.05)
-        .end()
-      .block()
-  }), []);
+  const styles = useChainStyles({
+    primaryButton: {
+      backgroundColor: 'white',
+      color: '#667eea',
+      padding: '0.875rem 2rem',
+      borderRadius: '9999px',
+      border: 'none',
+      boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+      transition: 'all 0.2s ease',
+      cursor: 'pointer',
+      hover: {
+        backgroundColor: '#f1f5f9',
+        transform: 'scale(1.05) translateY(-2px)'
+      }
+    },
+    secondaryButton: {
+      backgroundColor: 'transparent',
+      color: 'white',
+      border: '2px solid white',
+      padding: '0.875rem 2rem',
+      fontWeight: '600',
+      borderRadius: '9999px',
+      transition: 'all 0.2s ease',
+      cursor: 'pointer',
+      hover: {
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        transform: 'scale(1.05)'
+      }
+    }
+  });
 
   return (
     <div>
@@ -118,61 +126,65 @@ const Hero = () => {
         <>
           <h3>After: Separated Styles</h3>
           
-          <h4>Step 1: Create <code className="inline-code">hero.runt.js</code></h4>
+          <h4>Step 1: Create <code className="inline-code">button.chain.js</code></h4>
           <CodeBlock 
             language="javascript"
-            code={`// hero.runt.js - Pure style definitions
+            code={`// src/components/Button/styles/button.chain.js
 import { $ } from 'chaincss';
 
-export const primaryButton = $()
-  .backgroundColor('white')
-  .color('#667eea')
-  .padding('0.875rem 2rem')
-  .borderRadius('9999px')
+export const primaryButton = $
+  .bg('white')
+  .c('#667eea')
+  .p('0.875rem 2rem')
+  .rounded('9999px')
   .border('none')
-  .boxShadow('0 10px 15px -3px rgba(0,0,0,0.1)')
-  .hover()
-    .backgroundColor('#f1f5f9')
-    .scale(1.05)
-    .translateY('-2px')
-    .end()
+  .shadow('0 10px 15px -3px rgba(0,0,0,0.1)')
   .transition('all 0.2s ease')
   .cursor('pointer')
-  .block();
+  .hover()
+    .bg('#f1f5f9')
+    .transform('scale(1.05) translateY(-2px)')
+  .end()
+  .$el('.primary-btn');
 
-export const secondaryButton = $()
-  .backgroundColor('transparent')
-  .color('white')
+export const secondaryButton = $
+  .bg('transparent')
+  .c('white')
   .border('2px solid white')
-  .padding('0.875rem 2rem')
-  .fontWeight('600')
-  .borderRadius('9999px')
-  .hover()
-    .backgroundColor('rgba(255,255,255,0.1)')
-    .scale(1.05)
-    .end()
+  .p('0.875rem 2rem')
+  .weight('600')
+  .rounded('9999px')
   .transition('all 0.2s ease')
   .cursor('pointer')
-  .block();`}
+  .hover()
+    .bg('rgba(255,255,255,0.1)')
+    .transform('scale(1.05)')
+  .end()
+  .$el('.secondary-btn');`}
           />
 
-          <h4>Step 2: Clean Component</h4>
+          <h4>Step 2: Generate CSS</h4>
+          <CodeBlock 
+            language="bash"
+            code={`npx chaincss build
+
+# Output:
+# ✓ Generated: src/components/Button/styles/button.class.js
+# ✓ Generated: src/components/Button/styles/button.css`}
+          />
+
+          <h4>Step 3: Clean Component</h4>
           <CodeBlock 
             language="tsx"
             code={`// Hero.tsx - Clean, focused component
-import { useChainStyles } from 'chaincss/react';
-import { primaryButton, secondaryButton } from './hero.build';
+import { primaryButton, secondaryButton } from './styles/button.class.js';
+import './styles/button.css';
 
 const Hero = () => {
-  const dynamicStyles = useChainStyles(() => ({
-    primary: primaryButton,
-    secondary: secondaryButton
-  }), []);
-
   return (
     <div>
-      <button className={dynamicStyles.primary}>Primary</button>
-      <button className={dynamicStyles.secondary}>Secondary</button>
+      <button className={primaryButton}>Primary</button>
+      <button className={secondaryButton}>Secondary</button>
     </div>
   );
 };`}
@@ -185,6 +197,7 @@ const Hero = () => {
               <li>Styles are reusable across components</li>
               <li>Easier to test styles independently</li>
               <li>Better separation of concerns</li>
+              <li>Zero runtime overhead (build mode)</li>
             </ul>
           </div>
         </>
@@ -193,39 +206,66 @@ const Hero = () => {
       <h2>Modular Architecture Pattern</h2>
       <div className="feature-grid">
         <div className="feature-card">
-          <strong><code className="inline-code">*.runt.js</code></strong>
-          <p>Reusable style definitions (runtime mode)</p>
+          <strong><code className="inline-code">*.chain.js</code></strong>
+          <p>Source style definitions (v2)</p>
         </div>
         <div className="feature-card">
-          <strong><code className="inline-code">*.build.js</code></strong>
-          <p>Static styles compiled to CSS (build mode)</p>
+          <strong><code className="inline-code">*.class.js</code></strong>
+          <p>Generated class name exports</p>
+        </div>
+        <div className="feature-card">
+          <strong><code className="inline-code">*.css</code></strong>
+          <p>Generated CSS styles</p>
         </div>
         <div className="feature-card">
           <strong><code className="inline-code">*.tsx</code></strong>
           <p>Components that import and use styles</p>
-        </div>
-        <div className="feature-card">
-          <strong><code className="inline-code">tokens.js</code></strong>
-          <p>Design tokens for consistent theming</p>
         </div>
       </div>
 
       <h2>Reusing Styles Across Components</h2>
       <CodeBlock 
         language="javascript"
-        code={`// styles/buttons.runt.js - Shared button styles
-export const primaryButton = $().backgroundColor('blue').color('white').block();
-export const secondaryButton = $().backgroundColor('gray').color('white').block();
+        code={`// src/styles/buttons.chain.js - Shared button styles
+import { $ } from 'chaincss';
+
+export const primaryBtn = $
+  .bg('#3b82f6')
+  .c('white')
+  .p('12px 24px')
+  .rounded('8px')
+  .$el('.primary-btn');
+
+export const secondaryBtn = $
+  .bg('transparent')
+  .c('#3b82f6')
+  .border('2px solid #3b82f6')
+  .p('12px 24px')
+  .rounded('8px')
+  .$el('.secondary-btn');
 
 // components/SubmitButton.tsx
-import { primaryButton } from '../styles/buttons.runt';
+import { primaryBtn } from '../styles/buttons.class.js';
+import '../styles/buttons.css';
 
 // components/CancelButton.tsx  
-import { secondaryButton } from '../styles/buttons.runt';`}
+import { secondaryBtn } from '../styles/buttons.class.js';
+import '../styles/buttons.css';`}
       />
 
       <div className="note">
-        <strong>Best Practice:</strong> Keep your styles in a <code className="inline-code">styles/</code> folder and import them where needed. This creates a true separation of concerns and makes your codebase more scalable.
+        <strong>Best Practice:</strong> Keep your styles in a <code className="inline-code">styles/</code> folder next to your components. Each component gets its own <code className="inline-code">.chain.js</code> file, and ChainCSS generates the <code className="inline-code">.class.js</code> and <code className="inline-code">.css</code> files automatically.
+      </div>
+
+      <div className="tip">
+        <strong>v2 Migration Notes:</strong>
+        <ul>
+          <li><code>.block()</code> → <code>.$el()</code></li>
+          <li><code>.backgroundColor()</code> → <code>.bg()</code></li>
+          <li><code>.color()</code> → <code>.c()</code></li>
+          <li><code>.padding()</code> → <code>.p()</code></li>
+          <li><code>.borderRadius()</code> → <code>.rounded()</code></li>
+        </ul>
       </div>
     </>
   );

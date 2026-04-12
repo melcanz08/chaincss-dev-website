@@ -4,19 +4,16 @@ import CodeBlock from '../../components/CodeBlock';
 export default function VariantsDeepDive() {
   const [activeExample, setActiveExample] = useState('basic');
   const [selectedVariant, setSelectedVariant] = useState('primary');
-  const [selectedSize, setSelectedSize] = useState('md'); // Changed from 'medium' to 'md'
+  const [selectedSize, setSelectedSize] = useState('md');
   const [selectedState, setSelectedState] = useState('default');
   
-  // For polymorphic example
   const [polymorphicAs, setPolymorphicAs] = useState('p');
   const [polymorphicAlign, setPolymorphicAlign] = useState('left');
   const [polymorphicWeight, setPolymorphicWeight] = useState('normal');
   
-  // For responsive example
   const [responsiveLayout, setResponsiveLayout] = useState('auto');
   const [responsivePosition, setResponsivePosition] = useState('center');
   
-  // For compound example
   const [compoundVariant, setCompoundVariant] = useState('primary');
   const [compoundSize, setCompoundSize] = useState('md');
   const [compoundState, setCompoundState] = useState('default');
@@ -28,50 +25,50 @@ export default function VariantsDeepDive() {
       code: `import { recipe } from 'chaincss';
 
 const button = recipe({
-  base: $()
-    .padding('12px 24px')
-    .borderRadius('8px')
-    .fontWeight('600')
+  base: $
+    .p('12px 24px')
+    .rounded('8px')
+    .weight('600')
     .cursor('pointer')
     .transition('all 0.2s')
-    .block(),
+    .$el(),
   
   variants: {
     color: {
-      primary: $()
-        .backgroundColor('#3b82f6')
-        .color('white')
+      primary: $
+        .bg('#3b82f6')
+        .c('white')
         .hover()
-          .backgroundColor('#2563eb')
-          .end()
-        .block(),
-      secondary: $()
-        .backgroundColor('#6b7280')
-        .color('white')
+          .bg('#2563eb')
+        .end()
+        .$el(),
+      secondary: $
+        .bg('#6b7280')
+        .c('white')
         .hover()
-          .backgroundColor('#4b5563')
-          .end()
-        .block(),
-      danger: $()
-        .backgroundColor('#ef4444')
-        .color('white')
+          .bg('#4b5563')
+        .end()
+        .$el(),
+      danger: $
+        .bg('#ef4444')
+        .c('white')
         .hover()
-          .backgroundColor('#dc2626')
-          .end()
-        .block(),
-      success: $()
-        .backgroundColor('#10b981')
-        .color('white')
+          .bg('#dc2626')
+        .end()
+        .$el(),
+      success: $
+        .bg('#10b981')
+        .c('white')
         .hover()
-          .backgroundColor('#059669')
-          .end()
-        .block()
+          .bg('#059669')
+        .end()
+        .$el()
     },
     size: {
-      sm: $().padding('6px 12px').fontSize('12px').block(),
-      md: $().padding('10px 20px').fontSize('14px').block(),
-      lg: $().padding('14px 28px').fontSize('16px').block(),
-      xl: $().padding('18px 36px').fontSize('18px').block()
+      sm: $().p('6px 12px').textSize('12px').$el(),
+      md: $().p('10px 20px').textSize('14px').$el(),
+      lg: $().p('14px 28px').textSize('16px').$el(),
+      xl: $().p('18px 36px').textSize('18px').$el()
     }
   },
   
@@ -138,57 +135,57 @@ const button = recipe({
       code: `import { recipe } from 'chaincss';
 
 const button = recipe({
-  base: $()
-    .padding('12px 24px')
-    .borderRadius('8px')
-    .fontWeight('600')
+  base: $
+    .p('12px 24px')
+    .rounded('8px')
+    .weight('600')
     .cursor('pointer')
     .transition('all 0.2s')
-    .block(),
+    .$el(),
   
   variants: {
     color: {
-      primary: $().backgroundColor('#3b82f6').color('white').block(),
-      secondary: $().backgroundColor('#6b7280').color('white').block(),
-      outline: $().backgroundColor('transparent').color('#3b82f6').block()
+      primary: $().bg('#3b82f6').c('white').$el(),
+      secondary: $().bg('#6b7280').c('white').$el(),
+      outline: $().bg('transparent').c('#3b82f6').$el()
     },
     size: {
-      sm: $().padding('8px 16px').fontSize('14px').block(),
-      lg: $().padding('16px 32px').fontSize('18px').block()
+      sm: $().p('8px 16px').textSize('14px').$el(),
+      lg: $().p('16px 32px').textSize('18px').$el()
     },
     state: {
-      default: $().block(),
-      loading: $().opacity('0.7').cursor('wait').block(),
-      disabled: $().opacity('0.5').cursor('not-allowed').block()
+      default: $().$el(),
+      loading: $().opacity('0.7').cursor('wait').$el(),
+      disabled: $().opacity('0.5').cursor('not-allowed').$el()
     }
   },
   
   compoundVariants: [
     {
       variants: { color: 'outline', size: 'lg' },
-      style: $()
+      style: $
         .border('2px solid #3b82f6')
         .hover()
-          .backgroundColor('#3b82f6')
-          .color('white')
-          .end()
-        .block()
+          .bg('#3b82f6')
+          .c('white')
+        .end()
+        .$el()
     },
     {
       variants: { color: 'outline', size: 'sm' },
-      style: $()
+      style: $
         .border('1px solid #3b82f6')
         .hover()
-          .backgroundColor('#3b82f6')
-          .color('white')
-          .end()
-        .block()
+          .bg('#3b82f6')
+          .c('white')
+        .end()
+        .$el()
     },
     {
       variants: { color: 'primary', state: 'loading' },
-      style: $()
-        .position('relative')
-        .block()
+      style: $
+        .pos('relative')
+        .$el()
     }
   ],
   
@@ -265,7 +262,7 @@ const button = recipe({
               }
             }}
             disabled={compoundState === 'disabled'}>
-              {compoundState === 'loading' ? '⏳ Loading...' : `${compoundVariant} ${compoundSize === 'lg' ? 'Large' : 'Small'} ${compoundState === 'disabled' ? '(Disabled)' : ''}`}
+              {compoundState === 'loading' ? 'Loading...' : `${compoundVariant} ${compoundSize === 'lg' ? 'Large' : 'Small'} ${compoundState === 'disabled' ? '(Disabled)' : ''}`}
             </button>
           </div>
         );
@@ -277,47 +274,47 @@ const button = recipe({
       code: `import { recipe } from 'chaincss';
 
 const typography = recipe({
-  base: $()
-    .margin('0')
-    .block(),
+  base: $
+    .m('0')
+    .$el(),
   
   variants: {
     as: {
-      h1: $()
-        .fontSize('2.5rem')
-        .fontWeight('700')
+      h1: $
+        .textSize('2.5rem')
+        .weight('700')
         .lineHeight('1.2')
-        .block(),
-      h2: $()
-        .fontSize('2rem')
-        .fontWeight('600')
+        .$el(),
+      h2: $
+        .textSize('2rem')
+        .weight('600')
         .lineHeight('1.3')
-        .block(),
-      h3: $()
-        .fontSize('1.5rem')
-        .fontWeight('600')
+        .$el(),
+      h3: $
+        .textSize('1.5rem')
+        .weight('600')
         .lineHeight('1.4')
-        .block(),
-      p: $()
-        .fontSize('1rem')
+        .$el(),
+      p: $
+        .textSize('1rem')
         .lineHeight('1.5')
-        .marginBottom('1rem')
-        .block(),
-      small: $()
-        .fontSize('0.875rem')
-        .color('#64748b')
-        .block()
+        .mb('1rem')
+        .$el(),
+      small: $
+        .textSize('0.875rem')
+        .c('#64748b')
+        .$el()
     },
     align: {
-      left: $().textAlign('left').block(),
-      center: $().textAlign('center').block(),
-      right: $().textAlign('right').block()
+      left: $().textAlign('left').$el(),
+      center: $().textAlign('center').$el(),
+      right: $().textAlign('right').$el()
     },
     weight: {
-      normal: $().fontWeight('400').block(),
-      medium: $().fontWeight('500').block(),
-      semibold: $().fontWeight('600').block(),
-      bold: $().fontWeight('700').block()
+      normal: $().weight('400').$el(),
+      medium: $().weight('500').$el(),
+      semibold: $().weight('600').$el(),
+      bold: $().weight('700').$el()
     }
   },
   
@@ -387,46 +384,46 @@ const typography = recipe({
     responsive: {
       title: 'Responsive Variants',
       description: 'Variants that change based on screen size',
-      code: `import { recipe, responsive } from 'chaincss';
+      code: `import { recipe } from 'chaincss';
 
 const responsiveButton = recipe({
-  base: $()
-    .padding(responsive({
-      base: '8px 16px',
-      md: '12px 24px',
-      lg: '16px 32px'
-    }))
-    .fontSize(responsive({
-      base: '14px',
-      md: '16px',
-      lg: '18px'
-    }))
-    .borderRadius('8px')
-    .fontWeight('600')
+  base: $
+    .rounded('8px')
+    .weight('600')
     .cursor('pointer')
     .transition('all 0.2s')
-    .block(),
+    .p('8px 16px')
+    .textSize('14px')
+    .tablet((css) => css
+      .p('12px 24px')
+      .textSize('16px')
+    )
+    .desktop((css) => css
+      .p('16px 32px')
+      .textSize('18px')
+    )
+    .$el(),
   
   variants: {
     layout: {
-      full: $()
-        .width('100%')
-        .block(),
-      auto: $()
-        .width('auto')
-        .block()
+      full: $
+        .w('100%')
+        .$el(),
+      auto: $
+        .w('auto')
+        .$el()
     },
     position: {
-      left: $()
-        .marginRight('auto')
-        .block(),
-      center: $()
-        .marginLeft('auto')
-        .marginRight('auto')
-        .block(),
-      right: $()
-        .marginLeft('auto')
-        .block()
+      left: $
+        .mr('auto')
+        .$el(),
+      center: $
+        .ml('auto')
+        .mr('auto')
+        .$el(),
+      right: $
+        .ml('auto')
+        .$el()
     }
   },
   
@@ -478,7 +475,7 @@ const responsiveButton = recipe({
               </button>
             </div>
             <p style={{ marginTop: '12px', fontSize: '12px', color: '#64748b' }}>
-              Try resizing your browser window to see responsive padding and font size!
+              Try resizing your browser window to see responsive padding and font size
             </p>
           </div>
         );
@@ -568,7 +565,7 @@ const responsiveButton = recipe({
             cursor: 'pointer'
           }}
         >
-         Responsive Variants
+          Responsive Variants
         </button>
       </div>
       
@@ -591,33 +588,32 @@ const responsiveButton = recipe({
       
       <h2>Variant Composition</h2>
       <p>Combine multiple variants to create complex component APIs:</p>
-      <CodeBlock language="javascript" code={`// Combined variant system
-const button = recipe({
-  base: $().padding('12px 24px').block(),
+      <CodeBlock language="javascript" code={`const button = recipe({
+  base: $().p('12px 24px').$el(),
   
   variants: {
     color: {
-      primary: $().backgroundColor('#3b82f6').block(),
-      secondary: $().backgroundColor('#6b7280').block()
+      primary: $().bg('#3b82f6').$el(),
+      secondary: $().bg('#6b7280').$el()
     },
     size: {
-      sm: $().padding('8px 16px').fontSize('14px').block(),
-      lg: $().padding('16px 32px').fontSize('18px').block()
+      sm: $().p('8px 16px').textSize('14px').$el(),
+      lg: $().p('16px 32px').textSize('18px').$el()
     },
     rounded: {
-      true: $().borderRadius('9999px').block(),
-      false: $().borderRadius('8px').block()
+      true: $().rounded('9999px').$el(),
+      false: $().rounded('8px').$el()
     },
     fullWidth: {
-      true: $().width('100%').block(),
-      false: $().width('auto').block()
+      true: $().w('100%').$el(),
+      false: $().w('auto').$el()
     }
   },
   
   compoundVariants: [
     {
       variants: { color: 'primary', rounded: true },
-      style: $().backgroundColor('#2563eb').block()
+      style: $().bg('#2563eb').$el()
     }
   ],
   
@@ -632,7 +628,6 @@ const button = recipe({
       <h2>TypeScript Support</h2>
       <CodeBlock language="typescript" code={`import { recipe } from 'chaincss';
 
-// Define your variant types
 type ButtonVariants = {
   color: 'primary' | 'secondary' | 'danger';
   size: 'sm' | 'md' | 'lg';
@@ -640,27 +635,26 @@ type ButtonVariants = {
   fullWidth?: boolean;
 };
 
-// Create type-safe recipe
 const button = recipe<ButtonVariants>({
-  base: $().padding('12px 24px').block(),
+  base: $().p('12px 24px').$el(),
   variants: {
     color: {
-      primary: $().backgroundColor('#3b82f6').block(),
-      secondary: $().backgroundColor('#6b7280').block(),
-      danger: $().backgroundColor('#ef4444').block()
+      primary: $().bg('#3b82f6').$el(),
+      secondary: $().bg('#6b7280').$el(),
+      danger: $().bg('#ef4444').$el()
     },
     size: {
-      sm: $().padding('8px 16px').block(),
-      md: $().padding('12px 24px').block(),
-      lg: $().padding('16px 32px').block()
+      sm: $().p('8px 16px').$el(),
+      md: $().p('12px 24px').$el(),
+      lg: $().p('16px 32px').$el()
     },
     rounded: {
-      true: $().borderRadius('9999px').block(),
-      false: $().borderRadius('8px').block()
+      true: $().rounded('9999px').$el(),
+      false: $().rounded('8px').$el()
     },
     fullWidth: {
-      true: $().width('100%').block(),
-      false: $().width('auto').block()
+      true: $().w('100%').$el(),
+      false: $().w('auto').$el()
     }
   },
   defaultVariants: {
@@ -669,11 +663,7 @@ const button = recipe<ButtonVariants>({
     rounded: false,
     fullWidth: false
   }
-});
-
-// Type-safe usage
-const primaryButton = button({ color: 'primary', size: 'lg' }); // 
-const invalidButton = button({ color: 'invalid' }); //  TypeScript error`} />
+});`} />
       
       <div className="note">
         <strong>Best Practices</strong>
@@ -696,22 +686,6 @@ const invalidButton = button({ color: 'invalid' }); //  TypeScript error`} />
           <li>Consider using CSS variables for frequently changing variants</li>
         </ul>
       </div>
-      
-      {/* Navigation 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '48px', 
-        paddingTop: '24px', 
-        borderTop: '1px solid #e2e8f0' 
-      }}>
-        <a href="/docs/recipes" style={{ color: '#667eea', textDecoration: 'none' }}>
-          ← Recipe System
-        </a>
-        <a href="/docs/compound-variants" style={{ color: '#667eea', textDecoration: 'none' }}>
-          Compound Variants →
-        </a>
-      </div>*/}
     </>
   );
 }

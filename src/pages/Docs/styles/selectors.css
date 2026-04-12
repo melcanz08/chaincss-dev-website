@@ -1,0 +1,38 @@
+.demo-btn:hover  {
+  background-color: #2563eb;
+}
+.demo-btn  {
+  background-color: #3b82f6;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.demo-card:hover  {
+  transform: translateY(-4px);
+  shadow: 0 12px 24px -12px rgba(0,0,0,0.2);
+}
+.demo-card  {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.demo-input  {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  outline: none;
+  focus: undefined;
+  border-color: #3b82f6;
+  shadow: 0 0 0 3px rgba(59,130,246,0.1);
+  end: undefined;
+  transition: all 0.2s;
+}
