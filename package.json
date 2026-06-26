@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@srsholmes/react-code-input": "^0.0.5",
-    "chaincss": "^2.0.6",
+    "chaincss": "^2.8.3",
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.577.0",
     "react": "^19.2.4",
@@ -39,5 +39,7 @@
     "typescript-eslint": "^8.57.0",
     "vite": "^8.0.1",
     "vue": "^3.5.32"
-  }
+  },
+  "main": "./dist/browser.js",
+  "browser": "./dist/browser.js"
 }
