@@ -12,5 +12,8 @@ export default defineConfig({
   ],
   optimizeDeps: {
     exclude: ['vue']
+  },
+  ssr: {
+    noExternal: ['chaincss']
   }
 })

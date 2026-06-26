@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@srsholmes/react-code-input": "^0.0.5",
-    "chaincss": "^2.8.3",
+    "chaincss": "^2.8.4",
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.577.0",
     "react": "^19.2.4",
