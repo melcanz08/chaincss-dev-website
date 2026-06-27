@@ -1,7 +1,7 @@
 // src/components/Stats/stats.chain.js
-import { $ } from 'chaincss';
+import { chain } from 'chaincss';
 
-export const statsContainer = $
+export const statsContainer = chain()
   .display('flex')
   .gap('1.5rem')
   .justifyContent('center')
@@ -10,7 +10,7 @@ export const statsContainer = $
   .backgroundColor('#f8fafc')
   .$el('.stats-container');
 
-export const statsStat = $
+export const statsStat = chain()
   .fontSize('0.875rem')
   .color('#64748b')
   .$el('.stats-stat');

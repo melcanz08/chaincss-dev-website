@@ -1,12 +1,12 @@
-import { $ } from 'chaincss';
+import { chain } from 'chaincss';
 
-export const demoNav = $
+export const demoNav = chain()
   .bg('#1e293b')
   .p('16px')
   .rounded('8px')
   .$el('.demo-nav');
 
-export const demoNavLink = $
+export const demoNavLink = chain()
   .c('white')
   .textDecoration('none')
   .p('8px 16px')
@@ -17,7 +17,7 @@ export const demoNavLink = $
   .end()
   .$el('.demo-nav a');
 
-export const demoMenu = $
+export const demoMenu = chain()
   .bg('#f8fafc')
   .border('1px solid #e2e8f0')
   .rounded('8px')
@@ -26,7 +26,7 @@ export const demoMenu = $
   .p('0')
   .$el('.demo-menu');
 
-export const demoMenuItem = $
+export const demoMenuItem = chain()
   .p('12px 16px')
   .borderBottom('1px solid #e2e8f0')
   .hover()
@@ -34,18 +34,18 @@ export const demoMenuItem = $
   .end()
   .$el('.demo-menu > li');
 
-export const demoMenuLink = $
+export const demoMenuLink = chain()
   .c('#1e293b')
   .textDecoration('none')
   .$el('.demo-menu > li > a');
 
-export const demoLabel = $
+export const demoLabel = chain()
   .weight('600')
   .mb('4px')
   .display('block')
   .$el('.demo-label');
 
-export const demoInput = $
+export const demoInput = chain()
   .border('1px solid #e2e8f0')
   .rounded('6px')
   .p('8px 12px')
@@ -58,18 +58,18 @@ export const demoInput = $
   .end()
   .$el('.demo-input');
 
-export const demoTItle = $
+export const demoTItle = chain()
   .textSize('24px')
   .weight('bold')
   .mb('16px')
   .$el('.demo-title');
 
-export const demoParagraph = $
+export const demoParagraph = chain()
   .ml('20px')
   .c('#475569')
   .$el('.demo-paragraph');
 
-export const demoCard = $
+export const demoCard = chain()
   .bg('white')
   .rounded('12px')
   .p('20px')
@@ -80,7 +80,7 @@ export const demoCard = $
   .end()
   .$el('.demo-card');
 
-export const demoCardTitle = $
+export const demoCardTitle = chain()
   .textSize('18px')
   .weight('600')
   .mb('8px')

@@ -1,6 +1,6 @@
-import { $ } from 'chaincss';
+import { chain } from 'chaincss';
 
-export const demoBtn = $
+export const demoBtn = chain()
   .bg('#3b82f6')
   .c('white')
   .p('12px 24px')
@@ -15,7 +15,7 @@ export const demoBtn = $
   .transition('all 0.2s')
   .$el('.demo-btn');
 
-export const demoCard = $
+export const demoCard = chain()
   .bg('white')
   .rounded('12px')
   .p('20px')
@@ -29,7 +29,7 @@ export const demoCard = $
   .transition('all 0.2s')
   .$el('.demo-card');
 
-export const demoInput = $
+export const demoInput = chain()
   .border('1px solid #e2e8f0')
   .rounded('6px')
   .p('8px 12px')

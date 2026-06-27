@@ -1,18 +1,18 @@
 // ========== PARADIGM SECTION ==========
-import { $ } from 'chaincss';
+import { chain } from 'chaincss';
 
-export const paradigmSection = $
+export const paradigmSection = chain()
   .padding('80px 0')
   .backgroundColor('#f8fafc')
   .$el('.paradigm-section');
 
-export const paradigmContainer = $
+export const paradigmContainer = chain()
   .maxWidth('1200px')
   .margin('0 auto')
   .padding('0 20px')
   .$el('.paradigm-section .container');
 
-export const sectionTitle = $
+export const sectionTitle = chain()
   .fontSize('36px')
   .fontWeight('700')
   .textAlign('center')
@@ -22,7 +22,7 @@ export const sectionTitle = $
   })
   .$el('.section-title');
 
-export const sectionSubtitle = $
+export const sectionSubtitle = chain()
   .fontSize('18px')
   .textAlign('center')
   .color('#64748b')
@@ -34,7 +34,7 @@ export const sectionSubtitle = $
   })
   .$el('.section-subtitle');
 
-export const paradigmGrid = $
+export const paradigmGrid = chain()
   .display('grid')
   .gridTemplateColumns('repeat(auto-fill, minmax(320px, 1fr))')  // ← KEY CHANGE
   .gap('32px')
@@ -44,7 +44,7 @@ export const paradigmGrid = $
   })
   .$el('.paradigm-grid');
 
-export const paradigmCard = $
+export const paradigmCard = chain()
   .backgroundColor('white')
   .borderRadius('16px')
   .padding('24px')
@@ -62,18 +62,18 @@ export const paradigmCard = $
   })
   .$el('.paradigm-card');
 
-export const cardComparison = $
+export const cardComparison = chain()
   .fontSize('14px')
   .marginBottom('12px')
   .color('#64748b')
   .$el('.card-comparison');
 
-export const before = $
+export const before = chain()
   .color('#ef4444')
   .fontWeight('500')
   .$el('.before');
 
-export const cardResult = $
+export const cardResult = chain()
   .fontSize('14px')
   .color('#10b981')
   .marginTop('12px')
@@ -81,7 +81,7 @@ export const cardResult = $
   .borderTop('1px solid #e2e8f0')
   .$el('.card-result');
 
-export const paradigmQuote = $
+export const paradigmQuote = chain()
   .marginTop('48px')
   .padding('32px')
   .backgroundColor('#eef2ff')
@@ -92,7 +92,7 @@ export const paradigmQuote = $
   })
   .$el('.paradigm-quote');
 
-export const quote = $
+export const quote = chain()
   .fontSize('20px')
   .fontWeight('500')
   .color('#1e293b')

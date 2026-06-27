@@ -1,4 +1,4 @@
-import { $ } from 'chaincss';
+import { chain } from 'chaincss';
 
 // Global reset
 export const reset = $.margin('0').padding('0').boxSizing('border-box').$el('*');

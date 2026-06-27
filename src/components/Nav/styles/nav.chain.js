@@ -1,6 +1,6 @@
-import { $ } from 'chaincss';
+import { chain } from 'chaincss';
 
-export const nav = $
+export const nav = chain()
   .backgroundColor('rgba(255,255,255,0.95)')
   .backdropFilter('blur(12px)')
   .borderBottom('1px solid #e2e8f0')
@@ -9,7 +9,7 @@ export const nav = $
   .zIndex('50')
   .$el('.nav');
 
-export const navContainer = $
+export const navContainer = chain()
   .maxWidth('80rem')
   .margin('0 auto')
   .padding('1rem 1.5rem')
@@ -23,7 +23,7 @@ export const navContainer = $
   })
   .$el('.nav-container');
 
-export const logo = $
+export const logo = chain()
   .fontSize('1.5rem')
   .fontWeight('800')
   .background('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
@@ -33,7 +33,7 @@ export const logo = $
   .order('1')
   .$el('.logo');
 
-export const showOnMobile = $
+export const showOnMobile = chain()
   .display('none')
   .order('2')
   .marginLeft('auto')      // Push to right
@@ -47,7 +47,7 @@ export const showOnMobile = $
   })
   .$el('.show-on-mobile');
 
-export const navLinks = $
+export const navLinks = chain()
   .display('flex')           // ← These are the base desktop styles
   .gap('2rem')               // ← These are missing from your CSS!
   .alignItems('center')      // ← These are missing!
@@ -71,7 +71,7 @@ export const navLinks = $
   })
   .$el('.nav-links');
 
-export const navLinksOpen = $
+export const navLinksOpen = chain()
   .display('flex')
   .flexDirection('column')
   .width('100%')
@@ -84,7 +84,7 @@ export const navLinksOpen = $
   .zIndex('1000')
   .$el('.nav-links-open');
 
-export const link = $
+export const link = chain()
   .color('#4a5568')
   .textDecoration('none')
   .fontWeight('500')
@@ -95,12 +95,12 @@ export const link = $
   .end()
   .$el('.nav-link');
 
-export const activeLink = $
+export const activeLink = chain()
   .color('#667eea')
   .fontWeight('600')
   .$el('.nav-link-active');
 
-export const hideOnMobile = $
+export const hideOnMobile = chain()
   .display('flex')
   .media('(max-width: 768px)', (css) => {
     return css.display('none').$el();

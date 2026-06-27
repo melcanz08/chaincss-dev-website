@@ -1,5 +1,5 @@
-import { $ } from 'chaincss';
-export const hero = $
+import { chain } from 'chaincss';
+export const hero = chain()
   .background('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
   .color('white')
   .padding('8rem 1.5rem 6rem')
@@ -7,8 +7,8 @@ export const hero = $
   .position('relative')
   .overflow('hidden')
   .$el('.hero');
-  
-export const container = $
+  chain()
+export const container = chain()
   .maxWidth('80rem')
   .margin('0 auto')
   .padding('0 1.5rem')
@@ -16,14 +16,14 @@ export const container = $
   .zIndex('10')
   .$el('.hero-container');
 
-export const title = $
+export const title = chain()
   .fontSize('3.5rem')
   .fontWeight('800')
   .marginBottom('1rem')
   .letterSpacing('-0.02em')
   .$el('.hero-title');
 
-export const subtitle = $
+export const subtitle = chain()
   .fontSize('1.25rem')
   .marginBottom('2rem')
   .opacity('0.9')
@@ -31,14 +31,14 @@ export const subtitle = $
   .margin('0 auto 2rem')
   .$el('.hero-subtitle');
 
-export const buttonGroup = $
+export const buttonGroup = chain()
   .display('flex')
   .gap('1rem')
   .justifyContent('center')
   .flexWrap('wrap')
   .$el('.hero-button-group');
 
-export const badge = $
+export const badge = chain()
   .backgroundColor('rgba(255,255,255,0.2)')
   .color('white')
   .padding('0.5rem 1rem')
@@ -48,7 +48,7 @@ export const badge = $
   .display('inline-block')
   .$el('.hero-badge');
 
-export const primaryBtn = $
+export const primaryBtn = chain()
   .backgroundColor('white')
   .color('#667eea')
   .padding('0.875rem 2rem')
@@ -65,7 +65,7 @@ export const primaryBtn = $
   .cursor('pointer')
   .$el('.primary-btn');
 
-export const secondaryBtn = $
+export const secondaryBtn = chain()
   .backgroundColor('transparent')
   .textDecoration('none')
   .color('white')

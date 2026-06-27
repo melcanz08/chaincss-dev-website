@@ -1,6 +1,6 @@
-import { $ } from 'chaincss';
+import { chain } from 'chaincss';
 
-export const demoHoverBtn = $
+export const demoHoverBtn = chain()
   .bg('#3b82f6')
   .c('white')
   .p('12px 24px')
@@ -16,7 +16,7 @@ export const demoHoverBtn = $
   .end()
   .$el('.demo-hover-btn');
 
-export const demoFocusInput = $
+export const demoFocusInput = chain()
   .border('1px solid #e2e8f0')
   .rounded('8px')
   .p('12px 16px')
@@ -30,7 +30,7 @@ export const demoFocusInput = $
   .end()
   .$el('.demo-focus-input');
 
-export const demoActiveBtn = $
+export const demoActiveBtn = chain()
   .bg('#3b82f6')
   .c('white')
   .p('12px 24px')
@@ -49,7 +49,7 @@ export const demoActiveBtn = $
   .end()
   .$el('.demo-active-btn');
 
-export const demoCard = $
+export const demoCard = chain()
   .bg('white')
   .border('1px solid #e2e8f0')
   .rounded('12px')

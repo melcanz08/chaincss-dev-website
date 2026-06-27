@@ -1,7 +1,7 @@
-import { $ } from 'chaincss';
+import { chain } from 'chaincss';
 
 // ========== LAYOUT ==========
-export const docsContainer = $
+export const docsContainer = chain()
   .maxW('80rem')
   .m('0 auto')
   .p('2rem 1rem')
@@ -16,7 +16,7 @@ export const docsContainer = $
   )
   .$el('.docs-container');
 
-export const docsSidebar = $
+export const docsSidebar = chain()
   .display('none')
   .desktop((css) => css.display('block'))
   .pos('sticky')
@@ -26,11 +26,11 @@ export const docsSidebar = $
   .pr('1rem')
   .$el('.docs-sidebar');
 
-export const docsSidebarOpen = $
+export const docsSidebarOpen = chain()
   .display('block')
   .$el('.docs-sidebar.open');
 
-export const mobileMenuBtn = $
+export const mobileMenuBtn = chain()
   .display('flex')
   .alignItems('center')
   .justifyContent('center')
@@ -54,11 +54,11 @@ export const mobileMenuBtn = $
   .transition('all 0.2s')
   .$el('.mobile-menu-btn');
 
-export const sidebarSection = $
+export const sidebarSection = chain()
   .mb('2rem')
   .$el('.docs-sidebar-section');
 
-export const sidebarTitle = $
+export const sidebarTitle = chain()
   .textSize('0.75rem')
   .weight('600')
   .textTransform('uppercase')
@@ -67,7 +67,7 @@ export const sidebarTitle = $
   .mb('1rem')
   .$el('.docs-sidebar-title');
 
-export const sidebarLink = $
+export const sidebarLink = chain()
   .display('block')
   .p('0.5rem 0.75rem')
   .c('#475569')
@@ -80,27 +80,27 @@ export const sidebarLink = $
   .end()
   .$el('.docs-sidebar-link');
 
-export const sidebarLinkActive = $
+export const sidebarLinkActive = chain()
   .bg('#eef2ff')
   .c('#667eea')
   .weight('500')
   .$el('.docs-sidebar-link-active');
 
-export const content = $
+export const content = chain()
   .minW('0')
   .w('100%')
   .overflowX('hidden')
   .$el('.docs-content');
 
 // ========== TYPOGRAPHY ==========
-export const docsHeader = $
+export const docsHeader = chain()
   .mb('1.5rem')
   .borderBottom('1px solid #e2e8f0')
   .pb('1rem')
   .tablet((css) => css.mb('2rem'))
   .$el('.docs-header');
 
-export const docsTitle = $
+export const docsTitle = chain()
   .textSize('2rem')
   .weight('700')
   .mb('0.5rem')
@@ -110,59 +110,59 @@ export const docsTitle = $
   .tablet((css) => css.textSize('2.5rem'))
   .$el('.docs-title');
 
-export const docsDescription = $
+export const docsDescription = chain()
   .textSize('1rem')
   .c('#64748b')
   .tablet((css) => css.textSize('1.125rem'))
   .$el('.docs-description');
 
 // ========== PLAYGROUND STYLES ==========
-export const playgroundContainer = $
+export const playgroundContainer = chain()
   .maxW('80rem')
   .m('0 auto')
   .p('2rem 1rem')
   .tablet((css) => css.p('2rem 1.5rem'))
   .$el('.playground-container');
 
-export const playgroundHeader = $
+export const playgroundHeader = chain()
   .textAlign('center')
   .mb('2rem')
   .$el('.playground-header');
 
-export const playgroundTitle = $
+export const playgroundTitle = chain()
   .textSize('1.5rem')
   .weight('700')
   .mb('0.5rem')
   .tablet((css) => css.textSize('2rem'))
   .$el('.playground-title');
 
-export const playgroundDescription = $
+export const playgroundDescription = chain()
   .c('#64748b')
   .textSize('0.875rem')
   .tablet((css) => css.textSize('1rem'))
   .$el('.playground-description');
 
-export const playgroundGrid = $
+export const playgroundGrid = chain()
   .display('grid')
   .gridCols('1fr')
   .gap('1rem')
   .tablet((css) => css.gridCols('1fr 1fr').gap('1.5rem'))
   .$el('.playground-grid');
 
-export const editorSection = $
+export const editorSection = chain()
   .rounded('1rem')
   .overflow('hidden')
   .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
   .$el('.editor-section');
 
-export const previewSection = $
+export const previewSection = chain()
   .bg('#f8fafc')
   .rounded('1rem')
   .overflow('hidden')
   .boxShadow('0 4px 6px -1px rgba(0,0,0,0.1)')
   .$el('.preview-section');
 
-export const previewArea = $
+export const previewArea = chain()
   .p('1rem')
   .minH('250px')
   .display('flex')
@@ -174,7 +174,7 @@ export const previewArea = $
   .tablet((css) => css.p('2rem').minH('400px'))
   .$el('.preview-area');
 
-export const sectionHeader = $
+export const sectionHeader = chain()
   .bg('#1e1e1e')
   .p('0.75rem 1rem')
   .c('#9ca3af')
@@ -186,7 +186,7 @@ export const sectionHeader = $
   .borderBottom('1px solid #2d2d2d')
   .$el('.section-header');
 
-export const templateBtn = $
+export const templateBtn = chain()
   .p('0.5rem 1rem')
   .rounded('0.5rem')
   .borderStyle('none')
@@ -202,7 +202,7 @@ export const templateBtn = $
   .end()
   .$el('.template-btn');
 
-export const templateBtnActive = $
+export const templateBtnActive = chain()
   .bg('#667eea')
   .c('white')
   .hover()
@@ -210,7 +210,7 @@ export const templateBtnActive = $
   .end()
   .$el('.template-btn-active');
 
-export const templateButtons = $
+export const templateButtons = chain()
   .display('flex')
   .gap('0.5rem')
   .justify('center')
@@ -220,7 +220,7 @@ export const templateButtons = $
   .$el('.template-buttons');
 
 // ========== CODE ==========
-export const codeblock = $
+export const codeblock = chain()
   .bg('#1e1e1e')
   .c('#d4d4d4')
   .p('1rem')
@@ -232,7 +232,7 @@ export const codeblock = $
   .tablet((css) => css.textSize('0.875rem'))
   .$el('.code-block');
 
-export const inlineCode = $
+export const inlineCode = chain()
   .bg('#f1f5f9')
   .p('0.125rem 0.25rem')
   .rounded('0.25rem')
@@ -243,7 +243,7 @@ export const inlineCode = $
   .$el('.inline-code');
 
 // ========== FEATURE GRID ==========
-export const featureGrid = $
+export const featureGrid = chain()
   .display('grid')
   .gridCols('1fr')
   .gap('1rem')
@@ -251,7 +251,7 @@ export const featureGrid = $
   .sm((css) => css.gridCols('repeat(auto-fill, minmax(280px, 1fr))'))
   .$el('.feature-grid');
 
-export const featureCard = $
+export const featureCard = chain()
   .p('1rem')
   .bg('#f8fafc')
   .rounded('0.5rem')
@@ -264,7 +264,7 @@ export const featureCard = $
   .$el('.feature-card');
 
 // ========== CALL OUTS ==========
-export const tip = $
+export const tip = chain()
   .bg('#e0f2fe')
   .borderLeft('4px solid #3b82f6')
   .p('1rem')
@@ -272,7 +272,7 @@ export const tip = $
   .mb('1.5rem')
   .$el('.tip');
 
-export const note = $
+export const note = chain()
   .bg('#fef9e3')
   .borderLeft('4px solid #f59e0b')
   .p('1rem')
@@ -280,7 +280,7 @@ export const note = $
   .mb('1.5rem')
   .$el('.note');
 
-export const warning = $
+export const warning = chain()
   .bg('#fee2e2')
   .borderLeft('4px solid #ef4444')
   .p('1rem')
@@ -289,25 +289,25 @@ export const warning = $
   .$el('.warning');
 
 // ========== COMPARISON TABLE ==========
-export const comparisonTableWrapper = $
+export const comparisonTableWrapper = chain()
   .m('2rem 0')
   .rounded('1rem')
   .border('1px solid #e2e8f0')
   .overflow('auto')
   .$el('.comparison-table-wrapper');
 
-export const comparisonTable = $
+export const comparisonTable = chain()
   .w('100%')
   .borderCollapse('collapse')
   .minW('500px')
   .$el('.comparison-table');
 
-export const comparisonTableThead = $
+export const comparisonTableThead = chain()
   .bg('#f8fafc')
   .borderBottom('2px solid #e2e8f0')
   .$el('thead');
 
-export const comparisonTableTh = $
+export const comparisonTableTh = chain()
   .p('0.75rem 1rem')
   .textAlign('left')
   .weight('600')
@@ -318,7 +318,7 @@ export const comparisonTableTh = $
   .tablet((css) => css.p('1rem 1.5rem').textSize('1rem'))
   .$el('th');
 
-export const comparisonRow = $
+export const comparisonRow = chain()
   .transition('all 0.2s')
   .borderBottom('1px solid #f1f5f9')
   .hover()
@@ -327,7 +327,7 @@ export const comparisonRow = $
   .end()
   .$el('.comparison-row');
 
-export const problemCell = $
+export const problemCell = chain()
   .p('0.75rem 1rem')
   .weight('500')
   .c('#1e293b')
@@ -335,7 +335,7 @@ export const problemCell = $
   .tablet((css) => css.p('1rem 1.5rem').textSize('1rem'))
   .$el('.problem-cell');
 
-export const solutionCell = $
+export const solutionCell = chain()
   .p('0.75rem 1rem')
   .c('#475569')
   .textSize('0.875rem')
@@ -343,7 +343,7 @@ export const solutionCell = $
   .tablet((css) => css.p('1rem 1.5rem').textSize('1rem'))
   .$el('.solution-cell');
 
-export const solutionBadge = $
+export const solutionBadge = chain()
   .display('inline-block')
   .bg('#667eea')
   .c('white')
@@ -357,12 +357,12 @@ export const solutionBadge = $
   .$el('.solution-badge');
 
 // ========== LISTS ==========
-export const unorderedList = $
+export const unorderedList = chain()
   .pl('1.25rem')
   .mb('1rem')
   .tablet((css) => css.pl('1.5rem'))
   .$el('ul');
 
-export const listItem = $
+export const listItem = chain()
   .mb('0.25rem')
   .$el('li');
