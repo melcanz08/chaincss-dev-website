@@ -1,9 +1,11 @@
-export const activeLink = 'nav-link-active';
-export const hideOnMobile = 'hide-on-mobile';
-export const link = 'nav-link';
-export const logo = 'logo';
-export const nav = 'nav';
-export const navContainer = 'nav-container';
-export const navLinks = 'nav-links';
-export const navLinksOpen = 'nav-links-open';
-export const showOnMobile = 'show-on-mobile';
+/** ChainCSS Generated — DO NOT EDIT */
+
+export const nav = 'nav'
+export const navContainer = 'nav-container'
+export const logo = 'logo'
+export const showOnMobile = 'show-on-mobile'
+export const navLinks = 'nav-links'
+export const navLinksOpen = 'nav-links-open'
+export const link = 'nav-link'
+export const activeLink = 'nav-link-active'
+export const hideOnMobile = 'hide-on-mobile'

@@ -1,5 +1,6 @@
-export const body = 'body';
-export const list = 'ul';
-export const listItem = 'li';
-export const reset = '*';
-export const root = '#root';
+/** ChainCSS Generated — DO NOT EDIT */
+
+export const body = 'chain-body'
+export const root = '#root'
+export const list = 'chain-ul'
+export const listItem = 'chain-li'

@@ -1,222 +1,159 @@
-.template-btn-active:hover  {
-  background-color: #5a67d8 !important;
+.playground-container {
+  max-width:80rem;
+  margin:0 auto;
+  padding:2rem 1.5rem
 }
-.template-btn-active  {
-  background-color: #667eea !important;
-  color: white !important;
+.playground-header {
+  text-align:center;
+  margin-bottom:2rem
 }
-.chaincss-button:hover  {
-  background-color: #5a67d8;
-  transform: scale(1.05);
+.playground-title {
+  text-size:2rem;
+  weight:700px;
+  margin-bottom:.5rem
 }
-.chaincss-button  {
-  display: inline-block;
-  cursor: pointer;
-  background-color: #667eea;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  border-style: none;
-  font-size: 16px;
-  font-weight: 600;
-  transition: all 0.2s ease;
+.playground-description {
+  color:#64748b;
+  text-size:1rem
 }
-.chaincss-card:hover  {
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
-  transform: translateY(-4px);
+.template-buttons {
+  display:flex;
+  gap:1rem;
+  justify-content:center;
+  margin-bottom:1.5rem;
+  flex-wrap:wrap
 }
-.chaincss-card  {
-  display: block;
-  cursor: pointer;
-  background-color: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+.template-btn {
+  padding-top:.5rem;
+  padding-bottom:.5rem;
+  padding-left:1rem;
+  padding-right:1rem;
+  border-radius:.5rem;
+  border-style:none;
+  text-size:.875rem;
+  weight:500px;
+  cursor:pointer;
+  transition:all 0.2s;
+  background-color:#f1f5f9;
+  color:#475569
 }
-.chaincss-gradient  {
-  display: inline-block;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background-clip: text;
-  color: transparent;
-  font-size: 2rem;
-  font-weight: 800;
+.template-btn:hover {
+  background-color:#e2e8f0
 }
-.code-editor  {
-  width: 100%;
-  background-color: #1e1e1e;
-  color: #d4d4d4;
-  font-family: monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 1rem;
-  border: none;
-  outline: none;
-  resize: vertical;
-  min-height: 400px;
+.template-btn-active {
+  background-color:#667eea;
+  color:white
 }
-@media (max-width: 768px)  {
-  .code-editor  {
-    font-size: 12px;
-    min-height: 300px;
+.template-btn-active:hover {
+  background-color:#5a67d8
 }
+.playground-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.5rem;
+  width:100%
 }
-.code-input-dark  {
-  background-color: #1e1e1e;
-  color: #d4d4d4;
-  font-family: monospace;
-  font-size: 14px;
-  padding: 16px;
-  border: none;
-  outline: none;
-  width: 100%;
-  min-height: 400px;
-  resize: vertical;
+.editor-section {
+  border-radius:1rem;
+  overflow:hidden;
+  box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)
 }
-.playground-container  {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
+.preview-section {
+  background-color:#f8fafc;
+  border-radius:1rem;
+  overflow:hidden;
+  box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)
 }
-@media (max-width: 768px)  {
-  .playground-container  {
-    padding: 1rem;
+.section-header {
+  background-color:#1e1e1e;
+  padding:.75rem 1rem;
+  color:#9ca3af;
+  text-size:.875rem;
+  weight:500px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #2d2d2d
 }
+.code-input-dark {
+  background-color:#1e1e1e;
+  color:#d4d4d4;
+  font:monospace;
+  text-size:14px;
+  padding:16px;
+  border:none;
+  outline:none;
+  width:100%;
+  min-height:400px;
+  resize:vertical
 }
-.copy-btn:hover  {
-  color: #ffffff;
-  background-color: rgba(255,255,255,0.1);
+.preview-area {
+  padding:2rem;
+  min-height:400px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1.5rem;
+  background-color:#f8fafc
 }
-.copy-btn  {
-  background-color: transparent;
-  border: none;
-  color: #9ca3af;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+.css-output {
+  margin-top:1.5rem;
+  background-color:#1e1e1e;
+  border-radius:.5rem;
+  overflow:hidden
 }
-.css-content  {
-  padding: 1rem;
-  color: #d4d4d4;
-  font-family: monospace;
-  font-size: 12px;
-  overflow: auto;
-  max-height: 200px;
+.chaincss-button {
+  background-color:#667eea;
+  color:white;
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  ms-user-select:none;
+  padding-top:12px;
+  padding-bottom:12px;
+  padding-left:24px;
+  padding-right:24px;
+  border-radius:8px;
+  text-size:16px;
+  weight:600px;
+  transition:all 0.2s ease;
+  transform:scale(1.05)
 }
-@media (max-width: 768px)  {
-  .css-content  {
-    font-size: 10px;
-    max-height: 150px;
+.chaincss-button:hover {
+  background-color:#5a67d8
 }
+.chaincss-card {
+  background-color:white;
+  border-radius:12px;
+  padding:24px;
+  box-shadow:0 10px 15px -3px rgba(0,0,0,0.1);
+  transition:all 0.3s ease
 }
-.css-output  {
-  margin-top: 1.5rem;
-  background-color: #1e1e1e;
-  border-radius: 0.5rem;
-  overflow: hidden;
+.chaincss-card:hover {
+  box-shadow:0 20px 25px -5px rgba(0,0,0,0.15);
+  transform:translateY(-4px)
 }
-.playground-description  {
-  color: #64748b;
-  font-size: 1rem;
+.chaincss-gradient {
+  background-color:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  bg-clip:text;
+  color:transparent;
+  text-size:2rem;
+  weight:800px
 }
-@media (max-width: 768px)  {
-  .playground-description  {
-    font-size: 0.875rem;
+.copy-btn {
+  background-color:transparent;
+  border:none;
+  color:#9ca3af;
+  cursor:pointer;
+  padding:.25rem 0.5rem;
+  border-radius:.25rem;
+  display:flex;
+  align-items:center;
+  gap:.25rem
 }
-}
-.editor-section  {
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-}
-.playground-header  {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-.playground-grid  {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  width: 100%;
-}
-@media (max-width: 768px)  {
-  .playground-grid  {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-}
-}
-.preview-area  {
-  padding: 2rem;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  background-color: #f8fafc;
-}
-@media (max-width: 768px)  {
-  .preview-area  {
-    padding: 1rem;
-    min-height: 250px;
-}
-}
-.preview-section  {
-  background-color: #f8fafc;
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-}
-.section-header  {
-  background-color: #1e1e1e;
-  padding: 0.75rem 1rem;
-  color: #9ca3af;
-  font-size: 0.875rem;
-  font-weight: 500;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #2d2d2d;
-}
-.template-btn  {
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border-style: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  background-color: #f1f5f9;
-  color: #475569;
-}
-@media (max-width: 768px)  {
-  .template-btn  {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.75rem;
-}
-}
-.template-buttons  {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-@media (max-width: 768px)  {
-  .template-buttons  {
-    gap: 0.5rem;
-}
-}
-.playground-title  {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-@media (max-width: 768px)  {
-  .playground-title  {
-    font-size: 1.5rem;
-}
+.copy-btn:hover {
+  color:white;
+  background-color:rgba(255,255,255,0.1)
 }
