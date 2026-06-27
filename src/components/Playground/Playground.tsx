@@ -1,7 +1,8 @@
 // src/components/Playground/Playground.tsx
-import { useState, useEffect, useRef } from 'react';
-import { $ } from 'chaincss/runtime';
-import { Copy, Check, AlertCircle } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { chain } from 'chaincss';
+import { useChainStyles } from 'chaincss/runtime';
+import { Copy, Check, RefreshCw } from 'lucide-react';
 import { CodeInput } from '@srsholmes/react-code-input';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
@@ -21,201 +22,200 @@ import {
   playgroundGrid,
   editorSection,
   sectionHeader,
-  codeEditor,
+  codeInputDark,
   previewSection,
   previewArea,
   cssOutputSection,
-  cssContent,
   chaincssButton,
   chaincssCard,
   chaincssGradient,
-  codeInputDark,
-  copyBtn
+  copyBtn,
 } from './styles/playground.class.js';
 
-const templates = {
-  button: `const buttonStyle = $()
-  .backgroundColor('#667eea')
-  .color('white')
-  .padding('12px 24px')
-  .borderRadius('8px')
-  .borderStyle('none')
-  .fontSize('16px')
-  .fontWeight('600')
-  .cursor('pointer')
-  .hover()
-    .backgroundColor('#5a67d8')
-    .transform('scale(1.05)')
-  .end()
-  .transition('all 0.2s ease')
-  .$el('.chaincss-button');`,  
+// ============================================================================
+// Mixed Mode Demo Component (inline, since it needs hooks)
+// ============================================================================
+const MixedModeDemo = () => {
+  const [isActive, setIsActive] = useState(false);
 
-  card: `const cardStyle = $()
-  .backgroundColor('white')
-  .borderRadius('12px')
-  .padding('24px')
-  .boxShadow('0 10px 15px -3px rgba(0,0,0,0.1)')
-  .hover()
-    .boxShadow('0 20px 25px -5px rgba(0,0,0,0.15)')
-    .transform('translateY(-4px)')
-  .end()
-  .transition('all 0.3s ease')
-  .$el('.chaincss-card');`,  
+  const dynamicStyles = useChainStyles(() => ({
+    btn: (chain as any).dynamic()
+      .opacity(() => isActive ? 1 : 0.5)
+      .shadow(() => isActive
+        ? '0 8px 25px rgba(99,102,241,0.6)'
+        : '0 2px 8px rgba(0,0,0,0.3)')
+      .scale(() => isActive ? 1.05 : 1)
+      .transition('all 0.3s ease')
+      .$el('mixed-state')
+  }), [isActive]);
 
-  gradient: `const headingStyle = $()
-  .background('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
-  .backgroundClip('text')
-  .color('transparent')
-  .fontSize('2rem')
-  .fontWeight('800')
-  .$el('.chaincss-gradient');`, 
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
+      <button
+        className={`${chaincssButton} ${dynamicStyles.btn}`}  // ← combine static + dynamic classes
+        onClick={() => setIsActive(!isActive)}
+      >
+        {isActive ? 'Active ✓' : 'Click to Toggle'}
+      </button>
+      {/* ... rest unchanged ... */}
+    </div>
+  );
 };
 
+// ============================================================================
+// Template definitions
+// ============================================================================
+const templates = {
+  button: {
+    label: 'Button',
+    source: `chain()
+  .bg('#667eea').c('white').pressable()
+  .py('12px').px('24px').rounded(8)
+  .textSize(16).weight('600')
+  .transition('all 0.2s ease')
+  .hover().bg('#5a67d8').scale(1.05).end()
+  .$el('.chaincss-button')`,
+    css: `.chaincss-button {
+  background-color: #667eea;
+  color: white;
+  cursor: pointer;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border-style: none;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.chaincss-button:hover {
+  background-color: #5a67d8;
+  transform: scale(1.05);
+}`,
+    className: chaincssButton,
+    preview: <button className={chaincssButton}>ChainCSS Button</button>,
+  },
+  card: {
+    label: 'Card',
+    source: `chain()
+  .bg('white').rounded(12).p(24).cursor('pointer')
+  .shadow('0 10px 15px -3px rgba(0,0,0,0.1)')
+  .transition('all 0.3s ease')
+  .hover()
+    .shadow('0 20px 25px -5px rgba(0,0,0,0.15)')
+    .transform('translateY(-4px)')
+  .end()
+  .$el('.chaincss-card')`,
+    css: `.chaincss-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+.chaincss-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+}`,
+    className: chaincssCard,
+    preview: (
+      <div className={chaincssCard}>
+        <h3 style={{ marginBottom: '0.5rem', fontSize: '1.25rem', fontWeight: 600 }}>ChainCSS Card</h3>
+        <p style={{ color: '#64748b' }}>Hover to see animation</p>
+      </div>
+    ),
+  },
+  gradient: {
+    label: 'Gradient Text',
+    source: `chain()
+  .bg('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
+  .bgClip('text').c('transparent')
+  .textSize('2rem').weight('800')
+  .$el('.chaincss-gradient')`,
+    css: `.chaincss-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 2rem;
+  font-weight: 800;
+}`,
+    className: chaincssGradient,
+    preview: <h2 className={chaincssGradient}>ChainCSS Gradient Text</h2>,
+  },
+  mixed: {
+    label: 'Mixed Mode',
+    source: `chain.dynamic()
+  .bg('#6366f1').c('white').pressable()
+  .py('12px').px('24px').rounded(8)
+  .textSize(16).weight('600')
+  .transition('all 0.3s ease')
+  .opacity(() => isActive ? 1 : 0.5)
+  .shadow(() => isActive
+    ? '0 8px 25px rgba(99,102,241,0.6)'
+    : '0 2px 8px rgba(0,0,0,0.3)')
+  .scale(() => isActive ? 1.05 : 1)
+  .$el('mixed-btn')`,
+    css: `.chain-mixed-btn {
+  background-color: #6366f1;
+  color: white;
+  cursor: pointer;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border-style: none;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  /* opacity, box-shadow, transform → resolved at runtime */\n}`,
+    className: '',
+    preview: <MixedModeDemo />,
+  },
+};
+
+// ============================================================================
+// Playground Component
+// ============================================================================
 const Playground = () => {
-  const [code, setCode] = useState(templates.button);
   const [activeTemplate, setActiveTemplate] = useState('button');
   const [copied, setCopied] = useState(false);
-  const [cssOutput, setCssOutput] = useState('');
-  const [error, setError] = useState('');
-  const styleRef = useRef<HTMLStyleElement | null>(null);
+  const [copiedCSS, setCopiedCSS] = useState(false);
 
-  const loadTemplate = (template: string) => {
-    setActiveTemplate(template);
-    if (template === 'button') setCode(templates.button);
-    if (template === 'card') setCode(templates.card);
-    if (template === 'gradient') setCode(templates.gradient);
-    setError('');
-  };
+  const current = templates[activeTemplate as keyof typeof templates];
 
-  const copyCode = () => {
-    navigator.clipboard.writeText(code);
+  const copyCode = useCallback(() => {
+    navigator.clipboard.writeText(current.source);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
+  }, [current.source]);
 
-  const copyCSS = () => {
-    navigator.clipboard.writeText(cssOutput);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  // Evaluation logic - generate CSS from ChainCSS code (runtime)
-  useEffect(() => {
-    try {
-      const sandbox: any = {
-        $: $,
-        buttonStyle: null,
-        cardStyle: null,
-        headingStyle: null,
-      };
-      
-      const fn = new Function('$', 'sandbox', `
-        try {
-          ${code}
-          if (typeof buttonStyle !== 'undefined') sandbox.buttonStyle = buttonStyle;
-          if (typeof cardStyle !== 'undefined') sandbox.cardStyle = cardStyle;
-          if (typeof headingStyle !== 'undefined') sandbox.headingStyle = headingStyle;
-        } catch(e) {
-          sandbox.error = e.message;
-        }
-      `);
-      
-      fn($, sandbox);
-      
-      if (sandbox.error) {
-        setError(sandbox.error);
-        setCssOutput('');
-        return;
-      }
-      
-      let styleObj = null;
-      if (activeTemplate === 'button') styleObj = sandbox.buttonStyle;
-      if (activeTemplate === 'card') styleObj = sandbox.cardStyle;
-      if (activeTemplate === 'gradient') styleObj = sandbox.headingStyle;
-      
-      if (!styleObj) {
-        setError('No style defined. Make sure to assign to buttonStyle, cardStyle, or headingStyle');
-        setCssOutput('');
-        return;
-      }
-      
-      // Generate CSS from the style object
-      let generatedCSS = '';
-      const className = activeTemplate === 'button' ? 'chaincss-button' : 
-                        activeTemplate === 'card' ? 'chaincss-card' : 'chaincss-gradient';
-      
-      generatedCSS = `.${className} {\n`;
-      for (let prop in styleObj) {
-        if (prop !== 'selectors' && prop !== 'hover') {
-          const kebabProp = prop.replace(/([A-Z])/g, '-$1').toLowerCase();
-          generatedCSS += `  ${kebabProp}: ${styleObj[prop]};\n`;
-        }
-      }
-      generatedCSS += `}\n`;
-      
-      if (styleObj.hover && typeof styleObj.hover === 'object') {
-        generatedCSS += `.${className}:hover {\n`;
-        for (let prop in styleObj.hover) {
-          const kebabProp = prop.replace(/([A-Z])/g, '-$1').toLowerCase();
-          generatedCSS += `  ${kebabProp}: ${styleObj.hover[prop]};\n`;
-        }
-        generatedCSS += `}\n`;
-      }
-      
-      setCssOutput(generatedCSS);
-      setError('');
-      
-      if (styleRef.current) {
-        styleRef.current.remove();
-      }
-      
-      const styleElement = document.createElement('style');
-      styleElement.textContent = generatedCSS;
-      styleElement.setAttribute('data-playground', className);
-      document.head.appendChild(styleElement);
-      styleRef.current = styleElement;
-      
-    } catch (err: any) {
-      setError(err.message);
-      setCssOutput('');
-    }
-    
-    return () => {
-      if (styleRef.current) {
-        styleRef.current.remove();
-      }
-    };
-  }, [code, activeTemplate]);
+  const copyCSS = useCallback(() => {
+    navigator.clipboard.writeText(current.css);
+    setCopiedCSS(true);
+    setTimeout(() => setCopiedCSS(false), 2000);
+  }, [current.css]);
 
   return (
     <div id="playground" className={container}>
       <div className={header}>
         <h1 className={title}>Interactive Playground</h1>
-        <p className={description}>Write ChainCSS code and see the results in real-time</p>
+        <p className={description}>
+          Explore ChainCSS's chainable API — static styles compile to zero-runtime CSS, dynamic values resolve at runtime
+        </p>
       </div>
 
       <div className={templateButtons}>
-        <button 
-          className={`${templateBtn} ${activeTemplate === 'button' ? activeTemplateBtn : ''}`}
-          onClick={() => loadTemplate('button')}
-        >
-          Button
-        </button>
-        <button 
-          className={`${templateBtn} ${activeTemplate === 'card' ? activeTemplateBtn : ''}`}
-          onClick={() => loadTemplate('card')}
-        >
-          Card
-        </button>
-        <button 
-          className={`${templateBtn} ${activeTemplate === 'gradient' ? activeTemplateBtn : ''}`}
-          onClick={() => loadTemplate('gradient')}
-        >
-          Gradient Text
-        </button>
+        {Object.entries(templates).map(([key, tmpl]) => (
+          <button
+            key={key}
+            className={`${templateBtn} ${activeTemplate === key ? activeTemplateBtn : ''}`}
+            onClick={() => setActiveTemplate(key)}
+          >
+            {tmpl.label}
+          </button>
+        ))}
       </div>
 
       <div className={playgroundGrid}>
+        {/* Editor */}
         <div className={editorSection}>
           <div className={sectionHeader}>
             <span>ChainCSS Code</span>
@@ -224,87 +224,39 @@ const Playground = () => {
               {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
-          <div className="code-input-dark">
+          <div className={codeInputDark}>
             <CodeInput
-              value={code}
-              onChange={setCode}
+              value={current.source}
               language="javascript"
               highlightjs={hljs}
-              placeholder="Write your ChainCSS code here..."
               autoHeight={true}
+              onChange={() => {}}
             />
           </div>
         </div>
 
+        {/* Live Preview */}
         <div className={previewSection}>
           <div className={sectionHeader}>
             <span>Live Preview</span>
           </div>
           <div className={previewArea}>
-            {error ? (
-              <div style={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center', 
-                gap: '1rem', 
-                padding: '2rem', 
-                color: '#dc2626', 
-                textAlign: 'center' 
-              }}>
-                <AlertCircle size={24} />
-                <p style={{ fontSize: '0.875rem' }}>{error}</p>
-              </div>
-            ) : (
-              <div style={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                width: '100%',
-                minHeight: '300px'
-              }}>
-                {activeTemplate === 'button' && (
-                  <button className={chaincssButton}>
-                    ChainCSS Button
-                  </button>
-                )}
-                {activeTemplate === 'card' && (
-                  <div className={chaincssCard}>
-                    <h3 style={{ marginBottom: '0.5rem', fontSize: '1.25rem', fontWeight: 600 }}>
-                      ChainCSS Card
-                    </h3>
-                    <p style={{ color: '#64748b' }}>Styled with ChainCSS</p>
-                    <p style={{ fontSize: '0.875rem', color: '#94a3b8', marginTop: '1rem' }}>
-                      Hover to see animation
-                    </p>
-                  </div>
-                )}
-                {activeTemplate === 'gradient' && (
-                  <h2 className={chaincssGradient}>
-                    ChainCSS Gradient Text
-                  </h2>
-                )}
-              </div>
-            )}
+            {current.preview}
           </div>
         </div>
       </div>
 
-      {cssOutput && !error && (
-        <div className={cssOutputSection}>
-          <div className={sectionHeader}>
-            <span>Generated CSS</span>
-            <button className={copyBtn} onClick={copyCSS}>
-              <Copy size={14} /> Copy CSS
-            </button>
-          </div>
-          <CodeBlock 
-            code={cssOutput} 
-            language="css" 
-            showCopy={false}
-          />
+      {/* Compiled CSS */}
+      <div className={cssOutputSection}>
+        <div className={sectionHeader}>
+          <span>Compiled CSS (build-time output)</span>
+          <button className={copyBtn} onClick={copyCSS}>
+            {copiedCSS ? <Check size={14} /> : <Copy size={14} />}
+            {copiedCSS ? 'Copied!' : 'Copy CSS'}
+          </button>
         </div>
-      )}
+        <CodeBlock code={current.css} language="css" showCopy={false} />
+      </div>
     </div>
   );
 };

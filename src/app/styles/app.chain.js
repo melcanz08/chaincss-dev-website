@@ -1,5 +1,5 @@
-// ========== MODE SECTION ==========
 import { $ } from 'chaincss';
+
 export const modeSection = $
   .padding('4rem 1.5rem')
   .textAlign('center')
@@ -8,7 +8,7 @@ export const modeSection = $
   .$el('.mode-section');
 
 export const modeContainer = $
-  .maxWidth('800px')
+  .maxWidth('900px')
   .margin('0 auto')
   .$el('.mode-container');
 
@@ -25,6 +25,42 @@ export const modeTitleSpan = $
 export const modeDescription = $
   .fontSize('1.125rem')
   .color('#64748b')
-  .marginBottom('2rem')
-  .lineHeight('1.5')
+  .marginBottom('3rem')
+  .lineHeight('1.6')
+  .maxWidth('650px')
+  .margin('0 auto 3rem')
   .$el('.mode-description');
+
+export const featureGrid = $
+  .display('grid')
+  .gridTemplateColumns('repeat(auto-fit, minmax(280px, 1fr))')
+  .gap('1.5rem')
+  .maxWidth('900px')
+  .margin('0 auto')
+  .$el('.mode-feature-grid');
+
+export const featureCard = $
+  .backgroundColor('#f8fafc')
+  .border('1px solid #e2e8f0')
+  .borderRadius('1rem')
+  .padding('1.5rem')
+  .textAlign('left')
+  .$el('.mode-feature-card');
+
+export const featureIcon = $
+  .fontSize('2rem')
+  .marginBottom('0.75rem')
+  .$el('.mode-feature-icon');
+
+export const featureTitle = $
+  .fontSize('1.125rem')
+  .fontWeight('700')
+  .marginBottom('0.5rem')
+  .color('#1e293b')
+  .$el('.mode-feature-title');
+
+export const featureText = $
+  .fontSize('0.875rem')
+  .color('#64748b')
+  .lineHeight('1.6')
+  .$el('.mode-feature-text');

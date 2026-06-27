@@ -19,7 +19,9 @@ const Hero = () => {
       <div className={container}>
         <h1 className={title}>ChainCSS</h1>
         <p className={subtitle}>
-          The JavaScript-native styling engine for the modern web
+          Zero-runtime CSS-in-JS with a chainable API. 
+          Static styles compile away at build time. 
+          Dynamic values resolve when you need them.
         </p>
         <div className={buttonGroup}>
           <button className={primaryBtn} onClick={() => navigate('/playground')}>
