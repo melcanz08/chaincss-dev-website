@@ -6,14 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:css": "chaincss build -c \"src/**/*.chain.js\"",
-    "watch:css": "chaincss watch -c \"src/**/styles/*.chain.js\"",
+    "build:css": "chaincss build -c \"src/**/*.chain.ts\"",
+    "watch:css": "chaincss watch -c \"src/**/*.chain.ts\"",
     "init:css": "chaincss init",
     "preview": "vite preview"
   },
   "dependencies": {
     "@srsholmes/react-code-input": "^0.0.5",
-    "chaincss": "^2.8.7",
+    "chaincss": "^2.8.9",
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.577.0",
     "react": "^19.2.4",

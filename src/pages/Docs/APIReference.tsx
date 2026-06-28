@@ -1,357 +1,149 @@
-import { useState } from 'react';
-import CodeBlock from '../../components/CodeBlock';
+import {
+  contentTitle, contentDesc, sectionHeading, paragraph,
+  codeBlock, inlineCode, note, tableWrapper
+} from '../../styles/docs.chain.ts';
+import { docTable, docTh, docTd } from '../../styles/docs.chain.ts';
 
 export default function APIReference() {
-  const [activeSection, setActiveSection] = useState('chain');
-  
-  const sections = {
-    chain: {
-      title: '$ - Chainable API',
-      description: 'Creates a chainable style object',
-      signature: '$ => ChainBuilder',
-      examples: [
-        {
-          title: 'Basic Usage with Shorthands',
-          code: `import { $ } from 'chaincss';
-
-export const button = $
-  .bg('#3b82f6')
-  .c('white')
-  .p('12px 24px')
-  .rounded('8px')
-  .$el('.btn');`,
-          output: `.btn {
-  background-color: #3b82f6;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-}`
-        },
-        {
-          title: 'With Hover',
-          code: `export const button = $
-  .bg('#3b82f6')
-  .c('white')
-  .p('12px 24px')
-  .rounded('8px')
-  .hover()
-    .bg('#2563eb')
-  .end()
-  .$el('.btn');`,
-          output: `.btn {
-  background-color: #3b82f6;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-}
-.btn:hover {
-  background-color: #2563eb;
-}`
-        },
-        {
-          title: 'With Responsive Breakpoints',
-          code: `export const title = $
-  .textSize('3rem')
-  .mobile((css) => css.textSize('1.5rem'))
-  .tablet((css) => css.textSize('2rem'))
-  .desktop((css) => css.textSize('2.5rem'))
-  .$el('.title');`,
-          output: `.title {
-  font-size: 3rem;
-}
-@media (max-width: 768px) {
-  .title { font-size: 1.5rem; }
-}
-@media (min-width: 769px) and (max-width: 1024px) {
-  .title { font-size: 2rem; }
-}
-@media (min-width: 1025px) {
-  .title { font-size: 2.5rem; }
-}`
-        }
-      ]
-    },
-    el: {
-      title: '.$el()',
-      description: 'Terminates the chain and assigns styles to selectors',
-      signature: '.$el(...selectors: string[]) => StyleDefinition',
-      examples: [
-        {
-          title: 'Single Selector',
-          code: `export const button = $
-  .bg('#3b82f6')
-  .c('white')
-  .$el('.btn');`,
-          output: `.btn { background-color: #3b82f6; color: white; }`
-        },
-        {
-          title: 'Multiple Selectors',
-          code: `export const element = $
-  .c('red')
-  .$el('.btn', '.button', '[type="button"]');`,
-          output: `.btn, .button, [type="button"] { color: red; }`
-        }
-      ]
-    },
-    hover: {
-      title: '.hover()',
-      description: 'Creates hover state styles',
-      signature: '.hover() => HoverBuilder',
-      examples: [
-        {
-          title: 'Basic Hover',
-          code: `export const button = $
-  .bg('#3b82f6')
-  .hover()
-    .bg('#2563eb')
-  .end()
-  .$el('.btn');`,
-          output: `.btn { background-color: #3b82f6; }
-.btn:hover { background-color: #2563eb; }`
-        }
-      ]
-    },
-    media: {
-      title: '.media()',
-      description: 'Creates media query styles',
-      signature: '.media(query: string, callback: (css: ChainBuilder) => void) => ChainBuilder',
-      examples: [
-        {
-          title: 'Responsive Design',
-          code: `export const container = $
-  .w('100%')
-  .media('(min-width: 768px)', (css) => {
-    css.w('50%')
-  })
-  .media('(min-width: 1024px)', (css) => {
-    css.w('33.333%')
-  })
-  .$el('.container');`,
-          output: `.container { width: 100%; }
-@media (min-width: 768px) {
-  .container { width: 50%; }
-}
-@media (min-width: 1024px) {
-  .container { width: 33.333%; }
-}`
-        }
-      ]
-    },
-    keyframes: {
-      title: '.keyframes()',
-      description: 'Defines CSS keyframe animations',
-      signature: '.keyframes(name: string, frames: Record<string, StyleDefinition>) => ChainBuilder',
-      examples: [
-        {
-          title: 'Basic Animation',
-          code: `export const slideIn = $
-  .keyframes('slideIn', {
-    '0%': { opacity: 0, transform: 'translateX(-50px)' },
-    '100%': { opacity: 1, transform: 'translateX(0)' }
-  })
-  .$el();
-
-export const animated = $
-  .animation('slideIn 0.5s ease-out')
-  .$el('.animated');`,
-          output: `@keyframes slideIn {
-  0% { opacity: 0; transform: translateX(-50px); }
-  100% { opacity: 1; transform: translateX(0); }
-}
-.animated { animation: slideIn 0.5s ease-out; }`
-        }
-      ]
-    },
-    recipe: {
-      title: 'recipe()',
-      description: 'Creates variant-based components',
-      signature: 'recipe<T>(options: RecipeOptions<T>) => Recipe<T>',
-      examples: [
-        {
-          title: 'Basic Recipe with Shorthands',
-          code: `import { recipe } from 'chaincss';
-
-type ButtonVariants = {
-  color: 'primary' | 'secondary';
-  size: 'small' | 'large';
-};
-
-export const button = recipe<ButtonVariants>({
-  base: $
-    .p('12px 24px')
-    .rounded('8px')
-    .weight('600')
-    .$el(),
-  variants: {
-    color: {
-      primary: $.bg('#3b82f6').c('white').$el(),
-      secondary: $.bg('#6b7280').c('white').$el()
-    },
-    size: {
-      small: $.p('8px 16px').textSize('14px').$el(),
-      large: $.p('16px 32px').textSize('18px').$el()
-    }
-  },
-  defaultVariants: { color: 'primary', size: 'small' }
-});
-
-const primaryBtn = button({ color: 'primary', size: 'large' });`,
-          output: `.btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; }
-.btn-primary { background-color: #3b82f6; color: white; }
-.btn-large { padding: 16px 32px; font-size: 18px; }`
-        }
-      ]
-    },
-    tokens: {
-      title: 'createTokens()',
-      description: 'Creates design tokens',
-      signature: 'createTokens(tokens: Tokens) => DesignTokens',
-      examples: [
-        {
-          title: 'Create Tokens',
-          code: `import { createTokens } from 'chaincss';
-
-export const tokens = createTokens({
-  colors: {
-    primary: '#3b82f6',
-    secondary: '#6b7280',
-    background: '#ffffff',
-    text: '#1e293b'
-  },
-  spacing: {
-    sm: '8px',
-    md: '16px',
-    lg: '24px'
-  }
-});
-
-export const card = $
-  .bg('$colors.background')
-  .c('$colors.text')
-  .p('$spacing.md')
-  .$el('.card');`,
-          output: `.card {
-  background-color: #ffffff;
-  color: #1e293b;
-  padding: 16px;
-}`
-        }
-      ]
-    },
-    react: {
-      title: 'React Hooks',
-      description: 'React integration hooks',
-      signature: 'useChainStyles(styles, deps?, options?) => Record<string, string>',
-      examples: [
-        {
-          title: 'useChainStyles',
-          code: `import { useChainStyles } from 'chaincss/runtime';
-
-function Button({ variant = 'primary' }) {
-  const styles = useChainStyles({
-    button: {
-      backgroundColor: variant === 'primary' ? '#3b82f6' : '#6b7280',
-      color: 'white',
-      padding: '12px 24px',
-      borderRadius: '8px',
-      transition: 'all 0.2s',
-      cursor: 'pointer',
-      border: 'none',
-      hover: {
-        backgroundColor: variant === 'primary' ? '#2563eb' : '#4b5563'
-      }
-    }
-  });
-  
-  return <button className={styles.button}>Click Me</button>;
-}`,
-          output: `// Returns { button: "chain-button-abc123" }`
-        }
-      ]
-    },
-    cx: {
-      title: 'cx()',
-      description: 'Utility for conditional class names',
-      signature: 'cx(...classes: (string | undefined | null | false)[]) => string',
-      examples: [
-        {
-          title: 'Conditional Classes',
-          code: `import { cx } from 'chaincss/runtime';
-
-const isActive = true;
-const isDisabled = false;
-
-const className = cx(
-  'btn',
-  isActive && 'btn-active',
-  isDisabled && 'btn-disabled'
-);
-
-console.log(className); // "btn btn-active"`,
-          output: `btn btn-active`
-        }
-      ]
-    }
-  };
-  
-  const currentSection = sections[activeSection];
-  
   return (
     <>
-      <div className="docs-header">
-        <h1 className="docs-title">API Reference</h1>
-        <p className="docs-description">
-          Complete API reference for ChainCSS core functions, hooks, and utilities.
-        </p>
+      <h1 className={contentTitle}>API Reference</h1>
+      <p className={contentDesc}>
+        Complete reference for the ChainCSS v2.8.8 public API.
+      </p>
+
+      <h2 className={sectionHeading}>chain(options?)</h2>
+      <p className={paragraph}>
+        Creates a new style chain. Returns a proxy that collects styles and 
+        ultimately compiles to a class name string.
+      </p>
+      <pre className={codeBlock}>{`import { chain } from 'chaincss'
+
+const styles = chain()
+  .property(value)   // any CSS property in camelCase
+  .$el('name')       // finalize → { selectors, ...properties }
+
+// With debug mode:
+const debugChain = chain({ debug: true })
+debugChain.explain().visualization  // prints style breakdown`}</pre>
+
+      <h2 className={sectionHeading}>chain.dynamic(options?)</h2>
+      <p className={paragraph}>
+        Creates a mixed-mode chain. Static values compile to CSS; functions stay 
+        dynamic and resolve at runtime via <span className={inlineCode}>useChainStyles</span>.
+      </p>
+      <pre className={codeBlock}>{`import { chain } from 'chaincss'
+
+export const btn = chain.dynamic()
+  .bg('#6366f1')                                    // → static CSS
+  .color('#ffffff')                                  // → static CSS
+  .opacity(() => isActive ? 1 : 0.5)                 // → runtime
+  .shadow(() => isActive ? '0 8px 25px rgba(...)' : '0 2px 8px rgba(...)')
+  .$el('btn')
+
+// Component usage:
+import { btn, btnClass } from '../styles/button.chain'
+import { useChainStyles } from 'chaincss/runtime'
+const classes = useChainStyles({ btn }, [isActive])
+// <button className={\`\${btnClass} \${classes.btn}\`}>Click</button>`}</pre>
+
+      <h2 className={sectionHeading}>compileToCSS(styleObject, options?)</h2>
+      <p className={paragraph}>
+        Compiles a style object to a CSS string. Used at build time.
+      </p>
+      <div className={tableWrapper}>
+        <table className={docTable}>
+          <thead><tr><th className={docTh}>Option</th><th className={docTh}>Type</th><th className={docTh}>Default</th><th className={docTh}>Description</th></tr></thead>
+          <tbody>
+            <tr><td className={docTd}>scopeSelector</td><td className={docTd}>string</td><td className={docTd}>''</td><td className={docTd}>CSS selector for the rule</td></tr>
+            <tr><td className={docTd}>minify</td><td className={docTd}>boolean</td><td className={docTd}>false</td><td className={docTd}>Minify output</td></tr>
+            <tr><td className={docTd}>sourceMap</td><td className={docTd}>boolean</td><td className={docTd}>false</td><td className={docTd}>Add source comments</td></tr>
+          </tbody>
+        </table>
       </div>
-      
-      <div style={{ display: 'flex', gap: '32px', marginBottom: '32px', flexWrap: 'wrap' }}>
-        <div style={{ width: '240px', flexShrink: 0 }}>
-          <div style={{ position: 'sticky', top: '80px' }}>
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', marginBottom: '12px' }}>Core Functions</div>
-              <button onClick={() => setActiveSection('chain')} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', color: activeSection === 'chain' ? '#667eea' : '#475569', fontWeight: activeSection === 'chain' ? '500' : 'normal', borderRadius: '6px' }}>$ - Chainable API</button>
-              <button onClick={() => setActiveSection('el')} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', color: activeSection === 'el' ? '#667eea' : '#475569', borderRadius: '6px' }}>.$el()</button>
-              <button onClick={() => setActiveSection('hover')} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', color: activeSection === 'hover' ? '#667eea' : '#475569', borderRadius: '6px' }}>.hover()</button>
-              <button onClick={() => setActiveSection('media')} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', color: activeSection === 'media' ? '#667eea' : '#475569', borderRadius: '6px' }}>.media()</button>
-              <button onClick={() => setActiveSection('keyframes')} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', color: activeSection === 'keyframes' ? '#667eea' : '#475569', borderRadius: '6px' }}>.keyframes()</button>
-              <button onClick={() => setActiveSection('recipe')} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', color: activeSection === 'recipe' ? '#667eea' : '#475569', borderRadius: '6px' }}>recipe()</button>
-            </div>
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', marginBottom: '12px' }}>Design System</div>
-              <button onClick={() => setActiveSection('tokens')} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', color: activeSection === 'tokens' ? '#667eea' : '#475569', borderRadius: '6px' }}>createTokens()</button>
-            </div>
-            <div>
-              <div style={{ fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', marginBottom: '12px' }}>React Integration</div>
-              <button onClick={() => setActiveSection('react')} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', color: activeSection === 'react' ? '#667eea' : '#475569', borderRadius: '6px' }}>useChainStyles()</button>
-              <button onClick={() => setActiveSection('cx')} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', color: activeSection === 'cx' ? '#667eea' : '#475569', borderRadius: '6px' }}>cx()</button>
-            </div>
-          </div>
-        </div>
-        
-        <div style={{ flex: 1 }}>
-          <h2 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '8px' }}>
-            {currentSection.title}
-          </h2>
-          <p style={{ color: '#64748b', marginBottom: '16px' }}>
-            {currentSection.description}
-          </p>
-          <CodeBlock language="javascript" code={`Signature: ${currentSection.signature}`} />
-          
-          {currentSection.examples.map((example, idx) => (
-            <div key={idx} style={{ marginTop: '32px' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px' }}>
-                {example.title}
-              </h3>
-              <CodeBlock language="javascript" code={example.code} />
-              <div className="tip" style={{ marginTop: '12px' }}>
-                <strong>Output:</strong>
-                <CodeBlock language="css" code={example.output} />
-              </div>
-            </div>
-          ))}
-        </div>
+
+      <h2 className={sectionHeading}>partitionForBuild(styleObject, options?)</h2>
+      <p className={paragraph}>
+        Splits a style object into static CSS and dynamic values. Returns{' '}
+        <span className={inlineCode}>{`{ css, dynamicValues, hasDynamic }`}</span>.
+      </p>
+
+      <h2 className={sectionHeading}>classifyValue(value)</h2>
+      <p className={paragraph}>
+        Returns <span className={inlineCode}>'static'</span> for strings/numbers,{' '}
+        <span className={inlineCode}>'dynamic'</span> for functions.
+      </p>
+
+      <h2 className={sectionHeading}>Shorthands</h2>
+      <div className={tableWrapper}>
+        <table className={docTable}>
+          <thead><tr><th className={docTh}>Shorthand</th><th className={docTh}>CSS Property</th><th className={docTh}>Example</th></tr></thead>
+          <tbody>
+            <tr><td className={docTd}><span className={inlineCode}>bg()</span></td><td className={docTd}>background-color</td><td className={docTd}>.bg('#6366f1')</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>fs()</span></td><td className={docTd}>font-size</td><td className={docTd}>.fs(16)</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>fw()</span></td><td className={docTd}>font-weight</td><td className={docTd}>.fw(600)</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>rounded()</span></td><td className={docTd}>border-radius</td><td className={docTd}>.rounded(8)</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>p() / m()</span></td><td className={docTd}>padding / margin</td><td className={docTd}>.p('12px 24px')</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>flex() / grid()</span></td><td className={docTd}>display</td><td className={docTd}>.flex()</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>w() / h()</span></td><td className={docTd}>width / height</td><td className={docTd}>.w('100%')</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>pos()</span></td><td className={docTd}>position</td><td className={docTd}>.pos('absolute')</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>z()</span></td><td className={docTd}>z-index</td><td className={docTd}>.z(50)</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>op()</span></td><td className={docTd}>opacity</td><td className={docTd}>.op(0.5)</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>gap()</span></td><td className={docTd}>gap</td><td className={docTd}>.gap(16)</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>transform()</span></td><td className={docTd}>transform</td><td className={docTd}>.transform('translateY(-2px)')</td></tr>
+            <tr><td className={docTd}><span className={inlineCode}>transition()</span></td><td className={docTd}>transition</td><td className={docTd}>.transition('all 0.2s ease')</td></tr>
+          </tbody>
+        </table>
       </div>
+
+      <h2 className={sectionHeading}>States & Selectors</h2>
+      <pre className={codeBlock}>{`chain()
+  .hover()                    // :hover block
+    .bg('darkred')
+  .end()
+  .focus()                    // :focus block
+    .outline('2px solid blue')
+  .end()
+  .nest('.child', (c) =>      // nested selector
+    c.color('blue')
+  )
+  .children((c) =>            // & > * selector
+    c.padding(8)
+  )
+  .media('(min-width: 768px)', (c) =>
+    c.flexDirection('row')
+  )
+  .supports('display: grid', (c) =>
+    c.gap(16)
+  )
+  .when(condition, (c) =>     // conditional block
+    c.display('none')
+  )
+  .$el('component')`}</pre>
+
+      <h2 className={sectionHeading}>Compiler</h2>
+      <p className={paragraph}>
+        For build tooling, use <span className={inlineCode}>ChainCSSCompiler</span>:
+      </p>
+      <pre className={codeBlock}>{`import { ChainCSSCompiler } from 'chaincss'
+
+const compiler = new ChainCSSCompiler({
+  atomic: { enabled: true },
+  output: { minify: true },
+  verbose: true
+})
+
+// Compile a single style
+const result = compiler.compileStyle('my-component', styleDef)
+
+// Compile a file
+const results = await compiler.compileFile('./styles/button.chain.ts')
+
+// Compile multiple components
+await compiler.compileComponents(['./src/styles/*.chain.ts'])
+
+// Disable the pipeline
+compiler.setPipelineEnabled(false)`}</pre>
     </>
   );
 }

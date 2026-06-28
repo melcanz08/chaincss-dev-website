@@ -1,385 +1,76 @@
-import { useState } from 'react';
-import CodeBlock from '../../components/CodeBlock';
+import {
+  contentTitle, contentDesc, sectionHeading, paragraph,
+  codeBlock, inlineCode, note
+} from '../../styles/docs.chain.ts';
 
 export default function DesignTokens() {
-  const [activeMode, setActiveMode] = useState<'build' | 'runtime'>('build');
-  const [activeTheme, setActiveTheme] = useState('light');
-  
-  const themes = {
-    light: {
-      colors: {
-        primary: '#3b82f6',
-        secondary: '#6b7280',
-        background: '#ffffff',
-        text: '#1e293b',
-        border: '#e2e8f0'
-      },
-      spacing: {
-        sm: '8px',
-        md: '16px',
-        lg: '24px'
-      }
-    },
-    dark: {
-      colors: {
-        primary: '#60a5fa',
-        secondary: '#9ca3af',
-        background: '#0f172a',
-        text: '#f1f5f9',
-        border: '#334155'
-      },
-      spacing: {
-        sm: '8px',
-        md: '16px',
-        lg: '24px'
-      }
-    }
-  };
-  
-  const currentTheme = themes[activeTheme];
-  
   return (
     <>
-      <div className="docs-header">
-        <h1 className="docs-title">Design Tokens</h1>
-        <p className="docs-description">
-          Create a consistent design system with tokens for colors, spacing, typography, and more.
-          Use them in build-time with the <code>$token.path</code> syntax or at runtime with CSS variables.
-        </p>
-      </div>
-      
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', justifyContent: 'center' }}>
-        <button
-          onClick={() => setActiveMode('build')}
-          style={{
-            padding: '8px 24px',
-            borderRadius: '8px',
-            border: activeMode === 'build' ? '2px solid #667eea' : '1px solid #e2e8f0',
-            backgroundColor: activeMode === 'build' ? '#eef2ff' : 'white',
-            color: activeMode === 'build' ? '#667eea' : '#475569',
-            cursor: 'pointer',
-            fontWeight: activeMode === 'build' ? '500' : 'normal'
-          }}
-        >
-          Build-Time Mode
-        </button>
-        <button
-          onClick={() => setActiveMode('runtime')}
-          style={{
-            padding: '8px 24px',
-            borderRadius: '8px',
-            border: activeMode === 'runtime' ? '2px solid #667eea' : '1px solid #e2e8f0',
-            backgroundColor: activeMode === 'runtime' ? '#eef2ff' : 'white',
-            color: activeMode === 'runtime' ? '#667eea' : '#475569',
-            cursor: 'pointer',
-            fontWeight: activeMode === 'runtime' ? '500' : 'normal'
-          }}
-        >
-          Runtime Mode (CSS Variables)
-        </button>
-      </div>
-      
-      {activeMode === 'build' && (
-        <>
-          <h2>Creating Tokens (Build-Time)</h2>
-          <CodeBlock language="javascript" code={`import { createTokens } from 'chaincss';
+      <h1 className={contentTitle}>Design Tokens</h1>
+      <p className={contentDesc}>
+        Define design tokens once, use them everywhere. ChainCSS resolves tokens at build time.
+      </p>
+
+      <h2 className={sectionHeading}>Creating Tokens</h2>
+      <pre className={codeBlock}>{`import { createTokens } from 'chaincss'
 
 const tokens = createTokens({
   colors: {
-    primary: '#3b82f6',
-    secondary: '#6b7280',
-    background: '#ffffff',
-    text: '#1e293b'
+    primary: '#6366f1',
+    primaryHover: '#4f46e5',
+    surface: '#ffffff',
+    text: '#1a1a2e'
+  },
+  typography: {
+    heading: '32px',
+    body: '16px',
+    small: '14px'
   },
   spacing: {
+    xs: '4px',
     sm: '8px',
     md: '16px',
-    lg: '24px'
+    lg: '24px',
+    xl: '32px'
   }
-});`} />
+})`}</pre>
 
-          <h2>Using Tokens with <code>$token.path</code></h2>
-          <p>Use the <code>$token.path</code> syntax anywhere in your CSS values:</p>
-          <CodeBlock language="javascript" code={`import { $, createTokens } from 'chaincss';
+      <h2 className={sectionHeading}>Using Tokens</h2>
+      <pre className={codeBlock}>{`chain()
+  .bg('$colors.primary')
+  .color('$colors.text')
+  .fontSize('$typography.body')
+  .padding('$spacing.lg')
+  .$el('card')`}</pre>
 
-const tokens = createTokens({
-  colors: { primary: '#3b82f6', secondary: '#6b7280' },
-  spacing: { sm: '8px', md: '16px', lg: '24px' }
-});
+      <h2 className={sectionHeading}>Theme Contracts</h2>
+      <pre className={codeBlock}>{`import { createThemeContract, createTheme, validateTheme } from 'chaincss'
 
-export const card = $
-  .bg('$colors.background')
-  .c('$colors.text')
-  .border(\`1px solid $colors.primary\`)
-  .margin(\`$spacing.md $spacing.lg\`)
-  .padding(\`$spacing.sm $spacing.md $spacing.lg\`)
-  .shadow(\`0 0 0 3px $colors.primary\`)
-  .bg(\`linear-gradient(135deg, $colors.primary, $colors.secondary)\`)
-  .$el('.card');`} />
+const contract = createThemeContract({
+  colors: { primary: '', surface: '', text: '' }
+})
 
-          <div className="tip">
-            <strong>Works everywhere</strong> Tokens work in:
-            <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
-              <li>Simple values: <code>$colors.primary</code></li>
-              <li>Mixed with static text: <code>1px solid $colors.primary</code></li>
-              <li>Multiple tokens: <code>$spacing.sm $spacing.md $spacing.lg</code></li>
-              <li>Complex functions: <code>linear-gradient(135deg, $colors.primary, $colors.secondary)</code></li>
-            </ul>
-          </div>
-
-          <h2>Output CSS</h2>
-          <CodeBlock language="css" code={`.card {
-  background-color: #ffffff;
-  color: #1e293b;
-  border: 1px solid #3b82f6;
-  margin: 16px 24px;
-  padding: 8px 16px 24px;
-  box-shadow: 0 0 0 3px #3b82f6;
-  background: linear-gradient(135deg, #3b82f6, #6b7280);
-}`} />
-
-          <h2>Alternative: tokens.get()</h2>
-          <p>You can also use the explicit <code>tokens.get()</code> method when you need the value in JavaScript logic:</p>
-          <CodeBlock language="javascript" code={`import { $, createTokens } from 'chaincss';
-
-const myTokens = createTokens({
-  colors: { primary: '#3b82f6' }
-});
-
-export const card = $
-  .bg(myTokens.get('colors.primary'))
-  .$el('.card');`} />
-
-          <div className="note">
-            <strong>Tip:</strong> The <code>$token.path</code> syntax is cleaner for CSS values,
-            while <code>tokens.get()</code> is useful when you need the value in JavaScript logic.
-          </div>
-        </>
-      )}
-      
-      {activeMode === 'runtime' && (
-        <>
-          <h2>Creating Tokens (Runtime)</h2>
-          <CodeBlock language="javascript" code={`import { createTokens } from 'chaincss';
-
-const tokens = createTokens({
+const lightTheme = createTheme(contract, {
   colors: {
-    primary: '#3b82f6',
-    background: '#ffffff',
-    text: '#1e293b'
-  },
-  spacing: {
-    md: '16px',
-    lg: '24px'
+    primary: '#6366f1',
+    surface: '#ffffff',
+    text: '#1a1a2e'
   }
-});`} />
+})
 
-          <h2>Using Tokens in Styles</h2>
-          <CodeBlock language="javascript" code={`import { $, createTokens } from 'chaincss/runtime';
-
-const tokens = createTokens({
-  colors: { primary: '#3b82f6', background: '#ffffff', text: '#1e293b' }
-});
-
-const card = $()
-  .bg(tokens.get('colors.background'))
-  .c(tokens.get('colors.text'))
-  .p(tokens.get('spacing.md'))
-  .$el('.card');`} />
-
-          <h2>CSS Variables for Runtime Theming</h2>
-          <p>Generate CSS variables from your tokens for dynamic theme switching:</p>
-          <CodeBlock language="javascript" code={`import { createTokens } from 'chaincss';
-
-const tokens = createTokens({
+const darkTheme = createTheme(contract, {
   colors: {
-    primary: '#3b82f6',
-    background: '#ffffff'
+    primary: '#818cf8',
+    surface: '#0a0a0f',
+    text: '#e4e4e7'
   }
-});
+})
 
-const cssVariables = tokens.toCSSVariables();
-// Output:
-// :root {
-//   --colors-primary: #3b82f6;
-//   --colors-background: #ffffff;
-// }
+validateTheme(darkTheme, contract) // ✅ valid`}</pre>
 
-const style = document.createElement('style');
-style.textContent = cssVariables;
-document.head.appendChild(style);`} />
-
-          <h2>Runtime Theme Switching</h2>
-          <p>Switch themes dynamically using CSS variables:</p>
-          <CodeBlock language="javascript" code={`import { createTokens } from 'chaincss';
-
-const lightTheme = createTokens({
-  colors: { primary: '#3b82f6', background: '#ffffff', text: '#1e293b' }
-});
-
-const darkTheme = createTokens({
-  colors: { primary: '#60a5fa', background: '#0f172a', text: '#f1f5f9' }
-});
-
-function switchTheme(theme) {
-  const vars = theme.toCSSVariables();
-  const style = document.getElementById('theme-vars') || document.createElement('style');
-  style.id = 'theme-vars';
-  style.textContent = vars;
-  document.head.appendChild(style);
-}
-
-const card = $
-  .bg('var(--colors-background)')
-  .c('var(--colors-text)')
-  .$el('.card');`} />
-
-          <div className="tip">
-            <strong>Live Theme Demo:</strong> Click the buttons below to see runtime theming in action
-          </div>
-          
-          <div style={{ marginTop: '24px', marginBottom: '32px' }}>
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
-              <button
-                onClick={() => setActiveTheme('light')}
-                style={{
-                  padding: '8px 20px',
-                  borderRadius: '8px',
-                  border: activeTheme === 'light' ? '2px solid #667eea' : '1px solid #e2e8f0',
-                  backgroundColor: activeTheme === 'light' ? '#eef2ff' : 'white',
-                  color: activeTheme === 'light' ? '#667eea' : '#475569',
-                  cursor: 'pointer'
-                }}
-              >
-                Light Mode
-              </button>
-              <button
-                onClick={() => setActiveTheme('dark')}
-                style={{
-                  padding: '8px 20px',
-                  borderRadius: '8px',
-                  border: activeTheme === 'dark' ? '2px solid #667eea' : '1px solid #e2e8f0',
-                  backgroundColor: activeTheme === 'dark' ? '#eef2ff' : 'white',
-                  color: activeTheme === 'dark' ? '#667eea' : '#475569',
-                  cursor: 'pointer'
-                }}
-              >
-                Dark Mode
-              </button>
-            </div>
-            
-            <div style={{
-              backgroundColor: currentTheme.colors.background,
-              color: currentTheme.colors.text,
-              borderRadius: '12px',
-              padding: '24px',
-              border: `1px solid ${currentTheme.colors.border}`,
-              transition: 'all 0.3s'
-            }}>
-              <h3 style={{ color: currentTheme.colors.primary, marginBottom: '12px' }}>
-                Theme Preview
-              </h3>
-              <p>This card uses CSS variables for colors and spacing</p>
-              <button style={{
-                backgroundColor: currentTheme.colors.primary,
-                color: 'white',
-                padding: `${currentTheme.spacing.sm} ${currentTheme.spacing.lg}`,
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                marginTop: '12px'
-              }}>
-                Themed Button
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-      
-      <h2>Recommended Token Structure</h2>
-      <CodeBlock language="javascript" code={`// tokens/index.js
-import { createTokens } from 'chaincss';
-
-export const tokens = createTokens({
-  colors: {
-    primary: '#3b82f6',
-    secondary: '#6b7280',
-    accent: '#8b5cf6',
-    background: '#ffffff',
-    surface: '#f8fafc',
-    text: {
-      primary: '#1e293b',
-      secondary: '#64748b',
-      disabled: '#94a3b8'
-    },
-    border: '#e2e8f0'
-  },
-  
-  spacing: {
-    0: '0',
-    1: '4px',
-    2: '8px',
-    3: '12px',
-    4: '16px',
-    5: '24px',
-    6: '32px',
-    8: '48px',
-    10: '64px',
-    12: '96px'
-  },
-  
-  typography: {
-    fontFamily: {
-      sans: 'system-ui, -apple-system, sans-serif',
-      mono: 'monospace'
-    },
-    fontSize: {
-      xs: '0.75rem',
-      sm: '0.875rem',
-      base: '1rem',
-      lg: '1.125rem',
-      xl: '1.25rem',
-      '2xl': '1.5rem',
-      '3xl': '1.875rem',
-      '4xl': '2.25rem'
-    },
-    fontWeight: {
-      normal: '400',
-      medium: '500',
-      semibold: '600',
-      bold: '700'
-    }
-  },
-  
-  borderRadius: {
-    none: '0',
-    sm: '0.125rem',
-    base: '0.25rem',
-    md: '0.375rem',
-    lg: '0.5rem',
-    xl: '0.75rem',
-    '2xl': '1rem',
-    full: '9999px'
-  },
-  
-  shadows: {
-    sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-    base: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
-    md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-    lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-    xl: '0 20px 25px -5px rgb(0 0 0 / 0.1)'
-  }
-});`} />
-      
-      <div className="note">
-        <strong>Best Practices</strong>
-        <ul style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
-          <li>Use semantic names (<code className="inline-code">colors.primary</code>) not literal names (<code className="inline-code">colors.blue</code>)</li>
-          <li>Create a spacing scale with consistent increments</li>
-          <li>Define typography with a modular scale</li>
-          <li>Export tokens to CSS variables for runtime theming</li>
-          <li>Keep tokens in a single source of truth file</li>
-        </ul>
+      <div className={note}>
+        <strong>Tokens resolve at build time.</strong> No runtime token resolution — 
+        all token references are replaced with their values during compilation.
       </div>
     </>
   );
