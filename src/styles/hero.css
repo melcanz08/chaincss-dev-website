@@ -1,9 +1,3 @@
-.chain-hero {
-  padding:140px 24px 100px;
-  text-align:center;
-  max-width:900px;
-  margin:0 auto
-}
 .chain-hero-badge {
   display:inline-flex;
   align-items:center;
@@ -16,31 +10,16 @@
   font-weight:500;
   margin-bottom:32px
 }
-.chain-hero-title {
-  font-size:60px;
-  font-weight:800;
-  color:#f4f4f5;
-  line-height:1.1;
-  letter-spacing:-2px;
-  margin-bottom:24px
+.chain-hero-cta-group {
+  display:flex;
+  gap:16px;
+  justify-content:center
 }
 .chain-hero-gradient {
   background:linear-gradient(135deg, #818cf8, #a78bfa, #f472b6);
   --webkit-background-clip:text;
   --webkit-text-fill-color:transparent;
   background-clip:text
-}
-.chain-hero-subtitle {
-  font-size:18px;
-  color:#a1a1aa;
-  line-height:1.7;
-  max-width:650px;
-  margin:0 auto 48px
-}
-.chain-hero-cta-group {
-  display:flex;
-  gap:16px;
-  justify-content:center
 }
 .chain-hero-primary-btn {
   background-color:#6366f1;
@@ -72,4 +51,25 @@
 .chain-hero-secondary-btn:hover {
   background-color:rgba(255, 255, 255, 0.08);
   border-color:rgba(255, 255, 255, 0.2)
+}
+.chain-hero {
+  padding:140px 24px 100px;
+  text-align:center;
+  max-width:900px;
+  margin:0 auto
+}
+.chain-hero-subtitle {
+  font-size:18px;
+  color:#a1a1aa;
+  line-height:1.7;
+  max-width:650px;
+  margin:0 auto 48px
+}
+.chain-hero-title {
+  font-size:60px;
+  font-weight:800;
+  color:#f4f4f5;
+  line-height:1.1;
+  letter-spacing:-2px;
+  margin-bottom:24px
 }
