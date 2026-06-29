@@ -1,13 +1,3 @@
-.chain-nav-logo {
-  font-size:20px;
-  font-weight:700;
-  color:#fff;
-  letter-spacing:-0.5px;
-  cursor:pointer
-}
-.chain-nav-logo-accent {
-  color:#6366f1
-}
 .chain-nav {
   position:fixed;
   top:0px;
@@ -17,6 +7,65 @@
   background-color:rgba(10, 10, 15, 0.8);
   backdrop-filter:blur(12px);
   border-bottom:1px solid rgba(255, 255, 255, 0.06)
+}
+.chain-nav-inner {
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:64px
+}
+@media (max-width:640px)  {
+
+  .chain-nav-inner {
+  padding:0 16px;
+  height:56px
+}
+}
+.chain-nav-logo {
+  font-size:20px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-0.5px;
+  cursor:pointer
+}
+@media (max-width:640px)  {
+
+  .chain-nav-logo {
+  font-size:17px
+}
+}
+.chain-nav-logo-accent {
+  color:#6366f1
+}
+.chain-nav-links {
+  display:flex;
+  gap:32px;
+  align-items:center
+}
+@media (max-width:640px)  {
+
+  .chain-nav-links {
+  gap:16px
+}
+}
+.chain-nav-link {
+  font-size:14px;
+  font-weight:500;
+  color:#a1a1aa;
+  cursor:pointer;
+  transition:color 0.15s ease
+}
+.chain-nav-link:hover {
+  color:#ffffff
+}
+@media (max-width:640px)  {
+
+  .chain-nav-link {
+  font-size:13px
+}
 }
 .chain-nav-cta {
   background-color:#6366f1;
@@ -32,27 +81,10 @@
 .chain-nav-cta:hover {
   background-color:#4f46e5
 }
-.chain-nav-inner {
-  max-width:1200px;
-  margin:0 auto;
-  padding:0 24px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  height:64px
+@media (max-width:640px)  {
+
+  .chain-nav-cta {
+  padding:6px 14px;
+  font-size:12px
 }
-.chain-nav-link {
-  font-size:14px;
-  font-weight:500;
-  color:#a1a1aa;
-  cursor:pointer;
-  transition:color 0.15s ease
-}
-.chain-nav-link:hover {
-  color:#ffffff
-}
-.chain-nav-links {
-  display:flex;
-  gap:32px;
-  align-items:center
 }

@@ -5,13 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/build-css.mjs && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "chaincss": "^2.8.9",
-    "highlight.js": "^11.11.1",
-    "lucide-react": "^0.577.0",
+    "chaincss": "^2.8.10",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.1"

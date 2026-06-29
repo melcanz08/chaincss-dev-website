@@ -5,6 +5,9 @@ export const heroSection = chain()
   .textAlign('center')
   .maxWidth(900)
   .margin('0 auto')
+  .media('(max-width: 640px)', (c) => c
+    .padding('100px 16px 60px')
+  )
   .$el('hero');
 
 export const heroBadge = chain()
@@ -18,6 +21,11 @@ export const heroBadge = chain()
   .fontSize(13)
   .fontWeight("500")
   .marginBottom(32)
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(12)
+    .padding('4px 12px')
+    .marginBottom(24)
+  )
   .$el('hero-badge');
 
 export const heroTitle = chain()
@@ -27,6 +35,11 @@ export const heroTitle = chain()
   .lineHeight("1.1")
   .letterSpacing('-2px')
   .marginBottom(24)
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(36)
+    .letterSpacing('-1px')
+    .marginBottom(16)
+  )
   .$el('hero-title');
 
 export const heroGradient = chain()
@@ -42,12 +55,22 @@ export const heroSubtitle = chain()
   .lineHeight("1.7")
   .maxWidth(650)
   .margin('0 auto 48px')
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(15)
+    .margin('0 auto 32px')
+    .padding('0 8px')
+  )
   .$el('hero-subtitle');
 
 export const heroCtaGroup = chain()
   .display('flex')
   .gap(16)
   .justifyContent('center')
+  .media('(max-width: 640px)', (c) => c
+    .flexDirection('column')
+    .alignItems('center')
+    .gap(12)
+  )
   .$el('hero-cta-group');
 
 export const heroPrimaryBtn = chain()
@@ -65,6 +88,12 @@ export const heroPrimaryBtn = chain()
     .transform('translateY(-1px)')
     .shadow('0 4px 20px rgba(99, 102, 241, 0.3)')
   .end()
+  .media('(max-width: 640px)', (c) => c
+    .width('100%')
+    .maxWidth(300)
+    .padding('14px 24px')
+    .fontSize(15)
+  )
   .$el('hero-primary-btn');
 
 export const heroSecondaryBtn = chain()
@@ -81,4 +110,10 @@ export const heroSecondaryBtn = chain()
     .bg('rgba(255, 255, 255, 0.08)')
     .borderColor('rgba(255, 255, 255, 0.2)')
   .end()
+  .media('(max-width: 640px)', (c) => c
+    .width('100%')
+    .maxWidth(300)
+    .padding('14px 24px')
+    .fontSize(15)
+  )
   .$el('hero-secondary-btn');

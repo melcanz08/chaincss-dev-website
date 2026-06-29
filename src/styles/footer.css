@@ -3,14 +3,14 @@
   padding:40px 24px;
   text-align:center
 }
+.chain-footer-text {
+  font-size:14px;
+  color:#52525b
+}
 .chain-footer-link {
   color:#71717a;
   transition:color 0.15s ease
 }
 .chain-footer-link:hover {
   color:#a5b4fc
-}
-.chain-footer-text {
-  font-size:14px;
-  color:#52525b
 }

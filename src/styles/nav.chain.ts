@@ -19,6 +19,10 @@ export const navInner = chain()
   .alignItems('center')
   .justifyContent('space-between')
   .height(64)
+  .media('(max-width: 640px)', (c) => c
+    .padding('0 16px')
+    .height(56)
+  )
   .$el('nav-inner');
 
 export const logo = chain()
@@ -27,6 +31,9 @@ export const logo = chain()
   .color('#ffffff')
   .letterSpacing('-0.5px')
   .cursor('pointer')
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(17)
+  )
   .$el('nav-logo');
 
 export const logoAccent = chain()
@@ -37,6 +44,9 @@ export const navLinks = chain()
   .display('flex')
   .gap(32)
   .alignItems('center')
+  .media('(max-width: 640px)', (c) => c
+    .gap(16)
+  )
   .$el('nav-links');
 
 export const navLink = chain()
@@ -48,6 +58,9 @@ export const navLink = chain()
   .hover()
     .color('#ffffff')
   .end()
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(13)
+  )
   .$el('nav-link');
 
 export const navCta = chain()
@@ -63,4 +76,8 @@ export const navCta = chain()
   .hover()
     .bg('#4f46e5')
   .end()
+  .media('(max-width: 640px)', (c) => c
+    .padding('6px 14px')
+    .fontSize(12)
+  )
   .$el('nav-cta');

@@ -4,6 +4,9 @@ export const pgContainer = chain()
   .padding('100px 24px 60px')
   .maxWidth(1400)
   .margin('0 auto')
+  .media('(max-width: 768px)', (c) => c
+    .padding('80px 16px 40px')
+  )
   .$el('pg-container');
 
 export const pgHeader = chain()
@@ -16,6 +19,9 @@ export const pgTitle = chain()
   .fontWeight("700")
   .color('#ffffff')
   .marginBottom(12)
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(28)
+  )
   .$el('pg-title');
 
 export const pgDesc = chain()
@@ -27,6 +33,10 @@ export const pgGrid = chain()
   .display('grid')
   .gridTemplateColumns('1fr 1fr 1fr')
   .gap(24)
+  .media('(max-width: 1024px)', (c) => c
+    .gridTemplateColumns('1fr')
+    .gap(16)
+  )
   .$el('pg-grid');
 
 export const pgPanel = chain()
@@ -67,6 +77,11 @@ export const pgEditor = chain()
   .bg('transparent')
   .width('100%')
   .resize('none')
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(12)
+    .minHeight(200)
+    .padding(14)
+  )
   .$el('pg-editor');
 
 export const pgOutput = chain()
@@ -79,16 +94,24 @@ export const pgOutput = chain()
   .whiteSpace('pre-wrap')
   .overflow('auto')
   .flex(1)
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(12)
+    .minHeight(200)
+    .padding(14)
+  )
   .$el('pg-output');
 
 export const pgPreview = chain()
-  .display("flex")
-  .alignItems("center")
-  .justifyContent("center")
   .minHeight(350)
   .border('none')
   .width('100%')
   .bg('transparent')
+  .display('flex')
+  .alignItems('center')
+  .justifyContent('center')
+  .media('(max-width: 640px)', (c) => c
+    .minHeight(200)
+  )
   .$el('pg-preview');
 
 export const pgRunBtn = chain()

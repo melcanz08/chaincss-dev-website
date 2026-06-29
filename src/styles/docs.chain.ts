@@ -6,6 +6,11 @@ export const docsLayout = chain()
   .margin('0 auto')
   .padding('80px 24px 40px')
   .gap(48)
+  .media('(max-width: 768px)', (c) => c
+    .flexDirection('column')
+    .padding('80px 16px 40px')
+    .gap(24)
+  )
   .$el('docs-layout');
 
 export const sidebar = chain()
@@ -17,6 +22,16 @@ export const sidebar = chain()
   .maxHeight('calc(100vh - 120px)')
   .overflow('auto')
   .paddingRight(16)
+  .media('(max-width: 768px)', (c) => c
+    .width('100%')
+    .position('static')
+    .maxHeight('none')
+    .overflow('visible')
+    .paddingRight(0)
+    .paddingBottom(16)
+    .borderBottom('1px solid rgba(255,255,255,0.06)')
+    .marginBottom(16)
+  )
   .$el('docs-sidebar');
 
 export const sidebarTitle = chain()
@@ -50,11 +65,13 @@ export const sidebarLinkActive = chain()
   .fontWeight("500")
   .$el('sidebar-link-active');
 
-// Content area — just flex-grow, NOT display:flex
 export const content = chain()
   .flexGrow(1)
   .minWidth(0)
   .maxWidth('calc(100% - 308px)')
+  .media('(max-width: 768px)', (c) => c
+    .maxWidth('100%')
+  )
   .$el('docs-content');
 
 export const contentTitle = chain()
@@ -63,6 +80,9 @@ export const contentTitle = chain()
   .color('#f4f4f5')
   .marginBottom(8)
   .letterSpacing('-1px')
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(28)
+  )
   .$el('content-title');
 
 export const contentDesc = chain()
@@ -80,6 +100,10 @@ export const sectionHeading = chain()
   .marginBottom(16)
   .paddingBottom(8)
   .borderBottom('1px solid rgba(255,255,255,0.06)')
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(18)
+    .marginTop(32)
+  )
   .$el('section-heading');
 
 export const paragraph = chain()
@@ -102,6 +126,10 @@ export const codeBlock = chain()
   .color('#e4e4e7')
   .whiteSpace('pre-wrap')
   .wordBreak('break-word')
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(13)
+    .padding('16px')
+  )
   .$el('code-block');
 
 export const inlineCode = chain()
@@ -132,11 +160,13 @@ export const tableWrapper = chain()
   .border('1px solid rgba(255,255,255,0.06)')
   .$el('docs-table-wrap');
 
-// Inline styles for docs pages (not from chaincss)
 export const docTable = chain()
   .width('100%')
   .borderCollapse('collapse')
   .fontSize(14)
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(12)
+  )
   .$el('doc-table');
 
 export const docTh = chain()
@@ -149,6 +179,10 @@ export const docTh = chain()
   .letterSpacing('0.5px')
   .borderBottom('1px solid rgba(255,255,255,0.08)')
   .bg('rgba(255,255,255,0.02)')
+  .media('(max-width: 640px)', (c) => c
+    .padding('8px 10px')
+    .fontSize(11)
+  )
   .$el('doc-th');
 
 export const docTd = chain()
@@ -156,4 +190,8 @@ export const docTd = chain()
   .color('#d4d4d8')
   .borderBottom('1px solid rgba(255,255,255,0.04)')
   .fontSize(14)
+  .media('(max-width: 640px)', (c) => c
+    .padding('8px 10px')
+    .fontSize(12)
+  )
   .$el('doc-td');

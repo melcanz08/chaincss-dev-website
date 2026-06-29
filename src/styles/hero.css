@@ -1,3 +1,15 @@
+.chain-hero {
+  padding:140px 24px 100px;
+  text-align:center;
+  max-width:900px;
+  margin:0 auto
+}
+@media (max-width:640px)  {
+
+  .chain-hero {
+  padding:100px 16px 60px
+}
+}
 .chain-hero-badge {
   display:inline-flex;
   align-items:center;
@@ -10,16 +22,63 @@
   font-weight:500;
   margin-bottom:32px
 }
-.chain-hero-cta-group {
-  display:flex;
-  gap:16px;
-  justify-content:center
+@media (max-width:640px)  {
+
+  .chain-hero-badge {
+  font-size:12px;
+  padding:4px 12px;
+  margin-bottom:24px
+}
+}
+.chain-hero-title {
+  font-size:60px;
+  font-weight:800;
+  color:#f4f4f5;
+  line-height:1.1;
+  letter-spacing:-2px;
+  margin-bottom:24px
+}
+@media (max-width:640px)  {
+
+  .chain-hero-title {
+  font-size:36px;
+  letter-spacing:-1px;
+  margin-bottom:16px
+}
 }
 .chain-hero-gradient {
   background:linear-gradient(135deg, #818cf8, #a78bfa, #f472b6);
   --webkit-background-clip:text;
   --webkit-text-fill-color:transparent;
   background-clip:text
+}
+.chain-hero-subtitle {
+  font-size:18px;
+  color:#a1a1aa;
+  line-height:1.7;
+  max-width:650px;
+  margin:0 auto 48px
+}
+@media (max-width:640px)  {
+
+  .chain-hero-subtitle {
+  font-size:15px;
+  margin:0 auto 32px;
+  padding:0 8px
+}
+}
+.chain-hero-cta-group {
+  display:flex;
+  gap:16px;
+  justify-content:center
+}
+@media (max-width:640px)  {
+
+  .chain-hero-cta-group {
+  flex-direction:column;
+  align-items:center;
+  gap:12px
+}
 }
 .chain-hero-primary-btn {
   background-color:#6366f1;
@@ -37,6 +96,15 @@
   transform:translateY(-1px);
   box-shadow:0 4px 20px rgba(99, 102, 241, 0.3)
 }
+@media (max-width:640px)  {
+
+  .chain-hero-primary-btn {
+  width:100%;
+  max-width:300px;
+  padding:14px 24px;
+  font-size:15px
+}
+}
 .chain-hero-secondary-btn {
   background-color:rgba(255, 255, 255, 0.04);
   color:#d4d4d8;
@@ -52,24 +120,12 @@
   background-color:rgba(255, 255, 255, 0.08);
   border-color:rgba(255, 255, 255, 0.2)
 }
-.chain-hero {
-  padding:140px 24px 100px;
-  text-align:center;
-  max-width:900px;
-  margin:0 auto
+@media (max-width:640px)  {
+
+  .chain-hero-secondary-btn {
+  width:100%;
+  max-width:300px;
+  padding:14px 24px;
+  font-size:15px
 }
-.chain-hero-subtitle {
-  font-size:18px;
-  color:#a1a1aa;
-  line-height:1.7;
-  max-width:650px;
-  margin:0 auto 48px
-}
-.chain-hero-title {
-  font-size:60px;
-  font-weight:800;
-  color:#f4f4f5;
-  line-height:1.1;
-  letter-spacing:-2px;
-  margin-bottom:24px
 }

@@ -4,6 +4,9 @@ export const section = chain()
   .padding('100px 24px')
   .maxWidth(1200)
   .margin('0 auto')
+  .media('(max-width: 640px)', (c) => c
+    .padding('60px 16px')
+  )
   .$el('features-section');
 
 export const sectionLabel = chain()
@@ -23,6 +26,9 @@ export const sectionTitle = chain()
   .textAlign('center')
   .marginBottom(16)
   .letterSpacing('-0.5px')
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(28)
+  )
   .$el('section-title');
 
 export const sectionSubtitle = chain()
@@ -32,12 +38,21 @@ export const sectionSubtitle = chain()
   .maxWidth(600)
   .margin('0 auto 64px')
   .lineHeight("1.7")
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(15)
+    .margin('0 auto 40px')
+    .padding('0 8px')
+  )
   .$el('section-subtitle');
 
 export const grid = chain()
   .display('grid')
   .gridTemplateColumns('repeat(auto-fit, minmax(340px, 1fr))')
   .gap(24)
+  .media('(max-width: 640px)', (c) => c
+    .gridTemplateColumns('1fr')
+    .gap(16)
+  )
   .$el('feature-grid');
 
 export const card = chain()
@@ -50,6 +65,9 @@ export const card = chain()
     .borderColor('rgba(99, 102, 241, 0.2)')
     .bg('rgba(99, 102, 241, 0.04)')
   .end()
+  .media('(max-width: 640px)', (c) => c
+    .padding('24px')
+  )
   .$el('feature-card');
 
 export const cardIcon = chain()
