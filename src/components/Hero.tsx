@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { VERSION } from 'chaincss';
 import {
   heroSection, heroBadge, heroTitle, heroGradient,
   heroSubtitle, heroCtaGroup, heroPrimaryBtn, heroSecondaryBtn
@@ -9,7 +10,7 @@ export default function Hero() {
 
   return (
     <section className={heroSection}>
-      <div className={heroBadge}>v2.8.8 — 5-Stage Compiler Pipeline</div>
+      <div className={heroBadge}>v{VERSION} — 5-Stage Compiler Pipeline</div>
       <h1 className={heroTitle}>
         Write <span className={heroGradient}>CSS-in-JS</span>.<br />
         Ship zero runtime.
