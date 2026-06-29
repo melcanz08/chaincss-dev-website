@@ -1,7 +1,8 @@
 import { chain } from 'chaincss';
 
 export const section = chain()
-  .padding('100px 24px')
+  .padding("100px 24px")
+  .overflow("hidden")
   .maxWidth(1200)
   .margin('0 auto')
   .media('(max-width: 640px)', (c) => c
@@ -41,14 +42,14 @@ export const sectionSubtitle = chain()
   .media('(max-width: 640px)', (c) => c
     .fontSize(15)
     .margin('0 auto 40px')
-    .padding('0 8px')
   )
   .$el('section-subtitle');
 
 export const grid = chain()
   .display('grid')
-  .gridTemplateColumns('repeat(auto-fit, minmax(340px, 1fr))')
+  .gridTemplateColumns('repeat(auto-fit, minmax(280px, 1fr))')
   .gap(24)
+  .width('100%')
   .media('(max-width: 640px)', (c) => c
     .gridTemplateColumns('1fr')
     .gap(16)
@@ -59,6 +60,7 @@ export const card = chain()
   .bg('rgba(255, 255, 255, 0.02)')
   .border('1px solid rgba(255, 255, 255, 0.05)')
   .rounded(16)
+  .minWidth(0)
   .padding('32px')
   .transition('all 0.2s ease')
   .hover()
@@ -66,13 +68,17 @@ export const card = chain()
     .bg('rgba(99, 102, 241, 0.04)')
   .end()
   .media('(max-width: 640px)', (c) => c
-    .padding('24px')
+    .padding('16px')
   )
   .$el('feature-card');
 
 export const cardIcon = chain()
   .fontSize(36)
   .marginBottom(20)
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(28)
+    .marginBottom(12)
+  )
   .$el('feature-card-icon');
 
 export const cardTitle = chain()
@@ -80,12 +86,18 @@ export const cardTitle = chain()
   .fontWeight("600")
   .color('#e4e4e7')
   .marginBottom(12)
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(16)
+  )
   .$el('feature-card-title');
 
 export const cardText = chain()
   .fontSize(14)
   .color('#a1a1aa')
   .lineHeight("1.7")
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(13)
+  )
   .$el('feature-card-text');
 
 export const cardCode = chain()
@@ -96,6 +108,12 @@ export const cardCode = chain()
   .fontFamily("'JetBrains Mono', 'Fira Code', monospace")
   .color('#a5b4fc')
   .marginTop(16)
-  .overflow('auto')
+  .overflow("auto")
+  .whiteSpace("pre-wrap")
   .lineHeight("1.6")
+  .wordBreak('break-all')
+  .media('(max-width: 640px)', (c) => c
+    .fontSize(11)
+    .padding('10px')
+  )
   .$el('feature-card-code');

@@ -15,6 +15,7 @@ export const th = chain()
   .textTransform('uppercase')
   .letterSpacing('0.5px')
   .borderBottom('1px solid rgba(255,255,255,0.06)')
+  .whiteSpace('nowrap')
   .$el('comparison-th');
 
 export const td = chain()
@@ -37,7 +38,11 @@ export const partial = chain()
   .$el('comparison-partial');
 
 export const wrapper = chain()
-  .overflow('auto')
+  .overflow("auto")
+  .maxWidth("100%")
   .rounded(12)
   .border('1px solid rgba(255,255,255,0.06)')
+  .media('(max-width: 768px)', (c) => c
+    .maxWidth('calc(100vw - 48px)')
+  )
   .$el('comparison-wrapper');

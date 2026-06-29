@@ -41,6 +41,7 @@
   color:#6366f1
 }
 .chain-nav-links {
+  overflow:hidden;
   display:flex;
   gap:32px;
   align-items:center

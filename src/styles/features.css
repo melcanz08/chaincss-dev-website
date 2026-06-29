@@ -1,5 +1,6 @@
 .chain-features-section {
   padding:100px 24px;
+  overflow:hidden;
   max-width:1200px;
   margin:0 auto
 }
@@ -44,14 +45,14 @@
 
   .chain-section-subtitle {
   font-size:15px;
-  margin:0 auto 40px;
-  padding:0 8px
+  margin:0 auto 40px
 }
 }
 .chain-feature-grid {
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));
-  gap:24px
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:24px;
+  width:100%
 }
 @media (max-width:640px)  {
 
@@ -64,6 +65,7 @@
   background-color:rgba(255, 255, 255, 0.02);
   border:1px solid rgba(255, 255, 255, 0.05);
   border-radius:16px;
+  min-width:0px;
   padding:32px;
   transition:all 0.2s ease
 }
@@ -74,12 +76,19 @@
 @media (max-width:640px)  {
 
   .chain-feature-card {
-  padding:24px
+  padding:16px
 }
 }
 .chain-feature-card-icon {
   font-size:36px;
   margin-bottom:20px
+}
+@media (max-width:640px)  {
+
+  .chain-feature-card-icon {
+  font-size:28px;
+  margin-bottom:12px
+}
 }
 .chain-feature-card-title {
   font-size:18px;
@@ -87,10 +96,22 @@
   color:#e4e4e7;
   margin-bottom:12px
 }
+@media (max-width:640px)  {
+
+  .chain-feature-card-title {
+  font-size:16px
+}
+}
 .chain-feature-card-text {
   font-size:14px;
   color:#a1a1aa;
   line-height:1.7
+}
+@media (max-width:640px)  {
+
+  .chain-feature-card-text {
+  font-size:13px
+}
 }
 .chain-feature-card-code {
   background-color:rgba(0, 0, 0, 0.3);
@@ -101,5 +122,14 @@
   color:#a5b4fc;
   margin-top:16px;
   overflow:auto;
-  line-height:1.6
+  white-space:pre-wrap;
+  line-height:1.6;
+  word-break:break-all
+}
+@media (max-width:640px)  {
+
+  .chain-feature-card-code {
+  font-size:11px;
+  padding:10px
+}
 }

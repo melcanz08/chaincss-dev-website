@@ -52,18 +52,3 @@ img, video, canvas {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
 }
-
-/* Fix mobile overflow */
-body {
-  overflow-x: hidden;
-}
-
-.chain-comparison-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.chain-feature-card-code {
-  overflow-x: auto;
-  max-width: 100%;
-}

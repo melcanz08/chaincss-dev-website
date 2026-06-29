@@ -41,6 +41,7 @@ export const logoAccent = chain()
   .$el('nav-logo-accent');
 
 export const navLinks = chain()
+  .overflow("hidden")
   .display('flex')
   .gap(32)
   .alignItems('center')
