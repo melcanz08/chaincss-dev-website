@@ -6,7 +6,8 @@ export default function Footer() {
   const [downloads, setDownloads] = useState<string>('...');
 
   useEffect(() => {
-    fetch('https://api.npmjs.org/downloads/point/last-month/chaincss')
+    // Get total downloads from npm (all-time)
+    fetch('https://api.npmjs.org/downloads/point/2018-01-01:3000-01-01/chaincss')
       .then(res => res.json())
       .then(data => {
         if (data.downloads) {
@@ -19,7 +20,7 @@ export default function Footer() {
   return (
     <footer className={footer}>
       <p className={footerText}>
-        ChainCSS v{VERSION} · {downloads} downloads/month ·{' '}
+        ChainCSS v{VERSION} · {downloads} total downloads ·{' '}
         <a href="https://github.com/melcanz08/chaincss" className={footerLink} target="_blank" rel="noopener">
           GitHub
         </a>
