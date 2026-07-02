@@ -6,7 +6,7 @@ export const nav = chain()
   .left(0)
   .right(0)
   .zIndex("100")
-  .bg('rgba(10, 10, 15, 0.8)')
+  .bgc('rgba(10, 10, 15, 0.8)')
   .backdropFilter('blur(12px)')
   .borderBottom('1px solid rgba(255, 255, 255, 0.06)')
   .$el('nav');
@@ -65,7 +65,7 @@ export const navLink = chain()
   .$el('nav-link');
 
 export const navCta = chain()
-  .bg('#6366f1')
+  .bgc('#6366f1')
   .color('#ffffff')
   .padding('8px 20px')
   .rounded(8)

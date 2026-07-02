@@ -1,3 +1,88 @@
+.chain-feature-card {
+  background:rgba(255, 255, 255, .02);
+  border:1px solid rgba(255, 255, 255, .05);
+  border-radius:16px;
+  min-width:0;
+  padding:32px;
+  transition:all .2s ease
+}
+.chain-feature-card:hover {
+  border-color:rgba(99, 102, 241, 0.2);
+  background:rgba(99, 102, 241, 0.04)
+}
+@media (max-width:640px)  {
+
+  .chain-feature-card {
+  padding:16px
+}
+}
+.chain-feature-card-code {
+  background:rgba(0, 0, 0, .3);
+  border-radius:8px;
+  padding:14px 16px;
+  font-size:13px;
+  font-family:'JetBrains Mono', 'Fira Code', monospace;
+  color:#a5b4fc;
+  margin-top:16px;
+  overflow:auto;
+  white-space:pre-wrap;
+  line-height:1.6;
+  word-break:break-all
+}
+@media (max-width:640px)  {
+
+  .chain-feature-card-code {
+  font-size:11px;
+  padding:10px
+}
+}
+.chain-feature-card-icon {
+  font-size:36px;
+  margin-bottom:20px
+}
+@media (max-width:640px)  {
+
+  .chain-feature-card-icon {
+  font-size:28px;
+  margin-bottom:12px
+}
+}
+.chain-feature-card-text {
+  font-size:14px;
+  color:#a1a1aa;
+  line-height:1.7
+}
+@media (max-width:640px)  {
+
+  .chain-feature-card-text {
+  font-size:13px
+}
+}
+.chain-feature-card-title {
+  font-size:18px;
+  font-weight:600;
+  color:#e4e4e7;
+  margin-bottom:12px
+}
+@media (max-width:640px)  {
+
+  .chain-feature-card-title {
+  font-size:16px
+}
+}
+.chain-feature-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:24px;
+  width:100%
+}
+@media (max-width:640px)  {
+
+  .chain-feature-grid {
+  grid-template-columns:1fr;
+  gap:16px
+}
+}
 .chain-features-section {
   padding:100px 24px;
   overflow:hidden;
@@ -19,20 +104,6 @@
   text-align:center;
   margin-bottom:16px
 }
-.chain-section-title {
-  font-size:36px;
-  font-weight:700;
-  color:#f4f4f5;
-  text-align:center;
-  margin-bottom:16px;
-  letter-spacing:-0.5px
-}
-@media (max-width:640px)  {
-
-  .chain-section-title {
-  font-size:28px
-}
-}
 .chain-section-subtitle {
   font-size:17px;
   color:#a1a1aa;
@@ -48,88 +119,17 @@
   margin:0 auto 40px
 }
 }
-.chain-feature-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-  gap:24px;
-  width:100%
-}
-@media (max-width:640px)  {
-
-  .chain-feature-grid {
-  grid-template-columns:1fr;
-  gap:16px
-}
-}
-.chain-feature-card {
-  background-color:rgba(255, 255, 255, 0.02);
-  border:1px solid rgba(255, 255, 255, 0.05);
-  border-radius:16px;
-  min-width:0px;
-  padding:32px;
-  transition:all 0.2s ease
-}
-.chain-feature-card:hover {
-  border-color:rgba(99, 102, 241, 0.2);
-  background-color:rgba(99, 102, 241, 0.04)
-}
-@media (max-width:640px)  {
-
-  .chain-feature-card {
-  padding:16px
-}
-}
-.chain-feature-card-icon {
+.chain-section-title {
   font-size:36px;
-  margin-bottom:20px
+  font-weight:700;
+  color:#f4f4f5;
+  text-align:center;
+  margin-bottom:16px;
+  letter-spacing:-.5px
 }
 @media (max-width:640px)  {
 
-  .chain-feature-card-icon {
-  font-size:28px;
-  margin-bottom:12px
-}
-}
-.chain-feature-card-title {
-  font-size:18px;
-  font-weight:600;
-  color:#e4e4e7;
-  margin-bottom:12px
-}
-@media (max-width:640px)  {
-
-  .chain-feature-card-title {
-  font-size:16px
-}
-}
-.chain-feature-card-text {
-  font-size:14px;
-  color:#a1a1aa;
-  line-height:1.7
-}
-@media (max-width:640px)  {
-
-  .chain-feature-card-text {
-  font-size:13px
-}
-}
-.chain-feature-card-code {
-  background-color:rgba(0, 0, 0, 0.3);
-  border-radius:8px;
-  padding:14px 16px;
-  font-size:13px;
-  font-family:'JetBrains Mono', 'Fira Code', monospace;
-  color:#a5b4fc;
-  margin-top:16px;
-  overflow:auto;
-  white-space:pre-wrap;
-  line-height:1.6;
-  word-break:break-all
-}
-@media (max-width:640px)  {
-
-  .chain-feature-card-code {
-  font-size:11px;
-  padding:10px
+  .chain-section-title {
+  font-size:28px
 }
 }

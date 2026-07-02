@@ -9,8 +9,8 @@ const macros = [
   { name: 'pill()', desc: 'Fully rounded pill shape with inline-flex centering' },
   { name: 'circle(size)', desc: 'Perfect circle with flex centering' },
   { name: 'glass(blur?)', desc: 'Backdrop blur glassmorphism effect. Default blur: 16px' },
-  { name: 'hide()', desc: 'visibility: hidden' },
-  { name: 'show()', desc: 'visibility: visible' },
+  { name: 'hide()', desc: 'opacity: 0 + visibility: hidden + pointer-events: none' },
+  { name: 'show()', desc: 'opacity: 1 + visibility: visible + pointer-events: auto' },
   { name: 'truncate()', desc: 'Single-line text truncation with ellipsis' },
   { name: 'absolute(coords?)', desc: 'position: absolute with optional top/right/bottom/left' },
   { name: 'size(value)', desc: 'Sets both width and height' },
@@ -59,6 +59,28 @@ export default function Macros() {
           </tbody>
         </table>
       </div>
+
+      <h2 className={sectionHeading}>Pseudo-Classes & Pseudo-Elements</h2>
+      <p className={paragraph}>
+        ChainCSS supports all common pseudo-classes and pseudo-elements through chainable methods:
+      </p>
+      <pre className={codeBlock}>{`chain()
+  .hover()              // :hover
+    .bg('darkred')
+  .end()
+  .focus()              // :focus
+    .outline('2px solid blue')
+  .end()
+  .active()             // :active
+    .transform('scale(0.98)')
+  .end()
+  .checked()            // :checked
+    .bg('#6366f1')
+  .end()
+  .placeholder()        // ::placeholder
+    .color('#a1a1aa')
+  .end()
+  .$el('component')`}</pre>
 
       <h2 className={sectionHeading}>Unit Auto-Prefixing</h2>
       <p className={paragraph}>
