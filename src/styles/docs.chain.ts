@@ -195,3 +195,88 @@ export const docTd = chain()
     .fontSize(12)
   )
   .$el('doc-td');
+
+  export const auditTextarea = chain()
+  .width('100%')
+  .minHeight(300)
+  .bg('rgba(0,0,0,0.4)')
+  .rounded(12)
+  .padding('20px 24px')
+  .fontFamily("'JetBrains Mono', 'Fira Code', monospace")
+  .fontSize(14)
+  .lineHeight("1.7")
+  .color('#e4e4e7')
+  .border('1px solid rgba(255,255,255,0.06)')
+  .outline('none')
+  .resize('vertical')
+  .focus()
+    .borderColor('#6366f1')
+  .end()
+  .$el('audit-textarea');
+
+export const auditBtn = chain()
+  .bg('#6366f1')
+  .color('#ffffff')
+  .padding('14px 32px')
+  .rounded(10)
+  .fontSize(15)
+  .fontWeight("600")
+  .cursor('pointer')
+  .border('none')
+  .transition('all 0.15s ease')
+  .hover()
+    .bg('#4f46e5')
+  .end()
+  .$el('audit-btn');
+
+export const auditResultCard = chain()
+  .bg('rgba(0,0,0,0.3)')
+  .rounded(12)
+  .padding(24)
+  .border('1px solid rgba(255,255,255,0.06)')
+  .marginBottom(16)
+  .$el('audit-result-card');
+
+export const auditStatValue = chain()
+  .fontSize(32)
+  .fontWeight("700")
+  .lineHeight("1")
+  .$el('audit-stat-value');
+
+export const auditStatLabel = chain()
+  .fontSize(12)
+  .color('#71717a')
+  .textTransform('uppercase')
+  .letterSpacing('0.5px')
+  .marginTop(8)
+  .$el('audit-stat-label');
+
+export const auditIssueItem = chain()
+  .padding('14px 18px')
+  .rounded(8)
+  .marginBottom(8)
+  .borderLeft('3px solid')
+  .bg('rgba(255,255,255,0.02)')
+  .$el('audit-issue-item');
+
+export const auditIssueMsg = chain()
+  .fontSize(14)
+  .fontWeight("500")
+  .color('#e4e4e7')
+  .marginBottom(4)
+  .$el('audit-issue-msg');
+
+export const auditIssueSuggestion = chain()
+  .fontSize(13)
+  .color('#71717a')
+  .$el('audit-issue-suggestion');
+
+export const auditGrid = chain()
+  .display('grid')
+  .gridTemplateColumns('repeat(4, 1fr)')
+  .gap(16)
+  .marginBottom(32)
+  .media('(max-width: 640px)', (c) => c
+    .gridTemplateColumns('repeat(2, 1fr)')
+  )
+  .$el('audit-grid');

@@ -1,3 +1,82 @@
+.chain-audit-btn {
+  background:#6366f1;
+  color:#fff;
+  padding:14px 32px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  border:none;
+  transition:all .15s ease
+}
+.chain-audit-btn:hover {
+  background:#4f46e5
+}
+.chain-audit-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:16px;
+  margin-bottom:32px
+}
+@media (max-width:640px)  {
+
+  .chain-audit-grid {
+  grid-template-columns:repeat(2, 1fr)
+}
+}
+.chain-audit-issue-item {
+  padding:14px 18px;
+  border-radius:8px;
+  margin-bottom:8px;
+  border-left:3px solid;
+  background:rgba(255,255,255,.02)
+}
+.chain-audit-issue-msg {
+  font-size:14px;
+  font-weight:500;
+  color:#e4e4e7;
+  margin-bottom:4px
+}
+.chain-audit-issue-suggestion {
+  font-size:13px;
+  color:#71717a
+}
+.chain-audit-result-card {
+  background:rgba(0,0,0,.3);
+  border-radius:12px;
+  padding:24px;
+  border:1px solid rgba(255,255,255,.06);
+  margin-bottom:16px
+}
+.chain-audit-stat-label {
+  font-size:12px;
+  color:#71717a;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  margin-top:8px
+}
+.chain-audit-stat-value {
+  font-size:32px;
+  font-weight:700;
+  line-height:1
+}
+.chain-audit-textarea {
+  width:100%;
+  min-height:300px;
+  background:rgba(0,0,0,.4);
+  border-radius:12px;
+  padding:20px 24px;
+  font-family:'JetBrains Mono', 'Fira Code', monospace;
+  font-size:14px;
+  line-height:1.7;
+  color:#e4e4e7;
+  border:1px solid rgba(255,255,255,.06);
+  outline:none;
+  resize:vertical
+}
+.chain-audit-textarea:focus {
+  border-color:#6366f1
+}
 .chain-code-block {
   background:rgba(0,0,0,.4);
   border-radius:12px;

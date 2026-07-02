@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 
 const Docs = lazy(() => import('../pages/Docs/Docs'));
 const Playground = lazy(() => import('../components/Playground'));
+const Audit = lazy(() => import('../pages/Audit'));
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           } />
           <Route path="/docs/*" element={<Docs />} />
           <Route path="/playground" element={<Playground />} />
+          <Route path="/audit" element={<Audit />} />
         </Routes>
       </Suspense>
       <Footer />

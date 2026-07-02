@@ -31,6 +31,12 @@ export default function Nav() {
           >
             Playground
           </span>
+          <span
+            className={navLink + (isActive('/audit') ? ' ' + navLinkActive : '')}
+            onClick={() => navigate('/audit')}
+          >
+            Audit
+          </span>
           <a href="https://github.com/melcanz08/chaincss" target="_blank" rel="noopener" className={navLink}>
             GitHub
           </a>
