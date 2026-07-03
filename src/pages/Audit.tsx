@@ -6,15 +6,70 @@ import {
   auditIssueMsg, auditIssueSuggestion, auditGrid,
 } from '../styles/docs.chain.ts';
 
+interface AuditIssue {
+  severity: string;
+  message: string;
+  suggestion?: string;
+  wcag?: string;
+}
+
 interface AuditResult {
   errors: number;
   warnings: number;
   infos: number;
-  issues: Array<{
-    severity: string;
-    message: string;
-    suggestion?: string;
-  }>;
+  issues: AuditIssue[];
+  passes: number;
+}
+
+function clientSideAudit(code: string): AuditResult {
+  const issues: AuditIssue[] = [];
+
+  if (code.includes('outline:') && code.includes('none') && !code.includes('focus-visible')) {
+    issues.push({
+      severity: 'warning',
+      message: 'outline: none without :focus-visible fallback',
+      suggestion: 'Add .focus().outline("2px solid #3b82f6").outlineOffset("2px").end()',
+    });
+  }
+
+  if ((code.includes('animation') || code.includes('transition')) && !code.includes('prefers-reduced-motion')) {
+    issues.push({
+      severity: 'warning',
+      message: 'Animations without prefers-reduced-motion support',
+      suggestion: 'Wrap in .media("(prefers-reduced-motion: no-preference)", ...)',
+    });
+  }
+
+  if (code.includes('100vh')) {
+    issues.push({
+      severity: 'warning',
+      message: '100vh can cause issues on mobile browsers',
+      suggestion: 'Use 100dvh instead for dynamic viewport height',
+    });
+  }
+
+  const fontSizeMatch = code.match(/fontSize\((\d+)\)/);
+  if (fontSizeMatch && parseInt(fontSizeMatch[1]) < 12) {
+    issues.push({
+      severity: 'warning',
+      message: `font-size: ${fontSizeMatch[1]}px is below WCAG minimum of 12px`,
+      suggestion: 'Use font-size: max(12px, currentValue) for accessibility',
+    });
+  }
+
+  if (code.includes('.hover()') && !code.includes('.focus()')) {
+    issues.push({
+      severity: 'info',
+      message: 'Hover styles without :focus-visible fallback',
+      suggestion: 'Add .focus() styles for keyboard accessibility',
+    });
+  }
+
+  const errors = issues.filter(i => i.severity === 'error').length;
+  const warnings = issues.filter(i => i.severity === 'warning').length;
+  const infos = issues.filter(i => i.severity === 'info').length;
+
+  return { errors, warnings, infos, issues, passes: issues.length === 0 ? 1 : 0 };
 }
 
 export default function Audit() {
@@ -32,6 +87,7 @@ export default function Audit() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AuditResult | null>(null);
   const [error, setError] = useState('');
+  const [apiAvailable, setApiAvailable] = useState<boolean | null>(null);
 
   const runAudit = async () => {
     setLoading(true);
@@ -39,89 +95,35 @@ export default function Audit() {
     setResult(null);
 
     try {
-      // Dynamically import browser-compatible APIs
-      const { compileToCSS, classifyValue } = await import('chaincss');
+      const response = await fetch('/api/audit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: cssInput }),
+      });
 
-      const issues: AuditResult['issues'] = [];
-      const code = cssInput;
+      const contentType = response.headers.get('content-type') || '';
 
-      // Basic static analysis
-      
-      // Check for common issues
-      if (code.includes('outline:') && code.includes('none') && !code.includes('focus-visible')) {
-        issues.push({
-          severity: 'warning',
-          message: 'outline: none without :focus-visible fallback',
-          suggestion: 'Add .focus().outline("2px solid #3b82f6").outlineOffset("2px").end()',
-        });
+      if (!response.ok || contentType.includes('text/html')) {
+        throw new Error('API_UNAVAILABLE');
       }
 
-      if (code.includes('animation') || code.includes('transition')) {
-        if (!code.includes('prefers-reduced-motion')) {
-          issues.push({
-            severity: 'warning',
-            message: 'Animations without prefers-reduced-motion support',
-            suggestion: 'Wrap in .media("(prefers-reduced-motion: no-preference)", ...)',
-          });
-        }
-      }
-
-      if (code.includes('100vh')) {
-        issues.push({
-          severity: 'warning',
-          message: '100vh can cause issues on mobile browsers',
-          suggestion: 'Use 100dvh instead for dynamic viewport height',
-        });
-      }
-
-      if (code.includes('fontSize') && code.match(/fontSize\((\d+)\)/)) {
-        const match = code.match(/fontSize\((\d+)\)/);
-        if (match && parseInt(match[1]) < 12) {
-          issues.push({
-            severity: 'warning',
-            message: `font-size: ${match[1]}px is below WCAG minimum of 12px`,
-            suggestion: 'Use font-size: max(12px, currentValue) for accessibility',
-          });
-        }
-      }
-
-      // Check for hover without focus
-      if (code.includes('.hover()') && !code.includes('.focus()')) {
-        issues.push({
-          severity: 'info',
-          message: 'Hover styles without :focus-visible fallback',
-          suggestion: 'Add .focus() styles for keyboard accessibility',
-        });
-      }
-
-      // Color contrast approximations
-      if (code.includes('#ffffff') && code.includes('bg(')) {
-        const bgMatch = code.match(/\.bg\('([^']+)'\)/);
-        if (bgMatch) {
-          const bg = bgMatch[1];
-          // Simple luminance check
-          if (bg === '#6366f1' || bg === '#4f46e5') {
-            issues.push({
-              severity: 'info',
-              message: 'White text on indigo background — verify contrast ratio',
-              suggestion: 'Run chaincss check for exact WCAG contrast calculation',
-            });
-          }
-        }
-      }
-
-      const errors = issues.filter(i => i.severity === 'error');
-      const warnings = issues.filter(i => i.severity === 'warning');
-      const infos = issues.filter(i => i.severity === 'info');
+      const data = await response.json();
+      setApiAvailable(true);
 
       setResult({
-        errors: errors.length,
-        warnings: warnings.length,
-        infos: infos.length,
-        issues,
+        errors: data.summary.errors,
+        warnings: data.summary.warnings,
+        infos: data.summary.infos,
+        issues: data.issues,
+        passes: data.summary.totalIssues === 0 ? 1 : 0,
       });
     } catch (e) {
-      setError((e as Error).message);
+      if ((e as Error).message === 'API_UNAVAILABLE') {
+        setApiAvailable(false);
+        setResult(clientSideAudit(cssInput));
+      } else {
+        setError((e as Error).message);
+      }
     } finally {
       setLoading(false);
     }
@@ -132,12 +134,7 @@ export default function Audit() {
       <div className="chain-docs-content" style={{ maxWidth: '100%' }}>
         <h1 className={contentTitle}>CSS Accessibility Audit</h1>
         <p className={contentDesc}>
-          Paste your ChainCSS styles and get an instant accessibility report.
-          For full WCAG 2.2 analysis, run{' '}
-          <code style={{ background: 'rgba(99,102,241,0.12)', padding: '2px 8px', borderRadius: 4, fontSize: 13 }}>
-            npx chaincss check
-          </code>{' '}
-          in your terminal.
+          Paste your ChainCSS styles and get an instant WCAG 2.2 accessibility report.
         </p>
 
         <h2 className={sectionHeading}>Your Styles</h2>
@@ -189,7 +186,7 @@ export default function Audit() {
               </div>
               <div className={auditResultCard} style={{ borderLeftColor: '#22c55e' }}>
                 <div className={auditStatValue} style={{ color: '#22c55e' }}>
-                  {result.issues.length === 0 ? 1 : 0}
+                  {result.passes}
                 </div>
                 <div className={auditStatLabel}>Passed</div>
               </div>
@@ -227,12 +224,22 @@ export default function Audit() {
             )}
 
             <div className={note} style={{ marginTop: 24 }}>
-              <strong>💡 Want deeper analysis?</strong> Run{' '}
-              <code style={{ background: 'rgba(99,102,241,0.12)', padding: '2px 8px', borderRadius: 4 }}>
-                npx chaincss check
-              </code>{' '}
-              in your terminal for full WCAG 2.2 contrast checking, touch target sizing,
-              and responsive overflow detection powered by the ChainCSS CI pipeline.
+              {apiAvailable === true ? (
+                <>
+                  <strong>🔬 Powered by ChainCSS CI Pipeline</strong><br />
+                  This audit ran the full 5-stage compiler pipeline — normalization, validation,
+                  analysis, optimization, and lowering.
+                </>
+              ) : (
+                <>
+                  <strong>💡 Want deeper analysis?</strong> Run{' '}
+                  <code style={{ background: 'rgba(99,102,241,0.12)', padding: '2px 8px', borderRadius: 4 }}>
+                    npx chaincss check
+                  </code>{' '}
+                  in your terminal for full WCAG 2.2 contrast checking, touch target sizing,
+                  and responsive overflow detection.
+                </>
+              )}
             </div>
           </>
         )}

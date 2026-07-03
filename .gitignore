@@ -43,3 +43,5 @@ src/global.css.map
 src/styles/global.classes.*
 src/styles/global.map.json
 src/styles/chaincss-manifest.json
+.vercel
+.env*
