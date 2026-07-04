@@ -13,15 +13,27 @@
   background:transparent;
   color:#71717a;
   padding:6px 12px;
+  -webkit-border-radius:6px;
+  -moz-border-radius:6px;
   border-radius:6px;
   font-size:12px;
   cursor:pointer;
   border:1px solid rgba(255,255,255,.1);
-  transition:all .15s ease
+  -webkit-transition:all .15s ease;
+  transition:all .15s ease;
+  position:relative
 }
 .chain-pg-copy-btn:hover {
   color:#e4e4e7;
   border-color:rgba(255,255,255,0.2)
+}
+.chain-pg-copy-btn:after {
+  content:"";
+  position:absolute;
+  top:-4px;
+  left:-4px;
+  width:44px;
+  height:44px
 }
 .chain-pg-desc {
   font-size:16px;
@@ -40,6 +52,10 @@
   width:100%;
   resize:none
 }
+.chain-pg-editor:focus-visible {
+  outline:2px solid #3b82f6;
+  outline-offset:2px
+}
 @media (max-width:640px)  {
 
   .chain-pg-editor {
@@ -49,6 +65,7 @@
 }
 }
 .chain-pg-grid {
+  display:-ms-grid;
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
   gap:24px
@@ -73,6 +90,8 @@
   color:#22c55e;
   white-space:pre-wrap;
   overflow:auto;
+  display:-webkit-flex;
+  display:-ms-flexbox;
   display:flex
 }
 @media (max-width:640px)  {
@@ -86,12 +105,18 @@
 .chain-pg-panel {
   background:rgba(0,0,0,.3);
   border:1px solid rgba(255,255,255,.06);
+  -webkit-border-radius:16px;
+  -moz-border-radius:16px;
   border-radius:16px;
   overflow:hidden;
+  display:-webkit-flex;
+  display:-ms-flexbox;
   display:flex;
   flex-direction:column
 }
 .chain-pg-panel-header {
+  display:-webkit-flex;
+  display:-ms-flexbox;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -111,6 +136,8 @@
   border:none;
   width:100%;
   background:transparent;
+  display:-webkit-flex;
+  display:-ms-flexbox;
   display:flex;
   align-items:center;
   justify-content:center
@@ -125,15 +152,27 @@
   background:#6366f1;
   color:#fff;
   padding:8px 18px;
+  -webkit-border-radius:8px;
+  -moz-border-radius:8px;
   border-radius:8px;
   font-size:13px;
   font-weight:600;
   cursor:pointer;
   border:none;
-  transition:background .15s ease
+  -webkit-transition:background .15s ease;
+  transition:background .15s ease;
+  position:relative
 }
 .chain-pg-run-btn:hover {
   background:#4f46e5
+}
+.chain-pg-run-btn:after {
+  content:"";
+  position:absolute;
+  top:-4px;
+  left:-4px;
+  width:44px;
+  height:44px
 }
 .chain-pg-title {
   font-size:40px;

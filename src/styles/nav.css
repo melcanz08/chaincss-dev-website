@@ -3,7 +3,9 @@
   font-weight:700;
   color:#fff;
   letter-spacing:-.5px;
-  cursor:pointer
+  cursor:pointer;
+  min-width:44px;
+  min-height:44px
 }
 @media (max-width:640px)  {
 
@@ -21,6 +23,7 @@
   right:0;
   z-index:100;
   background-color:rgba(10, 10, 15, .8);
+  -webkit-backdrop-filter:blur(12px);
   backdrop-filter:blur(12px);
   border-bottom:1px solid rgba(255, 255, 255, .06)
 }
@@ -28,12 +31,17 @@
   background-color:#6366f1;
   color:#fff;
   padding:8px 20px;
+  -webkit-border-radius:8px;
+  -moz-border-radius:8px;
   border-radius:8px;
   font-size:14px;
   font-weight:600;
   cursor:pointer;
   border:none;
-  transition:background .15s ease
+  -webkit-transition:background .15s ease;
+  transition:background .15s ease;
+  min-width:44px;
+  min-height:44px
 }
 .chain-nav-cta:hover {
   background:#4f46e5
@@ -49,6 +57,8 @@
   max-width:1200px;
   margin:0 auto;
   padding:0 24px;
+  display:-webkit-flex;
+  display:-ms-flexbox;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -66,7 +76,10 @@
   font-weight:500;
   color:#a1a1aa;
   cursor:pointer;
-  transition:color .15s ease
+  -webkit-transition:color .15s ease;
+  transition:color .15s ease;
+  min-width:44px;
+  min-height:44px
 }
 .chain-nav-link:hover {
   color:#ffffff
@@ -79,6 +92,8 @@
 }
 .chain-nav-links {
   overflow:hidden;
+  display:-webkit-flex;
+  display:-ms-flexbox;
   display:flex;
   gap:32px;
   align-items:center

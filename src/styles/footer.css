@@ -5,6 +5,7 @@
 }
 .chain-footer-link {
   color:#71717a;
+  -webkit-transition:color .15s ease;
   transition:color .15s ease
 }
 .chain-footer-link:hover {

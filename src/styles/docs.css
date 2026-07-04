@@ -2,17 +2,23 @@
   background:#6366f1;
   color:#fff;
   padding:14px 32px;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
   border-radius:10px;
   font-size:15px;
   font-weight:600;
   cursor:pointer;
   border:none;
-  transition:all .15s ease
+  -webkit-transition:all .15s ease;
+  transition:all .15s ease;
+  min-width:44px;
+  min-height:44px
 }
 .chain-audit-btn:hover {
   background:#4f46e5
 }
 .chain-audit-grid {
+  display:-ms-grid;
   display:grid;
   grid-template-columns:repeat(4, 1fr);
   gap:16px;
@@ -26,6 +32,8 @@
 }
 .chain-audit-issue-item {
   padding:14px 18px;
+  -webkit-border-radius:8px;
+  -moz-border-radius:8px;
   border-radius:8px;
   margin-bottom:8px;
   border-left:3px solid;
@@ -43,6 +51,8 @@
 }
 .chain-audit-result-card {
   background:rgba(0,0,0,.3);
+  -webkit-border-radius:12px;
+  -moz-border-radius:12px;
   border-radius:12px;
   padding:24px;
   border:1px solid rgba(255,255,255,.06);
@@ -64,6 +74,8 @@
   width:100%;
   min-height:300px;
   background:rgba(0,0,0,.4);
+  -webkit-border-radius:12px;
+  -moz-border-radius:12px;
   border-radius:12px;
   padding:20px 24px;
   font-family:'JetBrains Mono', 'Fira Code', monospace;
@@ -79,6 +91,8 @@
 }
 .chain-code-block {
   background:rgba(0,0,0,.4);
+  -webkit-border-radius:12px;
+  -moz-border-radius:12px;
   border-radius:12px;
   padding:20px 24px;
   overflow:auto;
@@ -171,6 +185,8 @@
 }
 }
 .chain-docs-layout {
+  display:-webkit-flex;
+  display:-ms-flexbox;
   display:flex;
   max-width:1300px;
   margin:0 auto;
@@ -189,6 +205,8 @@
   background:rgba(99,102,241,.12);
   color:#c7d2fe;
   padding:2px 8px;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
   border-radius:4px;
   font-size:13px;
   font-family:'JetBrains Mono', 'Fira Code', monospace;
@@ -198,6 +216,8 @@
   background:rgba(99,102,241,.08);
   border-left:3px solid #6366f1;
   padding:16px 20px;
+  -webkit-border-radius:0 8px 8px 0;
+  -moz-border-radius:0 8px 8px 0;
   border-radius:0 8px 8px 0;
   margin-bottom:24px;
   font-size:14px;
@@ -229,6 +249,7 @@
 .chain-docs-sidebar {
   width:260px;
   flex-shrink:0;
+  position:-webkit-sticky;
   position:sticky;
   top:88px;
   height:fit-content;
@@ -252,13 +273,18 @@
 .chain-sidebar-link {
   display:block;
   padding:8px 12px;
+  -webkit-border-radius:6px;
+  -moz-border-radius:6px;
   border-radius:6px;
   font-size:14px;
   color:#a1a1aa;
   cursor:pointer;
+  -webkit-transition:all .1s ease;
   transition:all .1s ease;
   margin-bottom:2px;
-  text-decoration:none
+  text-decoration:none;
+  min-width:44px;
+  min-height:44px
 }
 .chain-sidebar-link:hover {
   background:rgba(255,255,255,0.04);
@@ -280,6 +306,8 @@
 .chain-docs-table-wrap {
   overflow:auto;
   margin-bottom:24px;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
   border-radius:10px;
   border:1px solid rgba(255,255,255,.06)
 }

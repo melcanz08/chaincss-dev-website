@@ -44,9 +44,8 @@ export const heroTitle = chain()
 
 export const heroGradient = chain()
   .background('linear-gradient(135deg, #818cf8, #a78bfa, #f472b6)')
-  .WebkitBackgroundClip('text')
-  .WebkitTextFillColor('transparent')
   .backgroundClip('text')
+  .textFillColor('transparent')
   .$el('hero-gradient');
 
 export const heroSubtitle = chain()
