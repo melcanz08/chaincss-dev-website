@@ -3,4 +3,6 @@
 
 export const footer = 'chain-site-footer'
 export const footerLink = 'chain-footer-link'
+export const footerRow = 'chain-footer-row'
+export const footerStat = 'chain-footer-stat'
 export const footerText = 'chain-footer-text'

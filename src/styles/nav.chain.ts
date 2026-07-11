@@ -6,19 +6,17 @@ export const nav = chain()
   .left(0)
   .right(0)
   .zIndex("100")
-  .bgc('rgba(10, 10, 15, 0.8)')
+  .background('rgba(10, 10, 15, 0.8)')
   .backdropFilter('blur(12px)')
   .borderBottom('1px solid rgba(255, 255, 255, 0.06)')
   .$el('nav');
 
 export const navInner = chain()
-  .maxWidth(1200)
-  .margin('0 auto')
-  .padding('0 24px')
   .display('flex')
   .alignItems('center')
   .justifyContent('space-between')
   .height(64)
+  .padding('0 24px')
   .media('(max-width: 640px)', (c) => c
     .padding('0 16px')
     .height(56)
@@ -41,12 +39,11 @@ export const logoAccent = chain()
   .$el('nav-logo-accent');
 
 export const navLinks = chain()
-  .overflow("hidden")
   .display('flex')
-  .gap(32)
+  .gap(24)
   .alignItems('center')
   .media('(max-width: 640px)', (c) => c
-    .gap(16)
+    .gap(12)
   )
   .$el('nav-links');
 
@@ -60,12 +57,12 @@ export const navLink = chain()
     .color('#ffffff')
   .end()
   .media('(max-width: 640px)', (c) => c
-    .fontSize(13)
+    .fontSize(12)
   )
   .$el('nav-link');
 
 export const navCta = chain()
-  .bgc('#6366f1')
+  .background('#6366f1')
   .color('#ffffff')
   .padding('8px 20px')
   .rounded(8)
@@ -75,7 +72,7 @@ export const navCta = chain()
   .border('none')
   .transition('background 0.15s ease')
   .hover()
-    .bg('#4f46e5')
+    .background('#4f46e5')
   .end()
   .media('(max-width: 640px)', (c) => c
     .padding('6px 14px')

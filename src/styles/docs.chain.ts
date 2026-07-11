@@ -2,7 +2,7 @@ import { chain } from 'chaincss';
 
 export const docsLayout = chain()
   .display('flex')
-  .maxWidth(1300)
+  .maxWidth(1500)
   .margin('0 auto')
   .padding('80px 24px 40px')
   .gap(48)

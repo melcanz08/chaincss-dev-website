@@ -4,158 +4,175 @@ import {
 } from '../../styles/docs.chain.ts';
 import { docTable, docTh, docTd } from '../../styles/docs.chain.ts';
 
+const properties = [
+  { method: '.bg(val)', css: 'background' },
+  { method: '.color(val)', css: 'color' },
+  { method: '.fs(val)', css: 'font-size' },
+  { method: '.fw(val)', css: 'font-weight' },
+  { method: '.ff(val)', css: 'font-family' },
+  { method: '.lh(val)', css: 'line-height' },
+  { method: '.ta(val)', css: 'text-align' },
+  { method: '.p(val)', css: 'padding' },
+  { method: '.pt(val)', css: 'padding-top' },
+  { method: '.pr(val)', css: 'padding-right' },
+  { method: '.pb(val)', css: 'padding-bottom' },
+  { method: '.pl(val)', css: 'padding-left' },
+  { method: '.m(val)', css: 'margin' },
+  { method: '.mt(val)', css: 'margin-top' },
+  { method: '.mr(val)', css: 'margin-right' },
+  { method: '.mb(val)', css: 'margin-bottom' },
+  { method: '.ml(val)', css: 'margin-left' },
+  { method: '.w(val)', css: 'width' },
+  { method: '.h(val)', css: 'height' },
+  { method: '.minW(val)', css: 'min-width' },
+  { method: '.maxW(val)', css: 'max-width' },
+  { method: '.minH(val)', css: 'min-height' },
+  { method: '.maxH(val)', css: 'max-height' },
+  { method: '.rounded(val)', css: 'border-radius' },
+  { method: '.border(val)', css: 'border' },
+  { method: '.shadow(val)', css: 'box-shadow' },
+  { method: '.opacity(val)', css: 'opacity' },
+  { method: '.cursor(val)', css: 'cursor' },
+  { method: '.overflow(val)', css: 'overflow' },
+  { method: '.z(val)', css: 'z-index' },
+  { method: '.pos(val)', css: 'position' },
+  { method: '.top(val)', css: 'top' },
+  { method: '.right(val)', css: 'right' },
+  { method: '.bottom(val)', css: 'bottom' },
+  { method: '.left(val)', css: 'left' },
+  { method: '.transition(val)', css: 'transition' },
+  { method: '.transform(val)', css: 'transform' },
+  { method: '.display(val)', css: 'display' },
+  { method: '.gap(val)', css: 'gap' },
+  { method: '.flexDirection(val)', css: 'flex-direction' },
+  { method: '.alignItems(val)', css: 'align-items' },
+  { method: '.justifyContent(val)', css: 'justify-content' },
+  { method: '.flexWrap(val)', css: 'flex-wrap' },
+];
+
+const pseudoClasses = [
+  { method: '.hover()', css: ':hover' },
+  { method: '.focus()', css: ':focus' },
+  { method: '.active()', css: ':active' },
+  { method: '.checked()', css: ':checked' },
+  { method: '.disabled()', css: ':disabled' },
+  { method: '.before()', css: '::before' },
+  { method: '.after()', css: '::after' },
+  { method: '.placeholder()', css: '::placeholder' },
+];
+
+const atRules = [
+  { method: '.media(query, fn)', desc: 'Wrap styles in @media query' },
+  { method: '.supports(condition, fn)', desc: 'Wrap styles in @supports' },
+  { method: '.container(query, fn)', desc: 'Wrap styles in @container' },
+  { method: '.layer(name, fn)', desc: 'Wrap styles in @layer' },
+  { method: '.nest(selector, fn)', desc: 'Nest child selector styles' },
+  { method: '.keyframes(name, steps)', desc: 'Define @keyframes animation' },
+  { method: '.when(condition, fn)', desc: 'Conditionally apply styles' },
+];
+
 export default function APIReference() {
   return (
     <>
       <h1 className={contentTitle}>API Reference</h1>
       <p className={contentDesc}>
-        Complete reference for the ChainCSS v2.8.15 public API.
+        Complete reference of all ChainCSS methods, pseudo-classes, at-rules, and utilities.
       </p>
 
-      <h2 className={sectionHeading}>chain(options?)</h2>
-      <p className={paragraph}>
-        Creates a new style chain. Returns a proxy that collects styles and 
-        ultimately compiles to a class name string.
-      </p>
+      <h2 className={sectionHeading}>Core API</h2>
       <pre className={codeBlock}>{`import { chain } from 'chaincss'
 
+// Static mode (zero runtime)
 const styles = chain()
-  .property(value)   // any CSS property in camelCase
-  .$el('name')       // finalize → { selectors, ...properties }
+  .property(value)    // Set any CSS property
+  .shorthand(value)   // Use shorthand aliases
+  .macro()            // Apply layout macros
+  .pseudo()           // Start pseudo-class block
+  .end()              // End pseudo-class block
+  .$el('name')        // Set selector and build
 
-// With debug mode:
-const debugChain = chain({ debug: true })
-debugChain.explain().visualization  // prints style breakdown`}</pre>
+// Dynamic mode (mixed static + runtime)
+const dynamic = chain.dynamic()
+  .bg('#6366f1')                 // → static CSS
+  .opacity(() => isActive ? 1 : 0.5)  // → runtime JS
+  .$el('btn-dynamic')`}</pre>
 
-      <h2 className={sectionHeading}>chain.dynamic(options?)</h2>
+      <h2 className={sectionHeading}>All CSS Properties</h2>
       <p className={paragraph}>
-        Creates a mixed-mode chain. Static values compile to CSS; functions stay 
-        dynamic and resolve at runtime via <span className={inlineCode}>useChainStyles</span>.
+        ChainCSS supports all standard CSS properties via camelCase methods.
+        Numeric values automatically get <code className={inlineCode}>px</code> suffix (except unitless properties like opacity, z-index, font-weight).
       </p>
-      <pre className={codeBlock}>{`import { chain } from 'chaincss'
-
-export const btn = chain.dynamic()
-  .bg('#6366f1')                                    // → static CSS
-  .color('#ffffff')                                  // → static CSS
-  .opacity(() => isActive ? 1 : 0.5)                 // → runtime
-  .shadow(() => isActive ? '0 8px 25px rgba(...)' : '0 2px 8px rgba(...)')
-  .$el('btn')
-
-// Component usage:
-import { btn, btnClass } from '../styles/button.chain'
-import { useChainStyles } from 'chaincss/runtime'
-const classes = useChainStyles({ btn }, [isActive])
-// <button className={\`\${btnClass} \${classes.btn}\`}>Click</button>`}</pre>
-
-      <h2 className={sectionHeading}>compileToCSS(styleObject, options?)</h2>
-      <p className={paragraph}>
-        Compiles a style object to a CSS string. Used at build time.
-      </p>
-      <div className={tableWrapper}>
-        <table className={docTable}>
-          <thead><tr><th className={docTh}>Option</th><th className={docTh}>Type</th><th className={docTh}>Default</th><th className={docTh}>Description</th></tr></thead>
-          <tbody>
-            <tr><td className={docTd}>scopeSelector</td><td className={docTd}>string</td><td className={docTd}>''</td><td className={docTd}>CSS selector for the rule</td></tr>
-            <tr><td className={docTd}>minify</td><td className={docTd}>boolean</td><td className={docTd}>false</td><td className={docTd}>Minify output</td></tr>
-            <tr><td className={docTd}>sourceMap</td><td className={docTd}>boolean</td><td className={docTd}>false</td><td className={docTd}>Add source comments</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2 className={sectionHeading}>partitionForBuild(styleObject, options?)</h2>
-      <p className={paragraph}>
-        Splits a style object into static CSS and dynamic values. Returns{' '}
-        <span className={inlineCode}>{`{ css, dynamicValues, hasDynamic }`}</span>.
-      </p>
-
-      <h2 className={sectionHeading}>classifyValue(value)</h2>
-      <p className={paragraph}>
-        Returns <span className={inlineCode}>'static'</span> for strings/numbers,{' '}
-        <span className={inlineCode}>'dynamic'</span> for functions.
-      </p>
-
-      <h2 className={sectionHeading}>Shorthands</h2>
-      <div className={tableWrapper}>
-        <table className={docTable}>
-          <thead><tr><th className={docTh}>Shorthand</th><th className={docTh}>CSS Property</th><th className={docTh}>Example</th></tr></thead>
-          <tbody>
-            <tr><td className={docTd}><span className={inlineCode}>bg()</span></td><td className={docTd}>background</td><td className={docTd}>.bg('#6366f1') or .bg('linear-gradient(...)')</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>bgc()</span></td><td className={docTd}>background-color</td><td className={docTd}>.bgc('#6366f1')</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>fs()</span></td><td className={docTd}>font-size</td><td className={docTd}>.fs(16)</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>fw()</span></td><td className={docTd}>font-weight</td><td className={docTd}>.fw(600)</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>rounded()</span></td><td className={docTd}>border-radius</td><td className={docTd}>.rounded(8)</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>p() / m()</span></td><td className={docTd}>padding / margin</td><td className={docTd}>.p('12px 24px')</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>flex() / grid()</span></td><td className={docTd}>display</td><td className={docTd}>.flex()</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>w() / h()</span></td><td className={docTd}>width / height</td><td className={docTd}>.w('100%')</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>pos()</span></td><td className={docTd}>position</td><td className={docTd}>.pos('absolute')</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>z()</span></td><td className={docTd}>z-index</td><td className={docTd}>.z(50)</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>op()</span></td><td className={docTd}>opacity</td><td className={docTd}>.op(0.5)</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>gap()</span></td><td className={docTd}>gap</td><td className={docTd}>.gap(16)</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>transform()</span></td><td className={docTd}>transform</td><td className={docTd}>.transform('translateY(-2px)')</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>transition()</span></td><td className={docTd}>transition</td><td className={docTd}>.transition('all 0.2s ease')</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2 className={sectionHeading}>States & Selectors</h2>
       <pre className={codeBlock}>{`chain()
-  .hover()                    // :hover pseudo-class
-    .bg('darkred')
-  .end()
-  .focus()                    // :focus pseudo-class
-    .outline('2px solid blue')
-  .end()
-  .active()                   // :active pseudo-class
-    .transform('scale(0.98)')
-  .end()
-  .checked()                  // :checked pseudo-class
-    .bg('#6366f1')
-  .end()
-  .placeholder()              // ::placeholder pseudo-element
-    .color('#a1a1aa')
-  .end()
-  .nest('.child', (c) =>      // nested selector
-    c.color('blue')
-  )
-  .children((c) =>            // & > * selector
-    c.padding(8)
-  )
-  .media('(min-width: 768px)', (c) =>
-    c.flexDirection('row')
-  )
-  .supports('display: grid', (c) =>
-    c.gap(16)
-  )
-  .when(condition, (c) =>     // conditional block
-    c.display('none')
-  )
-  .$el('component')`}</pre>
+  .backgroundColor('#fff')   // → background-color: #fff
+  .fontSize(16)              // → font-size: 16px
+  .borderRadius(8)           // → border-radius: 8px
+  .boxShadow('0 2px 8px rgba(0,0,0,0.1)')
+  .zIndex(10)                // unitless — no px added
+  .opacity(0.5)              // unitless
+  .$el('box')`}</pre>
 
-      <h2 className={sectionHeading}>Compiler</h2>
+      <h2 className={sectionHeading}>Shorthand Reference</h2>
+      <div className={tableWrapper}>
+        <table className={docTable}>
+          <thead><tr><th className={docTh}>Method</th><th className={docTh}>CSS Property</th></tr></thead>
+          <tbody>
+            {properties.map(p => (
+              <tr key={p.method}>
+                <td className={docTd}><code className={inlineCode}>{p.method}</code></td>
+                <td className={docTd}><code className={inlineCode}>{p.css}</code></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className={sectionHeading}>Pseudo-Classes</h2>
       <p className={paragraph}>
-        For build tooling, use <span className={inlineCode}>ChainCSSCompiler</span>:
+        Start a pseudo-class block with the method, add styles, then call <code className={inlineCode}>.end()</code> to close:
       </p>
-      <pre className={codeBlock}>{`import { ChainCSSCompiler } from 'chaincss'
+      <div className={tableWrapper}>
+        <table className={docTable}>
+          <thead><tr><th className={docTh}>Method</th><th className={docTh}>CSS Selector</th></tr></thead>
+          <tbody>
+            {pseudoClasses.map(p => (
+              <tr key={p.method}>
+                <td className={docTd}><code className={inlineCode}>{p.method}</code></td>
+                <td className={docTd}><code className={inlineCode}>{p.css}</code></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-const compiler = new ChainCSSCompiler({
-  atomic: { enabled: true },
-  output: { minify: true },
-  verbose: true
-})
+      <h2 className={sectionHeading}>At-Rules & Nesting</h2>
+      <div className={tableWrapper}>
+        <table className={docTable}>
+          <thead><tr><th className={docTh}>Method</th><th className={docTh}>Description</th></tr></thead>
+          <tbody>
+            {atRules.map(a => (
+              <tr key={a.method}>
+                <td className={docTd}><code className={inlineCode}>{a.method}</code></td>
+                <td className={docTd}>{a.desc}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-// Compile a single style
-const result = compiler.compileStyle('my-component', styleDef)
-
-// Compile a file
-const results = await compiler.compileFile('./styles/button.chain.ts')
-
-// Compile multiple components
-await compiler.compileComponents(['./src/styles/*.chain.ts'])
-
-// Pipeline control
-compiler.setPipelineEnabled(false)   // disable pipeline
-compiler.isPipelineEnabled()         // check status
-compiler.printPipelineReport()       // print timing report`}</pre>
+      <h2 className={sectionHeading}>Terminal Methods</h2>
+      <p className={paragraph}>
+        These methods finalize the style and return a result:
+      </p>
+      <div className={tableWrapper}>
+        <table className={docTable}>
+          <thead><tr><th className={docTh}>Method</th><th className={docTh}>Returns</th><th className={docTh}>Description</th></tr></thead>
+          <tbody>
+            <tr><td className={docTd}><code className={inlineCode}>.$el('name')</code></td><td className={docTd}>StyleDefinition</td><td className={docTd}>Set selector and build. Class gets <code className={inlineCode}>chain-</code> prefix.</td></tr>
+            <tr><td className={docTd}><code className={inlineCode}>.build(['.custom'])</code></td><td className={docTd}>StyleDefinition</td><td className={docTd}>Build with explicit selectors.</td></tr>
+            <tr><td className={docTd}><code className={inlineCode}>.explain()</code></td><td className={docTd}>Explanation</td><td className={docTd}>Debug: show how each property was resolved.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }

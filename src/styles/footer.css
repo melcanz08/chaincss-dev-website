@@ -1,17 +1,71 @@
 .chain-site-footer {
   border-top:1px solid rgba(255,255,255,.06);
   padding:40px 24px;
-  text-align:center
+  display:-webkit-flex;
+  display:-ms-flexbox;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px
+}
+@media (max-width:640px)  {
+
+  .chain-site-footer {
+  padding:32px 16px;
+  gap:12px
+}
 }
 .chain-footer-link {
   color:#71717a;
+  font-size:14px;
+  text-decoration:none;
   -webkit-transition:color .15s ease;
   transition:color .15s ease
 }
 .chain-footer-link:hover {
   color:#a5b4fc
 }
+@media (max-width:640px)  {
+
+  .chain-footer-link {
+  font-size:13px
+}
+}
+.chain-footer-row {
+  display:-webkit-flex;
+  display:-ms-flexbox;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:24px;
+  flex-wrap:wrap
+}
+@media (max-width:640px)  {
+
+  .chain-footer-row {
+  gap:16px;
+  flex-direction:column;
+  align-items:center
+}
+}
+.chain-footer-stat {
+  color:#6366f1;
+  font-size:14px
+}
+@media (max-width:640px)  {
+
+  .chain-footer-stat {
+  font-size:13px
+}
+}
 .chain-footer-text {
   font-size:14px;
   color:#52525b
+}
+@media (max-width:640px)  {
+
+  .chain-footer-text {
+  font-size:12px;
+  text-align:center
+}
 }

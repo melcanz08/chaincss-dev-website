@@ -7,84 +7,119 @@ import { docTable, docTh, docTd } from '../../styles/docs.chain.ts';
 export default function Pipeline() {
   return (
     <>
-      <h1 className={contentTitle}>Compiler Pipeline</h1>
+      <h1 className={contentTitle}>The 5-Stage Compiler Pipeline</h1>
       <p className={contentDesc}>
-        Every style runs through a 5-stage compiler pipeline at build time. 
-        No configuration needed — it just works.
+        Every <code className={inlineCode}>.chain.ts</code> file goes through five stages at build time.
+        Understanding the pipeline helps you debug styles and choose the right preset.
       </p>
 
-      <h2 className={sectionHeading}>The 5 Stages</h2>
+      <h2 className={sectionHeading}>Pipeline Overview</h2>
       <div className={tableWrapper}>
         <table className={docTable}>
-          <thead><tr><th className={docTh}>Stage</th><th className={docTh}>Pass</th><th className={docTh}>What It Does</th></tr></thead>
+          <thead><tr><th className={docTh}>Stage</th><th className={docTh}>What It Does</th><th className={docTh}>Example</th></tr></thead>
           <tbody>
-            <tr><td className={docTd} rowSpan={2} style={{fontWeight:600}}>1. Normalize</td><td className={docTd}>Intent Normalizer</td><td className={docTd}>Fixes patterns (e.g., flexbox → flex, abs → absolute), adds defaults</td></tr>
-            <tr><td className={docTd}>Unit Normalizer</td><td className={docTd}>Adds px to bare numbers, normalizes values</td></tr>
-            <tr><td className={docTd} rowSpan={2} style={{fontWeight:600}}>2. Validate</td><td className={docTd}>Accessibility Validator</td><td className={docTd}>WCAG 2.2 contrast, font-size, touch target, focus checks</td></tr>
-            <tr><td className={docTd}>Conflict Validator</td><td className={docTd}>z-index on static, flex/grid properties without display:flex/grid</td></tr>
-            <tr><td className={docTd} rowSpan={3} style={{fontWeight:600}}>3. Analyze</td><td className={docTd}>Responsive Analyzer</td><td className={docTd}>Flags fixed widths on mobile, 100vh issues, large typography</td></tr>
-            <tr><td className={docTd}>Layout Analyzer</td><td className={docTd}>Detects repeated layout patterns, suggests macros</td></tr>
-            <tr><td className={docTd}>Pattern Detector</td><td className={docTd}>Finds repeated style clusters, recommends recipes</td></tr>
-            <tr><td className={docTd} rowSpan={4} style={{fontWeight:600}}>4. Optimize</td><td className={docTd}>CSS Compressor</td><td className={docTd}>Shortens hex colors, removes redundant values, collapses shorthands</td></tr>
-            <tr><td className={docTd}>Dead Code Eliminator</td><td className={docTd}>Removes unreferenced and duplicate rules</td></tr>
-            <tr><td className={docTd}>Specificity Sorter</td><td className={docTd}>Sorts rules by specificity for predictable cascade</td></tr>
-            <tr><td className={docTd}>Media Query Packer</td><td className={docTd}>Merges duplicate media queries, sorts mobile-first</td></tr>
-            <tr><td className={docTd} rowSpan={3} style={{fontWeight:600}}>5. Lower</td><td className={docTd}>Intent Resolver</td><td className={docTd}>Resolves intent() calls to CSS declarations</td></tr>
-            <tr><td className={docTd}>Token Resolver</td><td className={docTd}>Resolves design tokens to CSS values</td></tr>
-            <tr><td className={docTd}>CSS Emitter</td><td className={docTd}>Prints final CSS output</td></tr>
+            <tr><td className={docTd}><strong>1. Normalization</strong></td><td className={docTd}>Intent detection, unit normalization, layout macros</td><td className={docTd}><code className={inlineCode}>flexbox</code> → <code className={inlineCode}>display: flex</code></td></tr>
+            <tr><td className={docTd}><strong>2. Validation</strong></td><td className={docTd}>WCAG 2.2 checks, conflict detection, z-index validation</td><td className={docTd}>Flags font-size below 12px</td></tr>
+            <tr><td className={docTd}><strong>3. Analysis</strong></td><td className={docTd}>Responsive patterns, layout recognition, dead code detection</td><td className={docTd}>Detects duplicate card-layout patterns</td></tr>
+            <tr><td className={docTd}><strong>4. Optimization</strong></td><td className={docTd}>Token resolution, compression, specificity sorting</td><td className={docTd}><code className={inlineCode}>$colors.primary</code> → <code className={inlineCode}>#6366f1</code></td></tr>
+            <tr><td className={docTd}><strong>5. Lowering</strong></td><td className={docTd}>CSS emission from IR</td><td className={docTd}>IR → plain CSS string</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h2 className={sectionHeading}>Pipeline Presets</h2>
+      <h2 className={sectionHeading}>Presets</h2>
       <p className={paragraph}>
-        Choose a preset that matches your workflow:
+        Choose a preset based on your environment. Presets control which passes run in each stage:
       </p>
-      <pre className={codeBlock}>{`import { createPipeline } from 'chaincss'
-
-// Fast, zero-config — the default for everyday use
-const pipeline = createPipeline('default')
-
-// Full optimization for production builds
-const pipeline = createPipeline('production')
-
-// Validation + analysis + optimization — use in CI
-const pipeline = createPipeline('ci')
-
-// Validation only — fast feedback in development
-const pipeline = createPipeline('lint')
-
-// Atomic CSS extraction
-const pipeline = createPipeline('atomic')`}</pre>
-
       <div className={tableWrapper}>
         <table className={docTable}>
-          <thead><tr><th className={docTh}>Preset</th><th className={docTh}>Includes</th></tr></thead>
+          <thead><tr><th className={docTh}>Preset</th><th className={docTh}>Use Case</th><th className={docTh}>Passes</th></tr></thead>
           <tbody>
-            <tr><td className={docTd}><span className={inlineCode}>default</span></td><td className={docTd}>Normalize + Compress + Lower</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>production</span></td><td className={docTd}>Default + Specificity + Dead Code + Media Query + Source</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>ci</span></td><td className={docTd}>Validation + Analysis + All optimizations + Accessibility</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>lint</span></td><td className={docTd}>Normalize + Validators only — no optimization</td></tr>
-            <tr><td className={docTd}><span className={inlineCode}>atomic</span></td><td className={docTd}>Normalize + Atomic Extractor + CSS Emitter</td></tr>
+            <tr><td className={docTd}><code className={inlineCode}>default</code></td><td className={docTd}>Development</td><td className={docTd}>Normalize + Compress + Lower</td></tr>
+            <tr><td className={docTd}><code className={inlineCode}>production</code></td><td className={docTd}>Build</td><td className={docTd}>+ Specificity + Dead-code + Media pack</td></tr>
+            <tr><td className={docTd}><code className={inlineCode}>ci</code></td><td className={docTd}>CI / Linting</td><td className={docTd}>Full validation + analysis + optimization</td></tr>
+            <tr><td className={docTd}><code className={inlineCode}>lint</code></td><td className={docTd}>Validate only</td><td className={docTd}>Normalize + Validate + Emit</td></tr>
+            <tr><td className={docTd}><code className={inlineCode}>atomic</code></td><td className={docTd}>Utility CSS</td><td className={docTd}>Normalize + Atomic extract + Emit</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h2 className={sectionHeading}>Disable the Pipeline</h2>
-      <pre className={codeBlock}>{`const compiler = new ChainCSSCompiler({
-  experimental: { enablePipeline: false }
+      <h2 className={sectionHeading}>Configuring the Pipeline</h2>
+      <pre className={codeBlock}>{`// chaincss.config.js
+export default {
+  // Choose a preset
+  pipeline: 'production',
+
+  // Or customize individual stages
+  pipeline: {
+    normalization: ['intent-normalizer', 'unit-normalizer'],
+    validation: ['accessibility-validator'],
+    optimization: ['css-compressor', 'dead-code-eliminator'],
+  },
+}`}</pre>
+
+      <h2 className={sectionHeading}>Pipeline in Vite Plugin</h2>
+      <pre className={codeBlock}>{`// vite.config.ts
+import chaincss from 'chaincss/vite'
+
+export default defineConfig({
+  plugins: [
+    chaincss({
+      pipeline: 'production',  // Use production preset for builds
+      verbose: true,           // See pipeline report in console
+    }),
+    react()
+  ]
 })`}</pre>
 
-      <h2 className={sectionHeading}>Pipeline Report</h2>
+      <h2 className={sectionHeading}>Reading the Pipeline Report</h2>
       <p className={paragraph}>
-        Enable verbose mode to see a timing report for each pass:
+        When <code className={inlineCode}>verbose: true</code>, ChainCSS prints a pipeline report:
       </p>
-      <pre className={codeBlock}>{`// Vite plugin
-chaincss({ verbose: true })
+      <pre className={codeBlock}>{`═══════════════════════════════════════════
+  ChainCSS Pipeline Report
+═══════════════════════════════════════════
 
-// Compiler
-const compiler = new ChainCSSCompiler({ verbose: true })
-compiler.printPipelineReport()`}</pre>
+  [NORMALIZATION]
+    ✓ intent-normalizer            0ms
+    ✓ unit-normalizer              0ms
+
+  [OPTIMIZATION]
+    ✓ token-resolver               0ms
+    ✓ css-compressor               0ms
+      📦 Saved 3 bytes, 0 rules eliminated
+
+  [LOWERING]
+    ✓ css-emitter                  0ms
+═══════════════════════════════════════════`}</pre>
+
+      <h2 className={sectionHeading}>Feature Detection & Skipping</h2>
+      <p className={paragraph}>
+        The pipeline detects which features your styles use and skips irrelevant passes.
+        If no <code className={inlineCode}>$token</code> references exist, the token-resolver pass is skipped.
+        This keeps compilation fast even with the full CI preset.
+      </p>
+      <pre className={codeBlock}>{`[ChainCSS] ℹ️  Skipped 1 pass(es) — no relevant features detected`}</pre>
+
+      <h2 className={sectionHeading}>Custom Passes</h2>
+      <p className={paragraph}>
+        You can write custom pipeline passes. Each pass is a function that receives the IR and returns transformed IR:
+      </p>
+      <pre className={codeBlock}>{`import { createPipeline } from 'chaincss/compiler'
+
+const myPipeline = createPipeline('default', {
+  optimization: [
+    {
+      name: 'my-custom-pass',
+      cost: 'cheap',
+      requiredFor: ['css'],
+      optimize(ir, context) {
+        // Transform the IR here
+        return { ir, savings: { rulesEliminated: 0, declarationsEliminated: 0, bytesSaved: 0 }, changes: 0 }
+      }
+    },
+  ],
+})`}</pre>
     </>
   );
 }

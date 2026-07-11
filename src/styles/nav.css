@@ -3,9 +3,7 @@
   font-weight:700;
   color:#fff;
   letter-spacing:-.5px;
-  cursor:pointer;
-  min-width:44px;
-  min-height:44px
+  cursor:pointer
 }
 @media (max-width:640px)  {
 
@@ -22,13 +20,13 @@
   left:0;
   right:0;
   z-index:100;
-  background-color:rgba(10, 10, 15, .8);
+  background:rgba(10, 10, 15, .8);
   -webkit-backdrop-filter:blur(12px);
   backdrop-filter:blur(12px);
   border-bottom:1px solid rgba(255, 255, 255, .06)
 }
 .chain-nav-cta {
-  background-color:#6366f1;
+  background:#6366f1;
   color:#fff;
   padding:8px 20px;
   -webkit-border-radius:8px;
@@ -39,9 +37,7 @@
   cursor:pointer;
   border:none;
   -webkit-transition:background .15s ease;
-  transition:background .15s ease;
-  min-width:44px;
-  min-height:44px
+  transition:background .15s ease
 }
 .chain-nav-cta:hover {
   background:#4f46e5
@@ -54,15 +50,13 @@
 }
 }
 .chain-nav-inner {
-  max-width:1200px;
-  margin:0 auto;
-  padding:0 24px;
   display:-webkit-flex;
   display:-ms-flexbox;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  height:64px
+  height:64px;
+  padding:0 24px
 }
 @media (max-width:640px)  {
 
@@ -77,9 +71,7 @@
   color:#a1a1aa;
   cursor:pointer;
   -webkit-transition:color .15s ease;
-  transition:color .15s ease;
-  min-width:44px;
-  min-height:44px
+  transition:color .15s ease
 }
 .chain-nav-link:hover {
   color:#ffffff
@@ -87,20 +79,19 @@
 @media (max-width:640px)  {
 
   .chain-nav-link {
-  font-size:13px
+  font-size:12px
 }
 }
 .chain-nav-links {
-  overflow:hidden;
   display:-webkit-flex;
   display:-ms-flexbox;
   display:flex;
-  gap:32px;
+  gap:24px;
   align-items:center
 }
 @media (max-width:640px)  {
 
   .chain-nav-links {
-  gap:16px
+  gap:12px
 }
 }

@@ -3,7 +3,7 @@ import { chain } from 'chaincss';
 export const section = chain()
   .padding("100px 24px")
   .overflow("hidden")
-  .maxWidth(1200)
+  .maxWidth(1400)
   .margin('0 auto')
   .media('(max-width: 640px)', (c) => c
     .padding('60px 16px')
@@ -36,7 +36,7 @@ export const sectionSubtitle = chain()
   .fontSize(17)
   .color('#a1a1aa')
   .textAlign('center')
-  .maxWidth(600)
+  .maxWidth(700)
   .margin('0 auto 64px')
   .lineHeight("1.7")
   .media('(max-width: 640px)', (c) => c

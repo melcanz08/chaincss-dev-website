@@ -10,9 +10,7 @@
   cursor:pointer;
   border:none;
   -webkit-transition:all .15s ease;
-  transition:all .15s ease;
-  min-width:44px;
-  min-height:44px
+  transition:all .15s ease
 }
 .chain-audit-btn:hover {
   background:#4f46e5
@@ -188,7 +186,7 @@
   display:-webkit-flex;
   display:-ms-flexbox;
   display:flex;
-  max-width:1300px;
+  max-width:1500px;
   margin:0 auto;
   padding:80px 24px 40px;
   gap:48px
@@ -282,9 +280,7 @@
   -webkit-transition:all .1s ease;
   transition:all .1s ease;
   margin-bottom:2px;
-  text-decoration:none;
-  min-width:44px;
-  min-height:44px
+  text-decoration:none
 }
 .chain-sidebar-link:hover {
   background:rgba(255,255,255,0.04);

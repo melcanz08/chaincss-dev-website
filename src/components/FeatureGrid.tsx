@@ -1,44 +1,53 @@
 import {
   section, sectionLabel, sectionTitle, sectionSubtitle,
-  grid, card, cardIcon, cardTitle, cardText, cardCode
+  grid, card, cardIcon, cardTitle, cardText
 } from '../styles/features.chain.ts';
 
 const features = [
   {
     icon: '⚡',
-    title: 'Zero-Runtime by Default',
-    text: 'Every static string and number is extracted at build time into plain CSS files. No JavaScript shipped for styles that never change.',
-    code: `chain().bg("#6366f1").padding(16).$el("btn")\n// → .chain-btn { background:#6366f1; padding:16px }`,
+    title: 'Zero-Runtime CSS',
+    text: 'Every static property is extracted at build time into plain CSS files. The compiler never ships to the browser — your users download zero JavaScript for styles.',
   },
   {
-    icon: '🔄',
-    title: 'Auto-Detection Mixed Mode',
-    text: 'Use chain.dynamic() and ChainCSS automatically splits your styles — static values to CSS, dynamic functions to runtime. No manual partitioning.',
-    code: `chain.dynamic()\n  .bg("#6366f1")          // → CSS\n  .opacity(() => active ? 1 : 0.5) // → runtime`,
+    icon: '🎨',
+    title: 'Mixed Mode',
+    text: 'Use chain.dynamic() for interactive styles. Static properties compile away, dynamic functions run at runtime via CSS custom properties — no DOM injection.',
+  },
+  {
+    icon: '🔒',
+    title: 'Type-Safe API',
+    text: 'Full TypeScript support with autocomplete. Catch typos and invalid values at compile time, not in production. Theme contracts validate your design tokens.',
+  },
+  {
+    icon: '♿',
+    title: 'Built-in Accessibility',
+    text: 'WCAG 2.2 audit checks contrast ratios, font sizes, touch targets, and focus indicators. Auto-fix common issues with chaincss check --fix.',
   },
   {
     icon: '🔬',
-    title: '5-Stage Compiler Pipeline',
-    text: 'Every style runs through Normalize → Validate → Analyze → Optimize → Lower stages at build time. Dead code elimination, CSS compression, intent resolution included.',
-    code: `// Pipeline runs automatically\n// No configuration needed`,
-  },
-  {
-    icon: '🎯',
-    title: 'One Chainable API',
-    text: 'Same fluent API for both static and dynamic modes. 500+ CSS properties as camelCase methods, plus shorthands, macros, states, and selectors.',
-    code: `chain()\n  .bg("red").hover().bg("darkred").end()\n  .media("(min-width: 768px)", c => c.flexDir("row"))`,
-  },
-  {
-    icon: '📦',
-    title: 'Design Tokens & Themes',
-    text: 'Built-in design token system with theme contracts. Define tokens once, use everywhere. Themes validate automatically at build time.',
-    code: `const tokens = createTokens({\n  colors: { primary: "#6366f1" }\n})\nchain().bg("$colors.primary")`,
+    title: 'Live Compiler Inspector',
+    text: 'Press Ctrl+Shift+I on any ChainCSS site. See every pass, every transformation, before/after diffs, and step-through replay of how your styles were generated.',
   },
   {
     icon: '🧩',
+    title: 'Recipe Variants',
+    text: 'Type-safe component variants like Stitches or CVA. Define size, color, and state variants declaratively — all compiled to zero-runtime CSS at build time.',
+  },
+  {
+    icon: '🎯',
+    title: 'Design Tokens',
+    text: 'Reference colors, spacing, and typography with $token.path syntax. Resolved at build time. Theme contracts catch missing tokens before they reach production.',
+  },
+  {
+    icon: '⚙️',
+    title: 'Atomic CSS Extraction',
+    text: 'Opt-in utility class generation. ChainCSS detects repeated property:value pairs and extracts them into reusable atomic classes — like Tailwind, but automated.',
+  },
+  {
+    icon: '🌐',
     title: 'Framework Agnostic',
-    text: 'First-class support for React, Vue, Svelte, and SolidJS. Vite and Webpack plugins included. Works with any framework — or none.',
-    code: `// React\nimport { btn } from "./button.chain"\n<button className={btn}>Click</button>`,
+    text: 'Outputs plain CSS strings. Works with React, Vue, Svelte, Solid, or vanilla HTML. Dedicated hooks for dynamic styles in each framework.',
   },
 ];
 
@@ -46,18 +55,16 @@ export default function FeatureGrid() {
   return (
     <section className={section}>
       <div className={sectionLabel}>Features</div>
-      <h2 className={sectionTitle}>Built for production</h2>
+      <h2 className={sectionTitle}>Everything you need to ship fast</h2>
       <p className={sectionSubtitle}>
-        ChainCSS compiles your styles at build time — not in the browser. 
-        Zero runtime, maximum performance.
+        ChainCSS combines the developer experience of CSS-in-JS with the performance of static CSS.
       </p>
       <div className={grid}>
-        {features.map((f, i) => (
-          <div key={i} className={card}>
+        {features.map(f => (
+          <div key={f.title} className={card}>
             <div className={cardIcon}>{f.icon}</div>
             <h3 className={cardTitle}>{f.title}</h3>
             <p className={cardText}>{f.text}</p>
-            <pre className={cardCode}>{f.code}</pre>
           </div>
         ))}
       </div>
