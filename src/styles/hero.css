@@ -4,34 +4,35 @@
   display:inline-flex;
   align-items:center;
   gap:8px;
-  background:rgba(99, 102, 241, .1);
+  background-color:rgba(99, 102, 241, .1);
+  font-size:13px;
+  font-weight:500;
   color:#a5b4fc;
+  margin-bottom:32px;
   padding:6px 16px;
   -webkit-border-radius:9999px;
   -moz-border-radius:9999px;
-  border-radius:9999px;
-  font-size:13px;
-  font-weight:500;
-  margin-bottom:32px
+  border-radius:9999px
 }
 @media (max-width:640px)  {
 
   .chain-hero-badge {
   font-size:12px;
-  padding:4px 12px;
-  margin-bottom:24px
+  margin-bottom:24px;
+  padding:4px 12px
 }
 }
 .chain-hero-cta-group {
   display:-webkit-flex;
   display:-ms-flexbox;
   display:flex;
-  gap:16px;
-  justify-content:center
+  justify-content:center;
+  gap:16px
 }
 @media (max-width:640px)  {
 
   .chain-hero-cta-group {
+  display:flex;
   flex-direction:column;
   align-items:center;
   gap:12px
@@ -41,72 +42,68 @@
   background:linear-gradient(135deg, #818cf8, #a78bfa, #f472b6);
   -webkit-background-clip:text;
   background-clip:text;
-  -webkit-text-fill-color:transparent;
-  text-fill-color:transparent
+  -webkit-text-fill-color:transparent
 }
 .chain-hero-primary-btn {
-  background:#6366f1;
+  background-color:#6366f1;
+  font-size:16px;
+  font-weight:600;
   color:#fff;
   padding:14px 32px;
+  border:none;
   -webkit-border-radius:12px;
   -moz-border-radius:12px;
   border-radius:12px;
-  font-size:16px;
-  font-weight:600;
   cursor:pointer;
-  border:none;
   -webkit-transition:all .2s ease;
   transition:all .2s ease
 }
 .chain-hero-primary-btn:hover {
-  background:#4f46e5;
-  -webkit-transform:translateY(-1px);
-  -ms-transform:translateY(-1px);
-  transform:translateY(-1px);
+  background-color:#4f46e5;
   -webkit-box-shadow:0 4px 20px rgba(99, 102, 241, 0.3);
   box-shadow:0 4px 20px rgba(99, 102, 241, 0.3)
 }
 @media (max-width:640px)  {
 
   .chain-hero-primary-btn {
+  padding:14px 24px;
   width:100%;
   max-width:400px;
-  padding:14px 24px;
   font-size:15px
 }
 }
 .chain-hero-secondary-btn {
-  background:rgba(255, 255, 255, .04);
+  background-color:rgba(255, 255, 255, .04);
+  font-size:16px;
+  font-weight:500;
   color:#d4d4d8;
   padding:14px 32px;
+  border:1px solid rgba(255, 255, 255, .1);
   -webkit-border-radius:12px;
   -moz-border-radius:12px;
   border-radius:12px;
-  font-size:16px;
-  font-weight:500;
   cursor:pointer;
-  border:1px solid rgba(255, 255, 255, .1);
   -webkit-transition:all .2s ease;
   transition:all .2s ease
 }
 .chain-hero-secondary-btn:hover {
-  background:rgba(255, 255, 255, 0.08);
+  background-color:rgba(255, 255, 255, 0.08);
   border-color:rgba(255, 255, 255, 0.2)
 }
 @media (max-width:640px)  {
 
   .chain-hero-secondary-btn {
+  padding:14px 24px;
   width:100%;
   max-width:400px;
-  padding:14px 24px;
   font-size:15px
 }
 }
 .chain-hero {
+  margin:0 auto;
   padding:140px 24px 100px;
-  text-align:center;
   max-width:1100px;
-  margin:0 auto
+  text-align:center
 }
 @media (max-width:640px)  {
 
@@ -116,10 +113,10 @@
 }
 .chain-hero-subtitle {
   font-size:18px;
-  color:#a1a1aa;
   line-height:1.7;
-  max-width:750px;
-  margin:0 auto 48px
+  color:#a1a1aa;
+  margin:0 auto 48px;
+  max-width:750px
 }
 @media (max-width:640px)  {
 
@@ -132,9 +129,9 @@
 .chain-hero-title {
   font-size:60px;
   font-weight:800;
-  color:#f4f4f5;
   line-height:1.1;
   letter-spacing:-2px;
+  color:#f4f4f5;
   margin-bottom:24px
 }
 @media (max-width:640px)  {

@@ -1,6 +1,6 @@
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
-import { docsLayout, sidebar, sidebarTitle, sidebarLink, sidebarLinkActive, content } from '../../styles/docs.chain.ts';
+import { docsLayout, sidebar, sidebarTitle, sidebarLink, sidebarLinkActive, content } from '../../styles/docs.class.js';
 
 const GettingStarted = lazy(() => import('./GettingStarted'));
 const StylingProperties = lazy(() => import('./StylingProperties'));

@@ -1,282 +1,213 @@
 import { chain } from 'chaincss';
 
 export const docsLayout = chain()
-  .display('flex')
-  .maxWidth(1500)
-  .margin('0 auto')
-  .padding('80px 24px 40px')
-  .gap(48)
+  .flex({ gap: 48 })
+  .box({ maxWidth: 1500, margin: '0 auto', padding: '80px 24px 40px' })
   .media('(max-width: 768px)', (c) => c
-    .flexDirection('column')
-    .padding('80px 16px 40px')
-    .gap(24)
+    .flex({ direction: 'column', gap: 24 })
+    .box({ padding: '80px 16px 40px' })
   )
   .$el('docs-layout');
 
 export const sidebar = chain()
-  .width(260)
-  .flexShrink(0)
-  .position('sticky')
-  .top(88)
-  .height('fit-content')
-  .maxHeight('calc(100vh - 120px)')
-  .overflow('auto')
-  .paddingRight(16)
+  .box({ width: 260, paddingRight: 16, overflow: 'auto' })
+  .position({ type: 'sticky', top: 88 })
+  .raw('flex-shrink', '0')
+  .raw('height', 'fit-content')
+  .raw('max-height', 'calc(100vh - 120px)')
   .media('(max-width: 768px)', (c) => c
-    .width('100%')
-    .position('static')
-    .maxHeight('none')
-    .overflow('visible')
-    .paddingRight(0)
-    .paddingBottom(16)
-    .borderBottom('1px solid rgba(255,255,255,0.06)')
-    .marginBottom(16)
+    .box({ width: '100%', paddingRight: 0, paddingBottom: 16, marginBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.06)' })
+    .position({ type: 'static' })
+    .raw('max-height', 'none')
+    .raw('overflow', 'visible')
   )
   .$el('docs-sidebar');
 
 export const sidebarTitle = chain()
-  .fontSize(12)
-  .fontWeight("600")
-  .color('#52525b')
-  .textTransform('uppercase')
-  .letterSpacing('1px')
-  .marginBottom(12)
+  .typography({
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#52525b',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+  })
+  .box({ marginBottom: 12 })
   .$el('sidebar-title');
 
 export const sidebarLink = chain()
-  .display('block')
-  .padding('8px 12px')
-  .rounded(6)
-  .fontSize(14)
-  .color('#a1a1aa')
-  .cursor('pointer')
-  .transition('all 0.1s ease')
-  .marginBottom(2)
-  .textDecoration('none')
+  .box({ padding: '8px 12px', borderRadius: 6, marginBottom: 2 })
+  .typography({ fontSize: 14, color: '#a1a1aa', textDecoration: 'none' })
+  .raw('display', 'block')
+  .raw('cursor', 'pointer')
+  .transition({ tr: 'all 0.1s ease' })
   .hover()
-    .bg('rgba(255,255,255,0.04)')
-    .color('#e4e4e7')
+    .background({ color: 'rgba(255,255,255,0.04)' })
+    .typography({ color: '#e4e4e7' })
   .end()
   .$el('sidebar-link');
 
 export const sidebarLinkActive = chain()
-  .bg('rgba(99,102,241,0.12)')
-  .color('#c7d2fe')
-  .fontWeight("500")
+  .background({ color: 'rgba(99,102,241,0.12)' })
+  .typography({ color: '#c7d2fe', fontWeight: '500' })
   .$el('sidebar-link-active');
 
 export const content = chain()
-  .flexGrow(1)
-  .minWidth(0)
-  .maxWidth('calc(100% - 308px)')
+  .box({ minWidth: 0, maxWidth: 'calc(100% - 308px)' })
+  .raw('flex-grow', '1')
   .media('(max-width: 768px)', (c) => c
-    .maxWidth('100%')
+    .box({ maxWidth: '100%' })
   )
   .$el('docs-content');
 
 export const contentTitle = chain()
-  .fontSize(36)
-  .fontWeight("700")
-  .color('#f4f4f5')
-  .marginBottom(8)
-  .letterSpacing('-1px')
+  .typography({ fontSize: 36, fontWeight: '700', color: '#f4f4f5', letterSpacing: '-1px' })
+  .box({ marginBottom: 8 })
   .media('(max-width: 640px)', (c) => c
-    .fontSize(28)
+    .typography({ fontSize: 28 })
   )
   .$el('content-title');
 
 export const contentDesc = chain()
-  .fontSize(17)
-  .color('#a1a1aa')
-  .marginBottom(40)
-  .lineHeight("1.7")
+  .typography({ fontSize: 17, color: '#a1a1aa', lineHeight: '1.7' })
+  .box({ marginBottom: 40 })
   .$el('content-desc');
 
 export const sectionHeading = chain()
-  .fontSize(22)
-  .fontWeight("600")
-  .color('#e4e4e7')
-  .marginTop(48)
-  .marginBottom(16)
-  .paddingBottom(8)
-  .borderBottom('1px solid rgba(255,255,255,0.06)')
+  .typography({ fontSize: 22, fontWeight: '600', color: '#e4e4e7' })
+  .box({ marginTop: 48, marginBottom: 16, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.06)' })
   .media('(max-width: 640px)', (c) => c
-    .fontSize(18)
-    .marginTop(32)
+    .typography({ fontSize: 18 })
+    .box({ marginTop: 32 })
   )
   .$el('section-heading');
 
 export const paragraph = chain()
-  .fontSize(15)
-  .color('#c4c4cc')
-  .lineHeight("1.8")
-  .marginBottom(20)
+  .typography({ fontSize: 15, color: '#c4c4cc', lineHeight: '1.8' })
+  .box({ marginBottom: 20 })
   .$el('docs-paragraph');
 
 export const codeBlock = chain()
-  .bg('rgba(0,0,0,0.4)')
-  .rounded(12)
-  .padding('20px 24px')
-  .overflow('auto')
-  .fontFamily("'JetBrains Mono', 'Fira Code', monospace")
-  .fontSize(14)
-  .lineHeight("1.7")
-  .marginBottom(24)
-  .border('1px solid rgba(255,255,255,0.06)')
-  .color('#e4e4e7')
-  .whiteSpace('pre-wrap')
-  .wordBreak('break-word')
+  .background({ color: 'rgba(0,0,0,0.4)' })
+  .box({ borderRadius: 12, padding: '20px 24px', overflow: 'auto', marginBottom: 24, border: '1px solid rgba(255,255,255,0.06)' })
+  .typography({
+    fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+    fontSize: 14,
+    lineHeight: '1.7',
+    color: '#e4e4e7',
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
+  })
   .media('(max-width: 640px)', (c) => c
-    .fontSize(13)
-    .padding('16px')
+    .typography({ fontSize: 13 })
+    .box({ padding: '16px' })
   )
   .$el('code-block');
 
 export const inlineCode = chain()
-  .bg('rgba(99,102,241,0.12)')
-  .color('#c7d2fe')
-  .padding('2px 8px')
-  .rounded(4)
-  .fontSize(13)
-  .fontFamily("'JetBrains Mono', 'Fira Code', monospace")
-  .whiteSpace('nowrap')
+  .background({ color: 'rgba(99,102,241,0.12)' })
+  .typography({ color: '#c7d2fe', fontSize: 13, fontFamily: "'JetBrains Mono', 'Fira Code', monospace", whiteSpace: 'nowrap' })
+  .box({ padding: '2px 8px', borderRadius: 4 })
   .$el('inline-code');
 
 export const note = chain()
-  .bg('rgba(99,102,241,0.08)')
-  .borderLeft('3px solid #6366f1')
-  .padding('16px 20px')
-  .rounded('0 8px 8px 0')
-  .marginBottom(24)
-  .fontSize(14)
-  .color('#c7d2fe')
-  .lineHeight("1.7")
+  .background({ color: 'rgba(99,102,241,0.08)' })
+  .box({ borderLeft: '3px solid #6366f1', padding: '16px 20px', borderRadius: '0 8px 8px 0', marginBottom: 24 })
+  .typography({ fontSize: 14, color: '#c7d2fe', lineHeight: '1.7' })
   .$el('docs-note');
 
 export const tableWrapper = chain()
-  .overflow('auto')
-  .marginBottom(24)
-  .rounded(10)
-  .border('1px solid rgba(255,255,255,0.06)')
+  .box({ overflow: 'auto', marginBottom: 24, borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' })
   .$el('docs-table-wrap');
 
 export const docTable = chain()
-  .width('100%')
-  .borderCollapse('collapse')
-  .fontSize(14)
+  .box({ width: '100%' })
+  .raw('border-collapse', 'collapse')
+  .typography({ fontSize: 14 })
   .media('(max-width: 640px)', (c) => c
-    .fontSize(12)
+    .typography({ fontSize: 12 })
   )
   .$el('doc-table');
 
 export const docTh = chain()
-  .padding('12px 16px')
-  .textAlign('left')
-  .color('#a1a1aa')
-  .fontWeight("600")
-  .fontSize(13)
-  .textTransform('uppercase')
-  .letterSpacing('0.5px')
-  .borderBottom('1px solid rgba(255,255,255,0.08)')
-  .bg('rgba(255,255,255,0.02)')
+  .box({ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' })
+  .background({ color: 'rgba(255,255,255,0.02)' })
+  .typography({
+    textAlign: 'left',
+    color: '#a1a1aa',
+    fontWeight: '600',
+    fontSize: 13,
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+  })
   .media('(max-width: 640px)', (c) => c
-    .padding('8px 10px')
-    .fontSize(11)
+    .box({ padding: '8px 10px' })
+    .typography({ fontSize: 11 })
   )
   .$el('doc-th');
 
 export const docTd = chain()
-  .padding('12px 16px')
-  .color('#d4d4d8')
-  .borderBottom('1px solid rgba(255,255,255,0.04)')
-  .fontSize(14)
+  .box({ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.04)' })
+  .typography({ fontSize: 14, color: '#d4d4d8' })
   .media('(max-width: 640px)', (c) => c
-    .padding('8px 10px')
-    .fontSize(12)
+    .box({ padding: '8px 10px' })
+    .typography({ fontSize: 12 })
   )
   .$el('doc-td');
 
-  export const auditTextarea = chain()
-  .width('100%')
-  .minHeight(300)
-  .bg('rgba(0,0,0,0.4)')
-  .rounded(12)
-  .padding('20px 24px')
-  .fontFamily("'JetBrains Mono', 'Fira Code', monospace")
-  .fontSize(14)
-  .lineHeight("1.7")
-  .color('#e4e4e7')
-  .border('1px solid rgba(255,255,255,0.06)')
-  .outline('none')
-  .resize('vertical')
+export const auditTextarea = chain()
+  .box({ width: '100%', minHeight: 300, borderRadius: 12, padding: '20px 24px', border: '1px solid rgba(255,255,255,0.06)' })
+  .background({ color: 'rgba(0,0,0,0.4)' })
+  .typography({ fontFamily: "'JetBrains Mono', 'Fira Code', monospace", fontSize: 14, lineHeight: '1.7', color: '#e4e4e7' })
+  .raw('outline', 'none')
+  .raw('resize', 'vertical')
   .focus()
-    .borderColor('#6366f1')
+    .box({ borderColor: '#6366f1' })
   .end()
   .$el('audit-textarea');
 
 export const auditBtn = chain()
-  .bg('#6366f1')
-  .color('#ffffff')
-  .padding('14px 32px')
-  .rounded(10)
-  .fontSize(15)
-  .fontWeight("600")
-  .cursor('pointer')
-  .border('none')
-  .transition('all 0.15s ease')
+  .background({ color: '#6366f1' })
+  .typography({ fontSize: 15, fontWeight: '600', color: '#ffffff' })
+  .box({ padding: '14px 32px', borderRadius: 10, border: 'none' })
+  .raw('cursor', 'pointer')
+  .transition({ tr: 'all 0.15s ease' })
   .hover()
-    .bg('#4f46e5')
+    .background({ color: '#4f46e5' })
   .end()
   .$el('audit-btn');
 
 export const auditResultCard = chain()
-  .bg('rgba(0,0,0,0.3)')
-  .rounded(12)
-  .padding(24)
-  .border('1px solid rgba(255,255,255,0.06)')
-  .marginBottom(16)
+  .background({ color: 'rgba(0,0,0,0.3)' })
+  .box({ borderRadius: 12, padding: 24, border: '1px solid rgba(255,255,255,0.06)', marginBottom: 16 })
   .$el('audit-result-card');
 
 export const auditStatValue = chain()
-  .fontSize(32)
-  .fontWeight("700")
-  .lineHeight("1")
+  .typography({ fontSize: 32, fontWeight: '700', lineHeight: '1' })
   .$el('audit-stat-value');
 
 export const auditStatLabel = chain()
-  .fontSize(12)
-  .color('#71717a')
-  .textTransform('uppercase')
-  .letterSpacing('0.5px')
-  .marginTop(8)
+  .typography({ fontSize: 12, color: '#71717a', textTransform: 'uppercase', letterSpacing: '0.5px' })
+  .box({ marginTop: 8 })
   .$el('audit-stat-label');
 
 export const auditIssueItem = chain()
-  .padding('14px 18px')
-  .rounded(8)
-  .marginBottom(8)
-  .borderLeft('3px solid')
-  .bg('rgba(255,255,255,0.02)')
+  .box({ padding: '14px 18px', borderRadius: 8, marginBottom: 8, borderLeft: '3px solid' })
+  .background({ color: 'rgba(255,255,255,0.02)' })
   .$el('audit-issue-item');
 
 export const auditIssueMsg = chain()
-  .fontSize(14)
-  .fontWeight("500")
-  .color('#e4e4e7')
-  .marginBottom(4)
+  .typography({ fontSize: 14, fontWeight: '500', color: '#e4e4e7' })
+  .box({ marginBottom: 4 })
   .$el('audit-issue-msg');
 
 export const auditIssueSuggestion = chain()
-  .fontSize(13)
-  .color('#71717a')
+  .typography({ fontSize: 13, color: '#71717a' })
   .$el('audit-issue-suggestion');
 
 export const auditGrid = chain()
-  .display('grid')
-  .gridTemplateColumns('repeat(4, 1fr)')
-  .gap(16)
-  .marginBottom(32)
+  .grid({ columns: 'repeat(4, 1fr)', gap: 16 })
+  .box({ marginBottom: 32 })
   .media('(max-width: 640px)', (c) => c
-    .gridTemplateColumns('repeat(2, 1fr)')
+    .grid({ columns: 'repeat(2, 1fr)' })
   )
   .$el('audit-grid');

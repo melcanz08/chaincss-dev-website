@@ -14,7 +14,6 @@ export default function Nav() {
 
   const links = [
     { to: '/docs', label: 'Docs' },
-    { to: '/docs/quickstart', label: 'Quick Start' },
     { to: '/playground', label: 'Playground' },
     { to: '/audit', label: 'Audit' },
   ];
@@ -31,11 +30,7 @@ export default function Nav() {
           ◈ <span className={logoAccent}>Chain</span>CSS
         </div>
 
-        {/* Desktop Links */}
-        <div className={navLinks} style={{
-          display: 'flex',
-          '@media (max-width: 640px)': { display: 'none' }
-        } as any}>
+        <div className={navLinks}>
           {links.map(link => (
             <a
               key={link.to}
@@ -51,7 +46,6 @@ export default function Nav() {
           ))}
         </div>
 
-        {/* Burger Button — visible only on mobile */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           style={{
@@ -70,7 +64,6 @@ export default function Nav() {
         </button>
       </div>
 
-      {/* Mobile Dropdown Menu */}
       {menuOpen && (
         <div style={{
           display: 'none',
@@ -99,7 +92,6 @@ export default function Nav() {
         </div>
       )}
 
-      {/* Inline style to toggle burger/menu on mobile — injected via style tag */}
       <style>{`
         @media (max-width: 640px) {
           .burger-btn { display: block !important; }

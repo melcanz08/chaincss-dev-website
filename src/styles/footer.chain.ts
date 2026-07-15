@@ -1,57 +1,42 @@
 import { chain } from 'chaincss';
 
 export const footer = chain()
-  .borderTop('1px solid rgba(255,255,255,0.06)')
-  .padding('40px 24px')
-  .display('flex')
-  .flexDirection('column')
-  .alignItems('center')
-  .gap(16)
+  .box({ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '40px 24px' })
+  .flex({ direction: 'column', align: 'center', gap: 16 })
   .media('(max-width: 640px)', (c) => c
-    .padding('32px 16px')
-    .gap(12)
+    .box({ padding: '32px 16px' })
+    .flex({ gap: 12 })
   )
   .$el('site-footer');
 
 export const footerRow = chain()
-  .display('flex')
-  .alignItems('center')
-  .justifyContent('center')
-  .gap(24)
-  .flexWrap('wrap')
+  .flex({ align: 'center', justify: 'center', gap: 24, wrap: 'wrap' })
   .media('(max-width: 640px)', (c) => c
-    .gap(16)
-    .flexDirection('column')
-    .alignItems('center')
+    .flex({ direction: 'column', align: 'center', gap: 16 })
   )
   .$el('footer-row');
 
 export const footerText = chain()
-  .fontSize(14)
-  .color('#52525b')
+  .typography({ fontSize: 14, color: '#52525b' })
   .media('(max-width: 640px)', (c) => c
-    .fontSize(12)
-    .textAlign('center')
+    .typography({ fontSize: 12, textAlign: 'center' })
   )
   .$el('footer-text');
 
 export const footerLink = chain()
-  .color('#71717a')
-  .fontSize(14)
-  .textDecoration('none')
+  .typography({ fontSize: 14, color: '#71717a', textDecoration: 'none' })
   .hover()
-    .color('#a5b4fc')
+    .typography({ color: '#a5b4fc' })
   .end()
-  .transition('color 0.15s ease')
+  .transition({ tr: 'color 0.15s ease' })
   .media('(max-width: 640px)', (c) => c
-    .fontSize(13)
+    .typography({ fontSize: 13 })
   )
   .$el('footer-link');
 
 export const footerStat = chain()
-  .color('#6366f1')
-  .fontSize(14)
+  .typography({ fontSize: 14, color: '#6366f1' })
   .media('(max-width: 640px)', (c) => c
-    .fontSize(13)
+    .typography({ fontSize: 13 })
   )
   .$el('footer-stat');

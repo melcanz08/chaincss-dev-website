@@ -12,13 +12,12 @@ export default function Hero() {
     <section className={heroSection}>
       
       <h1 className={heroTitle}>
-        Write <span className={heroGradient}>CSS-in-JS</span>.
-        <br />
-        Compile to zero-runtime CSS.
+        The <span className={heroGradient}>Design-Aware</span> CSS Compiler
       </h1>
       <p className={heroSubtitle}>
-        ChainCSS is a compiler that transforms your TypeScript styles into static CSS at build time.
-        Dynamic values update via CSS variables — no runtime library, no memory leaks.
+        Tokens know their relationships. Styles understand intent. Change one color in Figma — 
+        every derived shade, hover state, and contrast ratio updates automatically. 
+        Zero runtime. WCAG 2.2 built in.
       </p>
       <div className={heroCtaGroup}>
         <button className={heroPrimaryBtn} onClick={() => navigate('/docs/quickstart')}>
@@ -30,10 +29,10 @@ export default function Hero() {
       </div>
       <div style={{ marginTop: 32, marginBottom: 32, display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap' }}>
         {[
+          { value: 'Token Graph', label: 'Propagation' },
+          { value: 'WCAG 2.2', label: 'Auto-Fix' },
           { value: '0KB', label: 'Runtime' },
-          { value: '0.5ms', label: 'Compile Time' },
-          { value: '5-Stage', label: 'Pipeline' },
-          { value: 'WCAG 2.2', label: 'A11y Audit' },
+          { value: '80ms', label: 'Figma → Browser' },
         ].map(stat => (
           <div key={stat.label} style={{ textAlign: 'center' }}>
             <div style={{ fontSize: 24, fontWeight: 700, color: '#818cf8' }}>{stat.value}</div>
@@ -42,7 +41,7 @@ export default function Hero() {
         ))}
       </div>
       <div className={heroBadge}>
-        v{VERSION} — 5-Stage Compiler Pipeline • Zero Runtime • Built-in A11y Audit
+        v{VERSION} — Design Token Graph • Relationship Macros • Mixed Mode • Live Inspector
       </div>
     </section>
   );
