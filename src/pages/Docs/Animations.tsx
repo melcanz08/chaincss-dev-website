@@ -1,9 +1,10 @@
 import { contentTitle, contentDesc, sectionHeading, paragraph, codeBlock, inlineCode, note, tableWrapper } from '../../styles/docs.chain.ts';
 import { docTable, docTh, docTd } from '../../styles/docs.chain.ts';
-
+import { usePrism } from '../../lib/usePrism';
 const presets = ['fadeIn','fadeOut','fadeInUp','fadeInDown','fadeInLeft','fadeInRight','slideInUp','slideInDown','slideInLeft','slideInRight','zoomIn','zoomOut','bounce','bounceIn','pulse','pulseGlow','shake','shakeX','spin','spinReverse','wiggle','wobble','flip','flipX','blink','typing','shimmer','ripple','float','sink','swing','flash','textReveal','textGlitch'];
 
 export default function Animations() {
+  usePrism([]);
   return (
     <>
       <h1 className={contentTitle}>Animations & Keyframes</h1>

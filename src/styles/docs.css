@@ -5,25 +5,20 @@
   color:#fff;
   padding:14px 32px;
   border:none;
-  -webkit-border-radius:10px;
-  -moz-border-radius:10px;
   border-radius:10px;
   cursor:pointer;
-  -webkit-transition:all .15s ease;
   transition:all .15s ease
 }
 .chain-audit-btn:hover {
   background-color:#4f46e5
 }
 .chain-audit-grid {
-  display:-ms-grid;
   display:grid;
   grid-template-columns:repeat(4, 1fr);
   gap:16px;
   margin-bottom:32px
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-audit-grid {
   display:grid;
   grid-template-columns:repeat(2, 1fr)
@@ -32,8 +27,6 @@
 .chain-audit-issue-item {
   margin-bottom:8px;
   padding:14px 18px;
-  -webkit-border-radius:8px;
-  -moz-border-radius:8px;
   border-radius:8px;
   border-left:3px solid;
   background-color:rgba(255,255,255,.02)
@@ -53,8 +46,6 @@
   margin-bottom:16px;
   padding:24px;
   border:1px solid rgba(255,255,255,.06);
-  -webkit-border-radius:12px;
-  -moz-border-radius:12px;
   border-radius:12px
 }
 .chain-audit-stat-label {
@@ -72,8 +63,6 @@
 .chain-audit-textarea {
   padding:20px 24px;
   border:1px solid rgba(255,255,255,.06);
-  -webkit-border-radius:12px;
-  -moz-border-radius:12px;
   border-radius:12px;
   width:100%;
   min-height:300px;
@@ -93,8 +82,6 @@
   margin-bottom:24px;
   padding:20px 24px;
   border:1px solid rgba(255,255,255,.06);
-  -webkit-border-radius:12px;
-  -moz-border-radius:12px;
   border-radius:12px;
   overflow:auto;
   font-family:'JetBrains Mono', 'Fira Code', monospace;
@@ -104,8 +91,7 @@
   word-break:break-word;
   color:#e4e4e7
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-code-block {
   font-size:13px;
   padding:16px
@@ -116,8 +102,7 @@
   max-width:calc(100% - 308px);
   flex-grow:1
 }
-@media (max-width:768px)  {
-
+@media (max-width: 768px) {
   .chain-docs-content {
   max-width:100%
 }
@@ -135,8 +120,7 @@
   color:#f4f4f5;
   margin-bottom:8px
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-content-title {
   font-size:28px
 }
@@ -146,8 +130,7 @@
   border-collapse:collapse;
   font-size:14px
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-doc-table {
   font-size:12px
 }
@@ -158,8 +141,7 @@
   font-size:14px;
   color:#d4d4d8
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-doc-td {
   padding:8px 10px;
   font-size:12px
@@ -176,24 +158,20 @@
   text-transform:uppercase;
   color:#a1a1aa
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-doc-th {
   padding:8px 10px;
   font-size:11px
 }
 }
 .chain-docs-layout {
-  display:-webkit-flex;
-  display:-ms-flexbox;
   display:flex;
   gap:48px;
   margin:0 auto;
   padding:80px 24px 40px;
   max-width:1500px
 }
-@media (max-width:768px)  {
-
+@media (max-width: 768px) {
   .chain-docs-layout {
   display:flex;
   flex-direction:column;
@@ -208,16 +186,12 @@
   white-space:nowrap;
   color:#c7d2fe;
   padding:2px 8px;
-  -webkit-border-radius:4px;
-  -moz-border-radius:4px;
   border-radius:4px
 }
 .chain-docs-note {
   background-color:rgba(99,102,241,.08);
   margin-bottom:24px;
   padding:16px 20px;
-  -webkit-border-radius:0 8px 8px 0;
-  -moz-border-radius:0 8px 8px 0;
   border-radius:0 8px 8px 0;
   border-left:3px solid #6366f1;
   font-size:14px;
@@ -239,8 +213,7 @@
   padding-bottom:8px;
   border-bottom:1px solid rgba(255,255,255,.06)
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-section-heading {
   font-size:18px;
   margin-top:32px
@@ -257,13 +230,12 @@
   height:fit-content;
   max-height:calc(100vh - 120px)
 }
-@media (max-width:768px)  {
-
+@media (max-width: 768px) {
   .chain-docs-sidebar {
   margin-bottom:16px;
-  padding-right:0px;
+  padding-right:0;
   padding-bottom:16px;
-  border-bottom:1px solid rgba(255,255,255,0.06);
+  border-bottom:1px solid rgba(255,255,255,.06);
   width:100%;
   position:static;
   max-height:none;
@@ -273,19 +245,16 @@
 .chain-sidebar-link {
   margin-bottom:2px;
   padding:8px 12px;
-  -webkit-border-radius:6px;
-  -moz-border-radius:6px;
   border-radius:6px;
   font-size:14px;
   text-decoration:none;
   color:#a1a1aa;
   display:block;
   cursor:pointer;
-  -webkit-transition:all .1s ease;
   transition:all .1s ease
 }
 .chain-sidebar-link:hover {
-  background-color:rgba(255,255,255,0.04);
+  background-color:rgba(255,255,255,.04);
   color:#e4e4e7
 }
 .chain-sidebar-link-active {
@@ -304,8 +273,6 @@
 .chain-docs-table-wrap {
   margin-bottom:24px;
   border:1px solid rgba(255,255,255,.06);
-  -webkit-border-radius:10px;
-  -moz-border-radius:10px;
   border-radius:10px;
   overflow:auto
 }

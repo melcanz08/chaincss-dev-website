@@ -1,5 +1,11 @@
 import { chain } from 'chaincss';
 
+interface StyleContext {
+  isDark: boolean;
+  count: number;
+  [key: string]: any; // Allow additional properties
+}
+
 // ============================================================
 // STATIC STYLES
 // ============================================================
@@ -107,39 +113,38 @@ export const infoList = chain()
   .$el('info-list');
 
 export const previewTitle = chain()
-  .typography({ fontSize: 24, fontWeight: '700' })
+  .typography({ textAlign: 'center', fontSize: 24, fontWeight: '700' })
   .box({ marginBottom: 12 })
   .$el('preview-title');
 
 export const previewText = chain()
-  .typography({ fontSize: 14, lineHeight: 1.7 })
+  .typography({ textAlign: 'center', fontSize: 14, lineHeight: 1.7 })
   .raw('opacity', '0.7')
   .$el('preview-text');
 
 // ============================================================
-// DYNAMIC STYLES (Mixed Mode)
+// DYNAMIC STYLES (Mixed Mode) — Context-aware, no window globals
 // ============================================================
 
 export const themeToggle = chain.dynamic()
   .flex({ align: 'center', gap: 8 })
-  .display('inline-flex')
+  .raw('display', 'inline-flex')
   .box({ padding: '12px 24px', borderRadius: 8, border: '1px solid rgba(99, 102, 241, 0.3)' })
   .typography({ fontSize: 14, fontWeight: '600' })
   .raw('cursor', 'pointer')
   .transition({ tr: 'all 0.2s ease' })
-  .background({ color: () => (window as any).__css_isDark ? '#1e293b' : '#f1f5f9' })
-  .color(() => (window as any).__css_isDark ? '#e2e8f0' : '#0f172a')
+  .raw({ backgroundColor: (ctx: StyleContext) => ctx.isDark ? '#1e293b' : '#f1f5f9' })
+  .raw({ color: (ctx: StyleContext) => ctx.isDark ? '#e2e8f0' : '#0f172a' })
   .$el('theme-toggle');
 
 export const counterBadge = chain.dynamic()
   .flex({ align: 'center', justify: 'center' })
-  .display('inline-flex')
+  .raw('display', 'inline-flex')
   .box({ minWidth: 44, height: 44, borderRadius: 9999, padding: '0 16px', border: 'none' })
   .typography({ fontSize: 14, fontWeight: '700', color: '#ffffff' })
   .raw('cursor', 'pointer')
   .transition({ tr: 'all 0.2s ease' })
-  .background({ color: () => (window as any).__css_count > 10 ? '#ef4444' : '#6366f1' })
-  .transform({ custom: () => (window as any).__css_count > 10 ? 'scale(1.1)' : 'scale(1)' })
+  .raw({ backgroundColor: (ctx: StyleContext) => ctx.count > 10 ? '#ef4444' : '#6366f1' })
   .$el('counter-badge');
 
 export const previewCard = chain.dynamic()
@@ -149,12 +154,12 @@ export const previewCard = chain.dynamic()
   .media('(max-width: 640px)', (c) => c
     .box({ padding: 24 })
   )
-  .background({ bg: () => (window as any).__css_isDark
+  .raw({ background: (ctx: StyleContext) => ctx.isDark
     ? 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'
     : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'
   })
-  .color(() => (window as any).__css_isDark ? '#f1f5f9' : '#0f172a')
-  .shadow({ box: () => (window as any).__css_isDark
+  .raw({ color: (ctx: StyleContext) => ctx.isDark ? '#f1f5f9' : '#0f172a' })
+  .raw({ boxShadow: (ctx: StyleContext) => ctx.isDark
     ? '0 20px 60px rgba(0,0,0,0.5)'
     : '0 4px 12px rgba(0,0,0,0.1)'
   })

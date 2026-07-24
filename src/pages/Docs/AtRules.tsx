@@ -1,36 +1,37 @@
 import { contentTitle, contentDesc, sectionHeading, paragraph, codeBlock, inlineCode, note, tableWrapper } from '../../styles/docs.chain.ts';
 import { docTable, docTh, docTd } from '../../styles/docs.chain.ts';
-
+import { usePrism } from '../../lib/usePrism';
 export default function AtRules() {
+  usePrism([]);
   return (
     <>
       <h1 className={contentTitle}>At-Rules & Nesting</h1>
       <p className={contentDesc}>Responsive breakpoints, feature queries, container queries, layers, and nested selectors.</p>
 
       <h2 className={sectionHeading}>@media — Responsive Design</h2>
-      <pre className={codeBlock}>{`chain()
+      <pre className={codeBlock}><code className='language-ts'>{`chain()
   .flex({ direction: 'column' })
   .box({ padding: 16 })
   .media('(min-width: 768px)', (c) => c
     .flex({ direction: 'row', gap: 24 })
     .box({ padding: 24 })
   )
-  .$el('layout')`}</pre>
+  .$el('layout')`}</code></pre>
 
       <h2 className={sectionHeading}>@supports — Feature Queries</h2>
-      <pre className={codeBlock}>{`chain()
+      <pre className={codeBlock}><code className='language-ts'>{`chain()
   .grid({ columns: '1fr' })
   .supports('(display: grid)', (c) => c
     .grid({ columns: '1fr 1fr', gap: 16 })
   )
-  .$el('grid-layout')`}</pre>
+  .$el('grid-layout')`}</code></pre>
 
       <h2 className={sectionHeading}>@container — Container Queries</h2>
-      <pre className={codeBlock}>{`chain()
+      <pre className={codeBlock}><code className='language-ts'>{`chain()
   .container('(min-width: 400px)', (c) => c
     .flex({ direction: 'row' })
   )
-  .$el('card')`}</pre>
+  .$el('card')`}</code></pre>
 
       <h2 className={sectionHeading}>Nesting & Children</h2>
       <pre className={codeBlock}>{`chain()

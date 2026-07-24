@@ -14,7 +14,6 @@ const Animations = lazy(() => import('./Animations'));
 const MathEngine = lazy(() => import('./MathEngine'));
 const AtomicCSS = lazy(() => import('./AtomicCSS'));
 const Pipeline = lazy(() => import('./Pipeline'));
-const StyleGraph = lazy(() => import('./StyleGraph'));
 const Accessibility = lazy(() => import('./Accessibility'));
 const SelfHealing = lazy(() => import('./SelfHealing'));
 const Inspector = lazy(() => import('./Inspector'));
@@ -22,8 +21,10 @@ const Caching = lazy(() => import('./Caching'));
 const Security = lazy(() => import('./Security'));
 const APIReference = lazy(() => import('./APIReference'));
 const FrameworkIntegration = lazy(() => import('./FrameworkIntegration'));
+const NextJS = lazy(() => import('./NextJS'));
 const VitePlugin = lazy(() => import('./VitePlugin'));
 const WebpackPlugin = lazy(() => import('./WebpackPlugin'));
+const PostCSSPlugin = lazy(() => import('./PostCSSPlugin'));
 const CLI = lazy(() => import('./CLI'));
 const Benchmarks = lazy(() => import('./Benchmarks'));
 
@@ -37,7 +38,7 @@ const sections = [
     { to: '/docs/properties', label: 'CSS Properties' },
     { to: '/docs/pseudo-classes', label: 'Pseudo-Classes' },
     { to: '/docs/at-rules', label: 'At-Rules & Nesting' },
-    { to: '/docs/macros', label: 'Macros & Shorthands' },
+    { to: '/docs/macros', label: 'Macros' },
   ]},
   { title: 'Core Features', links: [
     { to: '/docs/mixed-mode', label: 'Mixed Mode' },
@@ -49,22 +50,23 @@ const sections = [
   ]},
   { title: 'Compiler', links: [
     { to: '/docs/pipeline', label: '5-Stage Pipeline' },
-    { to: '/docs/style-graph', label: 'Style Graph' },
     { to: '/docs/inspector', label: 'Live Inspector' },
     { to: '/docs/self-healing', label: 'Intent Engine' },
     { to: '/docs/accessibility', label: 'A11y Audit' },
     { to: '/docs/caching', label: 'Cache System' },
     { to: '/docs/security', label: 'Security' },
   ]},
+  { title: 'Integration', links: [
+    { to: '/docs/frameworks', label: 'React / Vue / Svelte / Solid' },
+    { to: '/docs/nextjs', label: 'Next.js (RSC + SSR)' },
+    { to: '/docs/vite-plugin', label: 'Vite Plugin' },
+    { to: '/docs/webpack-plugin', label: 'Webpack Plugin' },
+    { to: '/docs/postcss', label: 'PostCSS Plugin' },
+  ]},
   { title: 'Reference', links: [
     { to: '/docs/api', label: 'API Reference' },
     { to: '/docs/cli', label: 'CLI Commands' },
     { to: '/docs/benchmarks', label: 'Benchmarks' },
-  ]},
-  { title: 'Integration', links: [
-    { to: '/docs/frameworks', label: 'React / Vue / Svelte / Solid' },
-    { to: '/docs/vite-plugin', label: 'Vite Plugin' },
-    { to: '/docs/webpack-plugin', label: 'Webpack Plugin' },
   ]},
 ];
 
@@ -109,7 +111,6 @@ export default function Docs() {
             <Route path="math" element={<MathEngine />} />
             <Route path="atomic" element={<AtomicCSS />} />
             <Route path="pipeline" element={<Pipeline />} />
-            <Route path="style-graph" element={<StyleGraph />} />
             <Route path="inspector" element={<Inspector />} />
             <Route path="self-healing" element={<SelfHealing />} />
             <Route path="accessibility" element={<Accessibility />} />
@@ -119,8 +120,10 @@ export default function Docs() {
             <Route path="cli" element={<CLI />} />
             <Route path="benchmarks" element={<Benchmarks />} />
             <Route path="frameworks" element={<FrameworkIntegration />} />
+            <Route path="nextjs" element={<NextJS />} />
             <Route path="vite-plugin" element={<VitePlugin />} />
             <Route path="webpack-plugin" element={<WebpackPlugin />} />
+            <Route path="postcss" element={<PostCSSPlugin />} />
           </Routes>
         </Suspense>
       </main>

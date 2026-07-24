@@ -1,5 +1,6 @@
 import { contentTitle, contentDesc, sectionHeading, paragraph, codeBlock, inlineCode, note, tableWrapper } from '../../styles/docs.chain.ts';
 import { docTable, docTh, docTd } from '../../styles/docs.chain.ts';
+import { usePrism } from '../../lib/usePrism';
 
 const pseudos = [
   ['hover','.hover() ... .end()',':hover','Mouse hover'],
@@ -13,13 +14,14 @@ const pseudos = [
 ];
 
 export default function PseudoClasses() {
+  usePrism([]);
   return (
     <>
       <h1 className={contentTitle}>Pseudo-Classes & Pseudo-Elements</h1>
       <p className={contentDesc}>Style interactive states with .hover(), .focus(), and more.</p>
 
       <h2 className={sectionHeading}>Basic Usage</h2>
-      <pre className={codeBlock}>{`chain()
+      <pre className={codeBlock}><code className="language-ts">{`chain()
   .background({ color: '#6366f1' })
   .typography({ color: '#ffffff' })
   .box({ padding: '12px 24px', borderRadius: 8 })
@@ -30,7 +32,7 @@ export default function PseudoClasses() {
   .focus()
     .outline({ width: '2px', style: 'solid', color: '#818cf8', offset: '2px' })
   .end()
-  .$el('btn')`}</pre>
+  .$el('btn')`}</code></pre>
 
       <h2 className={sectionHeading}>All Pseudo-Classes</h2>
       <div className={tableWrapper}>

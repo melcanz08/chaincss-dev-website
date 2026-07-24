@@ -2,8 +2,10 @@ import {
   contentTitle, contentDesc, sectionHeading, paragraph,
   codeBlock, inlineCode, note
 } from '../../styles/docs.chain.ts';
+import { usePrism } from '../../lib/usePrism';
 
 export default function Recipes() {
+  usePrism([]);
   return (
     <>
       <h1 className={contentTitle}>Recipes: Type-Safe Component Variants</h1>
@@ -13,7 +15,7 @@ export default function Recipes() {
       </p>
 
       <h2 className={sectionHeading}>Basic Recipe</h2>
-      <pre className={codeBlock}>{`import { recipe } from 'chaincss'
+      <pre className={codeBlock}><code className='language-ts'>{`import { recipe } from 'chaincss'
 
 const button = recipe({
   base: chain()
@@ -40,10 +42,10 @@ const button = recipe({
 
 // Type-safe variant selection
 const primaryBtn = button({ color: 'primary', size: 'lg' })
-const dangerBtn = button({ color: 'danger', size: 'sm' })`}</pre>
+const dangerBtn = button({ color: 'danger', size: 'sm' })`}</code></pre>
 
       <h2 className={sectionHeading}>Compound Variants</h2>
-      <pre className={codeBlock}>{`const button = recipe({
+      <pre className={codeBlock}><code className='language-ts'>{`const button = recipe({
   base: chain().box({ padding: '8px 16px', borderRadius: 8 }),
   variants: {
     color: {
@@ -59,7 +61,7 @@ const dangerBtn = button({ color: 'danger', size: 'sm' })`}</pre>
     variants: { color: 'ghost', outlined: true },
     style: chain().box({ border: '2px solid #6366f1' }).background({ color: 'rgba(99,102,241,0.08)' }),
   }],
-})`}</pre>
+})`}</code></pre>
 
       <div className={note}>
         <strong>💡 Pro tip:</strong> Recipes compile to static CSS. Use them for design systems 

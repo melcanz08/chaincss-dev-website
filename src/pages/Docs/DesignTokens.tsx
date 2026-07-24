@@ -2,8 +2,9 @@ import {
   contentTitle, contentDesc, sectionHeading, paragraph,
   codeBlock, inlineCode, note
 } from '../../styles/docs.chain.ts';
-
+import { usePrism } from '../../lib/usePrism';
 export default function DesignTokens() {
+  usePrism([]);
   return (
     <>
       <h1 className={contentTitle}>Design Tokens</h1>
@@ -14,7 +15,7 @@ export default function DesignTokens() {
       </p>
 
       <h2 className={sectionHeading}>Defining Tokens</h2>
-      <pre className={codeBlock}>{`// chaincss.config.js
+      <pre className={codeBlock}><code className="language-ts">{`// chaincss.config.js
 export default {
   tokens: {
     tokens: {
@@ -31,10 +32,10 @@ export default {
       },
     },
   },
-}`}</pre>
+}`}</code></pre>
 
       <h2 className={sectionHeading}>Using Tokens</h2>
-      <pre className={codeBlock}>{`import { chain } from 'chaincss'
+      <pre className={codeBlock}><code className="language-ts">{`import { chain } from 'chaincss'
 
 export const card = chain()
   .background({ color: '$colors.surface' })
@@ -44,13 +45,13 @@ export const card = chain()
     fontSize: '$typography.fontSizeBase',
   })
   .box({ padding: '$spacing.lg', borderRadius: 8 })
-  .$el('card')`}</pre>
+  .$el('card')`}</code></pre>
 
       <h2 className={sectionHeading}>Token Entanglement — The Graph</h2>
       <p className={paragraph}>
         Tokens aren't flat variables. Define relationships between them:
       </p>
-      <pre className={codeBlock}>{`// chaincss.config.js
+      <pre className={codeBlock}><code className="language-ts">{`// chaincss.config.js
 export default {
   tokens: {
     tokens: {
@@ -65,14 +66,14 @@ export default {
       { type: 'contrast', foreground: 'text.onPrimary', background: 'primary.500', target: 4.5 },
     ],
   },
-}`}</pre>
+}`}</code></pre>
       <p className={paragraph}>
         Change <code className={inlineCode}>primary.500</code> and every derived shade, hover state, 
         and text contrast propagates automatically via topological sort.
       </p>
 
       <h2 className={sectionHeading}>Theme Contracts</h2>
-      <pre className={codeBlock}>{`import { createThemeContract, createTheme } from 'chaincss'
+      <pre className={codeBlock}><code className="language-ts">{`import { createThemeContract, createTheme } from 'chaincss'
 
 const contract = createThemeContract({
   colors: { primary: '', background: '', text: '' },
@@ -84,7 +85,7 @@ export const lightTheme = createTheme(contract, {
 
 export const darkTheme = createTheme(contract, {
   colors: { primary: '#818cf8', background: '#0f172a', text: '#e2e8f0' },
-})`}</pre>
+})`}</code></pre>
 
       <div className={note}>
         <strong>🔒 Build-time validation:</strong> Missing tokens in a theme contract throw compile errors — 

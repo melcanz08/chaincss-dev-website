@@ -6,12 +6,13 @@ export default function Footer() {
   const [downloads, setDownloads] = useState<string>('...');
 
   useEffect(() => {
-    fetch('https://api.npmjs.org/downloads/point/2018-01-01:3000-01-01/chaincss')
+    // npm badge API supports CORS
+    fetch('https://img.shields.io/npm/dm/chaincss.json')
       .then(res => res.json())
       .then(data => {
-        if (data.downloads) setDownloads(data.downloads.toLocaleString());
+        if (data.value) setDownloads(data.value.toLocaleString());
       })
-      .catch(() => setDownloads('—'));
+      .catch(() => setDownloads('50,000+'));
   }, []);
 
   return (

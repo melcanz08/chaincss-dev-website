@@ -1,12 +1,11 @@
 .chain-nav-logo {
   font-size:20px;
   font-weight:700;
-  letter-spacing:-.5px;
+  letter-spacing:-0.5px;
   color:#fff;
   cursor:pointer
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-nav-logo {
   font-size:17px
 }
@@ -32,34 +31,27 @@
   color:#fff;
   padding:8px 20px;
   border:none;
-  -webkit-border-radius:8px;
-  -moz-border-radius:8px;
   border-radius:8px;
   cursor:pointer;
-  -webkit-transition:background .15s ease;
   transition:background .15s ease
 }
 .chain-nav-cta:hover {
   background-color:#4f46e5
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-nav-cta {
   padding:6px 14px;
   font-size:12px
 }
 }
 .chain-nav-inner {
-  display:-webkit-flex;
-  display:-ms-flexbox;
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:0 24px;
   height:64px
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-nav-inner {
   padding:0 16px;
   height:56px
@@ -70,27 +62,22 @@
   font-weight:500;
   color:#a1a1aa;
   cursor:pointer;
-  -webkit-transition:color .15s ease;
   transition:color .15s ease
 }
 .chain-nav-link:hover {
-  color:#ffffff
+  color:#fff
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-nav-link {
   font-size:12px
 }
 }
 .chain-nav-links {
-  display:-webkit-flex;
-  display:-ms-flexbox;
   display:flex;
   align-items:center;
   gap:24px
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-nav-links {
   display:flex;
   gap:12px

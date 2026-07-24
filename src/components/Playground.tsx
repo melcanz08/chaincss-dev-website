@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useChainStyles } from 'chaincss/runtime'
 import {
   playgroundSection, wrapper, panel, panelTitle, runButton,
   tabs, codeDisplay, outputDisplay,
@@ -17,9 +18,9 @@ const DEFAULT_STATIC = `chain()
 
 const DEFAULT_DYNAMIC = `chain.dynamic()
   .box({ padding: 24, borderRadius: 12 })
-  .background({ color: () => isDark ? '#1e293b' : '#f8fafc' })
-  .typography({ color: () => isDark ? '#f1f5f9' : '#0f172a' })
-  .shadow({ box: () => isDark
+  .background({ color: (ctx) => ctx.isDark ? '#1e293b' : '#f8fafc' })
+  .typography({ color: (ctx) => ctx.isDark ? '#f1f5f9' : '#0f172a' })
+  .shadow({ box: (ctx) => ctx.isDark
     ? '0 10px 60px rgba(0,0,0,0.5)'
     : '0 4px 12px rgba(0,0,0,0.1)'
   })
@@ -85,8 +86,11 @@ export default function Playground() {
   const [count, setCount] = useState(0)
   const [copied, setCopied] = useState(false)
 
-  ;(window as any).__css_isDark = isDark
-  ;(window as any).__css_count = count
+  // Pass state as context object — no window globals needed
+  const { classes: dynamicClasses, styleVars } = useChainStyles(
+    { themeToggle, counterBadge, previewCard },
+    { isDark, count }
+  )
 
   const runCompile = () => {
     const result = activeTab === 'static' 
@@ -202,39 +206,22 @@ export default function Playground() {
 
         <div className={controlBar}>
           <button
-            className={themeToggle.className}
-            style={{
-              background: isDark ? '#1e293b' : '#f1f5f9',
-              color: isDark ? '#e2e8f0' : '#0f172a',
-            }}
+            className={dynamicClasses.themeToggle}
+            style={styleVars}
             onClick={() => setIsDark(!isDark)}
           >
             {isDark ? '🌙 Dark Mode' : '☀️ Light Mode'}
           </button>
           <button
-            className={counterBadge.className}
-            style={{
-              background: count > 10 ? '#ef4444' : '#6366f1',
-              transform: count > 10 ? 'scale(1.1)' : 'scale(1)',
-            }}
+            className={dynamicClasses.counterBadge}
+            style={styleVars}
             onClick={() => setCount(c => c + 1)}
           >
             Clicks: {count}
           </button>
         </div>
 
-        <div
-          className={previewCard.className}
-          style={{
-            background: isDark
-              ? 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'
-              : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-            color: isDark ? '#f1f5f9' : '#0f172a',
-            boxShadow: isDark
-              ? '0 20px 60px rgba(0,0,0,0.5)'
-              : '0 4px 12px rgba(0,0,0,0.1)',
-          }}
-        >
+        <div className={dynamicClasses.previewCard} style={styleVars}>
           <h3 className={previewTitle}>Mixed Mode Preview</h3>
           <p className={previewText}>
             Background, text color, and shadow are all dynamic.

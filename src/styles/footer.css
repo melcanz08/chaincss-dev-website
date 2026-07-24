@@ -1,17 +1,12 @@
 .chain-site-footer {
   padding:40px 24px;
   border-top:1px solid rgba(255,255,255,.06);
-  display:-webkit-flex;
-  display:-ms-flexbox;
-  display:-webkit-flex;
-  display:-ms-flexbox;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:16px
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-site-footer {
   padding:32px 16px;
   display:flex;
@@ -22,29 +17,24 @@
   font-size:14px;
   text-decoration:none;
   color:#71717a;
-  -webkit-transition:color .15s ease;
   transition:color .15s ease
 }
 .chain-footer-link:hover {
   color:#a5b4fc
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-footer-link {
   font-size:13px
 }
 }
 .chain-footer-row {
-  display:-webkit-flex;
-  display:-ms-flexbox;
   display:flex;
   flex-wrap:wrap;
   align-items:center;
   justify-content:center;
   gap:24px
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-footer-row {
   display:flex;
   flex-direction:column;
@@ -56,8 +46,7 @@
   font-size:14px;
   color:#6366f1
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-footer-stat {
   font-size:13px
 }
@@ -66,8 +55,7 @@
   font-size:14px;
   color:#52525b
 }
-@media (max-width:640px)  {
-
+@media (max-width: 640px) {
   .chain-footer-text {
   font-size:12px;
   text-align:center

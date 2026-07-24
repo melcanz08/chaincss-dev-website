@@ -2,8 +2,10 @@ import {
   contentTitle, contentDesc, sectionHeading, paragraph,
   codeBlock, inlineCode, note
 } from '../../styles/docs.chain.ts';
+import { usePrism } from '../../lib/usePrism';
 
 export default function MixedMode() {
+  usePrism([]);
   return (
     <>
       <h1 className={contentTitle}>Mixed Mode: Static + Dynamic Styles</h1>
@@ -23,7 +25,7 @@ export default function MixedMode() {
       </p>
 
       <h2 className={sectionHeading}>Static vs Dynamic</h2>
-      <pre className={codeBlock}>{`import { chain } from 'chaincss'
+      <pre className={codeBlock}><code className='language-ts'>{`import { chain } from 'chaincss'
 
 // ── STATIC MODE — everything compiles to CSS at build time ──
 export const staticBtn = chain()
@@ -42,7 +44,7 @@ export const dynamicBtn = chain.dynamic()
     ? '0 8px 25px rgba(99,102,241,0.4)'
     : '0 2px 8px rgba(0,0,0,0.1)'
   })
-  .$el('btn-dynamic')`}</pre>
+  .$el('btn-dynamic')`}</code></pre>
 
       <h2 className={sectionHeading}>How It Works</h2>
       <p className={paragraph}>
@@ -54,7 +56,7 @@ export const dynamicBtn = chain.dynamic()
       </ol>
 
       <h2 className={sectionHeading}>Using Mixed Mode in React</h2>
-      <pre className={codeBlock}>{`import { useChainStyles } from 'chaincss/runtime'
+      <pre className={codeBlock}><code className='language-ts'>{`import { useChainStyles } from 'chaincss/runtime'
 import { dynamicBtn } from './button.chain'
 
 function Button({ isActive }) {
@@ -71,10 +73,10 @@ function Button({ isActive }) {
       Click me
     </button>
   )
-}`}</pre>
+}`}</code></pre>
 
       <h2 className={sectionHeading}>What Gets Generated</h2>
-      <pre className={codeBlock}>{`/* button.css — static CSS */
+      <pre className={codeBlock}><code className='language-ts'>{`/* button.css — static CSS */
 .chain-btn-dynamic {
   padding: 12px 24px;
   border-radius: 8px;
@@ -91,7 +93,7 @@ export const dynamicBtn = {
     "background-color": () => isActive ? '#6366f1' : '#a5b4fc',
     "box-shadow": () => isActive ? '0 8px 25px ...' : '0 2px 8px ...'
   }
-}`}</pre>
+}`}</code></pre>
 
       <h2 className={sectionHeading}>Security</h2>
       <p className={paragraph}>

@@ -43,12 +43,13 @@ export default function Macros() {
 
   return (
     <>
-      <h1 className={contentTitle}>Macros & Shorthands</h1>
+      <h1 className={contentTitle}>Macros</h1>
       <p className={contentDesc}>
-        32+ macros and 100+ shorthands. Express design intent — not selector mechanics.
+        32+ macros that express design intent — not selector mechanics.
+        All compile to plain CSS at build time with zero runtime overhead.
       </p>
 
-      <h2 className={sectionHeading}>Relationship Macros — The Differentiator</h2>
+      <h2 className={sectionHeading}>Relationship Macros</h2>
       <p className={paragraph}>
         These macros generate CSS relationship selectors. Instead of writing complex{' '}
         <code className={inlineCode}>:has()</code>, <code className={inlineCode}>:focus-within</code>, 
@@ -115,7 +116,8 @@ export default function Macros() {
 
       <div className={note}>
         <strong>💡 Tip:</strong> All macros compile to plain CSS at build time. 
-        Zero runtime overhead. Use the <a href="/docs/inspector" style={{ color: '#818cf8' }}>Live Inspector</a> to see the generated output.
+        Zero runtime overhead. See <a href="/docs/properties" style={{ color: '#818cf8' }}>Styling API</a> for{' '}
+        structured shorthands and CSS properties.
       </div>
     </>
   );

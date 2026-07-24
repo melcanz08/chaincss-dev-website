@@ -1,3 +1,4 @@
+// hero.chain.ts
 import { chain, type ChainProxy } from 'chaincss';
 
 export const heroSection = chain()
@@ -10,7 +11,7 @@ export const heroSection = chain()
 
 export const heroBadge = chain()
   .flex({ align: 'center', gap: 8 })
-  .display('inline-flex')
+  .raw('display','inline-flex')
   .background({ color: 'rgba(99, 102, 241, 0.1)' })
   .typography({ fontSize: 13, fontWeight: '500', color: '#a5b4fc' })
   .box({ padding: '6px 16px', borderRadius: 9999, marginBottom: 32 })
@@ -37,8 +38,8 @@ export const heroTitle = chain()
 
 export const heroGradient = chain()
   .background({ bg: 'linear-gradient(135deg, #818cf8, #a78bfa, #f472b6)' })
-  .raw('background-clip', 'text')
-  .raw('-webkit-text-fill-color', 'transparent')
+  .raw('backgroundClip', 'text')
+  .raw('textFillColor', 'transparent')
   .$el('hero-gradient');
 
 export const heroSubtitle = chain()

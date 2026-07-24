@@ -18,5 +18,5 @@ export default {
         lg: '24px',
       },
     },
-  },
+  }
 }
