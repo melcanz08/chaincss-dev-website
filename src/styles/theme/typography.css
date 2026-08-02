@@ -1,0 +1,10 @@
+.chain-body{font-size:15px;line-height:1.8;}
+.chain-body-lg{font-size:18px;line-height:1.7;}
+.chain-body-sm{font-size:13px;line-height:1.6;}
+.chain-caption{font-size:12px;letter-spacing:0.5px;text-transform:uppercase;}
+.chain-h1{font-size:60px;font-weight:800;line-height:1.1;letter-spacing:-2px;}
+.chain-h2{font-size:36px;font-weight:700;letter-spacing:-0.5px;}
+.chain-h3{font-size:22px;font-weight:600;}
+.chain-h4{font-size:18px;font-weight:600;}
+.chain-mono{font-family:'JetBrains Mono', 'Fira Code', monospace;font-size:13px;line-height:1.7;}
+.chain-mono-sm{font-family:'JetBrains Mono', 'Fira Code', monospace;font-size:11px;}

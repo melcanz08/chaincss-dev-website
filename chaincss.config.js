@@ -1,5 +1,9 @@
 export default {
-  inputs: ['src/styles/**/*.chain.ts'],
+  inputs: [
+    'src/styles/**/*.chain.ts',
+    'src/pages/**/*.chain.ts',
+    'src/components/**/*.chain.ts',
+  ],
   output: {
     outputDir: 'src/styles',
   },

@@ -1,0 +1,20 @@
+.chain-feature-card{background-color:rgba(255, 255, 255, 0.02);padding:32px;border:1px solid rgba(255, 255, 255, 0.05);border-radius:16px;min-width:0;transition:all 0.2s ease;}
+.chain-feature-card:hover{border-color:rgba(99, 102, 241, 0.2);background-color:rgba(99, 102, 241, 0.04);}
+@media (max-width: 640px) { .chain-feature-card{padding:16px;} }
+.chain-feature-card-code{background-color:rgba(0, 0, 0, 0.3);margin-top:16px;padding:14px 16px;border-radius:8px;overflow:auto;font-family:'JetBrains Mono', 'Fira Code', monospace;font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-all;color:#a5b4fc;}
+@media (max-width: 640px) { .chain-feature-card-code{font-size:11px;padding:10px;} }
+.chain-feature-card-icon{font-size:36px;margin-bottom:20px;}
+@media (max-width: 640px) { .chain-feature-card-icon{font-size:28px;margin-bottom:12px;} }
+.chain-feature-card-text{font-size:14px;line-height:1.7;color:#a1a1aa;}
+@media (max-width: 640px) { .chain-feature-card-text{font-size:13px;} }
+.chain-feature-card-title{font-size:18px;font-weight:600;color:#e4e4e7;margin-bottom:12px;}
+@media (max-width: 640px) { .chain-feature-card-title{font-size:16px;} }
+.chain-feature-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:24px;width:100%;}
+@media (max-width: 640px) { .chain-feature-grid{display:grid;grid-template-columns:1fr;gap:16px;} }
+.chain-features-section{margin:0 auto;padding:100px 24px;max-width:1400px;overflow:hidden;}
+@media (max-width: 640px) { .chain-features-section{padding:60px 16px;} }
+.chain-section-label{font-size:13px;font-weight:600;letter-spacing:1px;text-align:center;text-transform:uppercase;color:#818cf8;margin-bottom:16px;}
+.chain-section-subtitle{font-size:17px;line-height:1.7;text-align:center;color:#a1a1aa;margin:0 auto 64px;max-width:700px;}
+@media (max-width: 640px) { .chain-section-subtitle{font-size:15px;margin:0 auto 40px;} }
+.chain-section-title{font-size:36px;font-weight:700;letter-spacing:-0.5px;text-align:center;color:#f4f4f5;margin-bottom:16px;}
+@media (max-width: 640px) { .chain-section-title{font-size:28px;} }

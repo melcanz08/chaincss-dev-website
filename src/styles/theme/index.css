@@ -1,0 +1,32 @@
+.chain-body{font-size:15px;line-height:1.8;}
+.chain-body-lg{font-size:18px;line-height:1.7;}
+.chain-body-sm{font-size:13px;line-height:1.6;}
+.chain-caption{font-size:12px;letter-spacing:0.5px;text-transform:uppercase;}
+.chain-h1{font-size:60px;font-weight:800;line-height:1.1;letter-spacing:-2px;}
+.chain-h2{font-size:36px;font-weight:700;letter-spacing:-0.5px;}
+.chain-h3{font-size:22px;font-weight:600;}
+.chain-h4{font-size:18px;font-weight:600;}
+.chain-mono{font-family:'JetBrains Mono', 'Fira Code', monospace;font-size:13px;line-height:1.7;}
+.chain-mono-sm{font-family:'JetBrains Mono', 'Fira Code', monospace;font-size:11px;}
+.chain-container{margin:0 auto;padding-right:24px;padding-left:24px;max-width:1400px;}
+.chain-flex-between{display:flex;align-items:center;justify-content:space-between;}
+.chain-flex-center{display:flex;align-items:center;justify-content:center;}
+.chain-flex-col{display:flex;flex-direction:column;}
+.chain-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:24px;}
+@media (max-width: 640px) { .chain-grid{display:grid;grid-template-columns:1fr;gap:16px;} }
+.chain-section{padding-top:100px;padding-bottom:60px;}
+@media (max-width: 640px) { .chain-section{padding-top:60px;padding-bottom:40px;} }
+.chain-badge{display:inline-flex;align-items:center;gap:8px;background-color:rgba(99, 102, 241, 0.1);font-size:13px;font-weight:500;color:#a5b4fc;padding:4px 12px;border-radius:9999px;}
+.chain-btn-primary{background-color:#6366f1;font-size:14px;font-weight:600;color:#fff;padding:10px 24px;border:none;border-radius:8px;cursor:pointer;transition:all 0.15s ease;}
+.chain-btn-primary:hover{background-color:#4f46e5;}
+.chain-btn-secondary{background-color:transparent;font-size:14px;font-weight:500;padding:10px 24px;border:1px solid rgba(255, 255, 255, 0.1);border-radius:8px;cursor:pointer;transition:all 0.15s ease;}
+.chain-btn-secondary:hover{background-color:rgba(255, 255, 255, 0.08);}
+.chain-card{background-color:rgba(0, 0, 0, 0.3);padding:24px;border:1px solid rgba(255, 255, 255, 0.06);border-radius:12px;}
+.chain-input{background-color:rgba(0, 0, 0, 0.4);padding:10px 14px;border:1px solid rgba(255, 255, 255, 0.1);border-radius:8px;width:100%;font-size:14px;color:#e4e4e7;outline:none;}
+.chain-input:focus{border-color:#6366f1;}
+.chain-link{font-size:14px;text-decoration:none;color:#a1a1aa;cursor:pointer;transition:color 0.15s ease;}
+.chain-link:hover{color:#fff;}
+.chain-table{width:100%;font-size:14px;border-collapse:collapse;}
+.chain-table-td{padding:10px 16px;border-bottom:1px solid rgba(255, 255, 255, 0.04);}
+.chain-table-th{padding:12px 16px;border-bottom:1px solid rgba(255, 255, 255, 0.08);font-size:13px;font-weight:600;letter-spacing:0.5px;text-align:left;text-transform:uppercase;}
+.chain-codeBlock{background-color:#0f172a;padding:16px 20px;border:1px solid rgba(99, 102, 241, 0.3);border-radius:8px;overflow:auto;font-family:'JetBrains Mono', 'Fira Code', monospace;font-size:13px;line-height:1.7;}

@@ -4,12 +4,15 @@
   "version": "1.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "clean": "rm -rf node_modules/.vite .chaincss .chaincss-cache .chaincss-webpack-tmp dist",
+    "dev": "npm run clean && vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "chaincss": "^2.14.3",
+    "chaincss": "^2.15.1",
+    "color2k": "^2.0.4",
+    "jiti": "^2.7.0",
     "prismjs": "^1.30.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

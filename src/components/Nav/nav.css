@@ -1,0 +1,14 @@
+.chain-nav-logo{font-size:20px;font-weight:700;letter-spacing:-0.5px;color:#fff;cursor:pointer;}
+@media (max-width: 640px) { .chain-nav-logo{font-size:17px;} }
+.chain-nav-logo-accent{color:#6366f1;}
+.chain-nav{position:fixed;top:0;right:0;left:0;z-index:100;background-color:rgba(10, 10, 15, 0.8);-webkit-backdrop-filter: blur(12px);backdrop-filter: blur(12px);border-bottom:1px solid rgba(255, 255, 255, 0.06);}
+.chain-nav-cta{background-color:#6366f1;font-size:14px;font-weight:600;color:#fff;padding:8px 20px;border:none;border-radius:8px;cursor:pointer;transition:background 0.15s ease;}
+.chain-nav-cta:hover{background-color:#4f46e5;}
+@media (max-width: 640px) { .chain-nav-cta{padding:6px 14px;font-size:12px;} }
+.chain-nav-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:64px;}
+@media (max-width: 640px) { .chain-nav-inner{padding:0 16px;height:56px;} }
+.chain-nav-link{font-size:14px;font-weight:500;color:#a1a1aa;cursor:pointer;transition:color 0.15s ease;}
+.chain-nav-link:hover{color:#fff;}
+@media (max-width: 640px) { .chain-nav-link{font-size:12px;} }
+.chain-nav-links{display:flex;align-items:center;gap:24px;}
+@media (max-width: 640px) { .chain-nav-links{display:flex;gap:12px;} }
