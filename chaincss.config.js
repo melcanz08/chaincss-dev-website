@@ -5,7 +5,7 @@ export default {
     'src/components/**/*.chain.ts',
   ],
   output: {
-    outputDir: 'src/styles',
+    outputDir: 'dist/assets',
   },
   tokens: {
     enabled: true,
