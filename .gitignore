@@ -10,15 +10,16 @@ lerna-debug.log*
 # Dependencies
 node_modules
 
+# TypeScript build info
+*.tsbuildinfo
+
 # Build outputs
 dist
 dist-ssr
 *.local
 
-# ChainCSS cache (ADD THIS)
+# ChainCSS & Vite Caches
 .chaincss-cache/
-
-# Vite cache (ADD THIS)
 .vite/
 node_modules/.vite
 
@@ -27,21 +28,24 @@ node_modules/.vite
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-# Generated CSS
+# Generated CSS & ChainCSS Artifacts
 src/styles/global.css
 src/styles/*.map
 src/global.css
 src/global.css.map
-
-.chaincss-cache
 src/styles/global.classes.*
 src/styles/global.map.json
 src/styles/chaincss-manifest.json
+src/components/**/*.css
+src/components/**/*.class.js
+
+# Deployment & Environment
 .vercel
 .env*
