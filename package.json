@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "chaincss": "^2.15.4",
+    "chaincss": "^2.15.7",
     "color2k": "^2.0.4",
     "jiti": "^2.7.0",
     "prismjs": "^1.30.0",
