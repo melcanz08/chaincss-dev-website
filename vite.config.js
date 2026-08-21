@@ -7,10 +7,12 @@ export default defineConfig({
     chaincss({
       verbose: true,
       minify: true,
+      atomic: true,
+      cssOutput: 'assets/chaincss.css',
     }),
     react(),
   ],
   optimizeDeps: {
-    exclude: ['vue', 'chaincss', 'chalk']
+    exclude: ['vue']
   }
 })
