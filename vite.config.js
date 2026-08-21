@@ -7,7 +7,7 @@ export default defineConfig({
     chaincss({
       verbose: true,
       minify: true,
-      atomic: true,
+      atomic: false,
       cssOutput: 'assets/chaincss.css',
     }),
     react(),
