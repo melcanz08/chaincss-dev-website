@@ -1,3 +1,5 @@
+// src/pages/docs/ThemeSwitching.tsx
+
 import { useState, useEffect } from 'react'
 import {
   contentTitle, contentDesc, sectionHeading, paragraph,

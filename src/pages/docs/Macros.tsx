@@ -150,6 +150,8 @@ const animationMacros = [
   { name: 'pulse()', desc: 'Pulsing opacity', css: 'Opacity oscillation with auto-generated @keyframes' },
   { name: 'bounce()', desc: 'Bouncing animation', css: 'translateY bounce with auto-generated @keyframes' },
   { name: 'marquee()', desc: 'Marquee scroll', css: 'translateX animation with auto-generated @keyframes' },
+  { name: 'skeleton()', desc: 'Loading skeleton', css: 'Gradient sweep with auto-generated @keyframes' },
+  { name: 'shimmer()', desc: 'Shimmer effect', css: 'Light sweep with auto-generated @keyframes' },
 ];
 
 const utilityMacros = [
@@ -344,8 +346,11 @@ export default function Macros() {
       </p>
       <pre className={codeBlock}><code className="language-ts">{`chain()
   .skeleton()     // loading skeleton with gradient sweep
+  .shimmer()      // shimmer light sweep
   .float(6)       // floating animation, 6s cycle
   .spin('2s')     // rotating animation, 2s cycle
+  .pulse(3)       // pulse animation, 3s cycle
+  .bounce()       // bounce animation, 1s cycle
   .$el('animated')`}</code></pre>
       <div className={tableWrapper}>
         <table className={docTable}>

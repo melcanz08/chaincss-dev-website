@@ -4,6 +4,7 @@ import { docsLayout, sidebar, sidebarTitle, sidebarLink, sidebarLinkActive, cont
 
 const GettingStarted = lazy(() => import('../GettingStarted'));
 const StylingProperties = lazy(() => import('../StylingProperties'));
+const Vanilla = lazy(() => import('../Vanilla'));
 const PseudoClasses = lazy(() => import('../PseudoClasses'));
 const AtRules = lazy(() => import('../AtRules'));
 const Macros = lazy(() => import('../Macros'));
@@ -50,6 +51,7 @@ const sections = [
       { to: '/docs', end: true, label: 'Introduction' },
       { to: '/docs/installation', label: 'Installation' },
       { to: '/docs/quickstart', label: 'Quick Start' },
+      { to: '/docs/vanilla', label: 'Vanilla HTML' }, 
     ]
   },
   {
@@ -153,6 +155,7 @@ export default function Docs() {
             <Route index element={<GettingStarted />} />
             <Route path="installation" element={<GettingStarted />} />
             <Route path="quickstart" element={<GettingStarted />} />
+            <Route path="vanilla" element={<Vanilla />} />
 
             {/* Styling API */}
             <Route path="properties" element={<StylingProperties />} />

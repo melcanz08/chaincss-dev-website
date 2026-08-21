@@ -1,17 +1,8 @@
-.chain-hero-badge{display:inline-flex;align-items:center;gap:8px;background-color:rgba(99, 102, 241, 0.1);font-size:13px;font-weight:500;color:#a5b4fc;margin-bottom:32px;padding:6px 16px;border-radius:9999px;}
-@media (max-width: 640px) { .chain-hero-badge{font-size:12px;margin-bottom:24px;padding:4px 12px;} }
-.chain-hero-cta-group{display:flex;justify-content:center;gap:16px;}
-@media (max-width: 640px) { .chain-hero-cta-group{display:flex;flex-direction:column;align-items:center;gap:12px;} }
+.chain-hero-badge{display:inline-flex;align-items:center;gap:8px;background-color:rgba(99, 102, 241, 0.1);font-size:13px;font-weight:500;color:#a5b4fc;margin-bottom:32px;padding:6px 16px;border-radius:9999px;}@media (max-width: 640px) {.chain-hero-badge{font-size:12px;margin-bottom:24px;padding:4px 12px;}}
+.chain-hero-cta-group{display:flex;justify-content:center;gap:16px;}@media (max-width: 640px) {.chain-hero-cta-group{display:flex;flex-direction:column;align-items:center;gap:12px;}}
 .chain-hero-gradient{background:linear-gradient(135deg, #818cf8, #a78bfa, #f472b6);-webkit-background-clip: text;background-clip: text;-webkit-text-fill-color: transparent;text-fill-color: transparent;}
-.chain-hero-primary-btn{background-color:#6366f1;font-size:16px;font-weight:600;color:#fff;padding:14px 32px;border:none;border-radius:12px;cursor:pointer;transition:all 0.2s ease;}
-.chain-hero-primary-btn:hover{background-color:#4f46e5;transform:translatey(-1px);box-shadow:0 4px 20px rgba(99, 102, 241, 0.3);}
-@media (max-width: 640px) { .chain-hero-primary-btn{padding:14px 24px;width:100%;max-width:400px;font-size:15px;} }
-.chain-hero-secondary-btn{background-color:rgba(255, 255, 255, 0.04);font-size:16px;font-weight:500;color:#d4d4d8;padding:14px 32px;border:1px solid rgba(255, 255, 255, 0.1);border-radius:12px;cursor:pointer;transition:all 0.2s ease;}
-.chain-hero-secondary-btn:hover{background-color:rgba(255, 255, 255, 0.08);border-color:rgba(255, 255, 255, 0.2);}
-@media (max-width: 640px) { .chain-hero-secondary-btn{padding:14px 24px;width:100%;max-width:400px;font-size:15px;} }
-.chain-hero{margin:0 auto;padding:140px 24px 100px;max-width:1100px;text-align:center;}
-@media (max-width: 640px) { .chain-hero{padding:100px 16px 60px;} }
-.chain-hero-subtitle{font-size:18px;line-height:1.7;color:#a1a1aa;margin:0 auto 48px;max-width:750px;}
-@media (max-width: 640px) { .chain-hero-subtitle{font-size:15px;margin:0 auto 32px;padding:0 8px;} }
-.chain-hero-title{font-size:60px;font-weight:800;line-height:1.1;letter-spacing:-2px;color:#f4f4f5;margin-bottom:24px;}
-@media (max-width: 640px) { .chain-hero-title{font-size:36px;letter-spacing:-1px;margin-bottom:16px;} }
+.chain-hero-primary-btn{background-color:#6366f1;font-size:16px;font-weight:600;color:#fff;padding:14px 32px;border:none;border-radius:12px;cursor:pointer;transition:all 0.2s ease;}@media (max-width: 640px) {.chain-hero-primary-btn{padding:14px 24px;width:100%;max-width:400px;font-size:15px;}}.chain-hero-primary-btn:hover{background-color:#4f46e5;box-shadow:0 4px 20px rgba(99, 102, 241, 0.3);}
+.chain-hero-secondary-btn{background-color:rgba(255, 255, 255, 0.04);font-size:16px;font-weight:500;color:#d4d4d8;padding:14px 32px;border:1px solid rgba(255, 255, 255, 0.1);border-radius:12px;cursor:pointer;transition:all 0.2s ease;}@media (max-width: 640px) {.chain-hero-secondary-btn{padding:14px 24px;width:100%;max-width:400px;font-size:15px;}}.chain-hero-secondary-btn:hover{background-color:rgba(255, 255, 255, 0.08);border-color:rgba(255, 255, 255, 0.2);}
+.chain-hero{margin:0 auto;padding:140px 24px 100px;max-width:1100px;text-align:center;}@media (max-width: 640px) {.chain-hero{padding:100px 16px 60px;}}
+.chain-hero-subtitle{font-size:18px;line-height:1.7;color:#a1a1aa;margin:0 auto 48px;max-width:750px;}@media (max-width: 640px) {.chain-hero-subtitle{font-size:15px;margin:0 auto 32px;padding:0 8px;}}
+.chain-hero-title{font-size:60px;font-weight:800;line-height:1.1;letter-spacing:-2px;color:#f4f4f5;margin-bottom:24px;}@media (max-width: 640px) {.chain-hero-title{font-size:36px;letter-spacing:-1px;margin-bottom:16px;}}

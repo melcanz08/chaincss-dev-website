@@ -11,6 +11,6 @@ export default defineConfig({
     react(),
   ],
   optimizeDeps: {
-    exclude: ['vue', 'chaincss']
+    exclude: ['vue', 'chaincss', 'chalk']
   }
 })
