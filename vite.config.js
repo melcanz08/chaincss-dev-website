@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import chaincss from 'chaincss/vite'
 
 export default defineConfig({
+  base: './',  // ← ADD THIS — makes paths relative
   plugins: [
     chaincss({
       verbose: true,
