@@ -9,14 +9,42 @@ import {
 } from './intent.chain';
 
 const intents = [
-  { id: 'primary', name: 'Primary Action', desc: 'Standard high-priority user flow element.', color: '#6366f1', hex: '#6366f1', borderHex: '#4338ca' },
-  { id: 'warning', name: 'Caution / Warning', desc: 'Requires attention before proceeding.', color: '#f59e0b', hex: '#f59e0b', borderHex: '#d97706' },
-  { id: 'success', name: 'Success State', desc: 'Confirms completion or safe operation.', color: '#10b981', hex: '#10b981', borderHex: '#059669' },
-  { id: 'danger', name: 'Destructive / Danger', desc: 'Irreversible or high-risk actions.', color: '#f43f5e', hex: '#f43f5e', borderHex: '#e11d48' },
+  { 
+    id: 'button-primary', 
+    name: 'Primary Action', 
+    desc: 'Standard high-priority user flow element.',
+    color: '#6366f1', 
+    hex: '#6366f1', 
+    borderHex: '#4338ca' 
+  },
+  { 
+    id: 'warning',                    // ← Use "warning" as the data-theme key
+    name: 'Caution / Warning', 
+    desc: 'Requires attention before proceeding.',
+    color: '#f59e0b', 
+    hex: '#f59e0b', 
+    borderHex: '#d97706' 
+  },
+  { 
+    id: 'selected', 
+    name: 'Success State', 
+    desc: 'Confirms completion or safe operation.',
+    color: '#10b981', 
+    hex: '#10b981', 
+    borderHex: '#059669' 
+  },
+  { 
+    id: 'disabled', 
+    name: 'Destructive / Danger', 
+    desc: 'Irreversible or high-risk actions.',
+    color: '#f43f5e', 
+    hex: '#f43f5e', 
+    borderHex: '#e11d48' 
+  },
 ];
 
 export default function IntentStyles() {
-  const [activeIntent, setActiveIntent] = useState('primary');
+  const [activeIntent, setActiveIntent] = useState('button-primary');
   const current = intents.find(i => i.id === activeIntent) || intents[0];
 
   return (
@@ -26,7 +54,8 @@ export default function IntentStyles() {
       </h1>
       <p className={intentSubtitle}>
         Design systems shouldn't just store static values; they should express purpose. 
-        ChainCSS allows you to declare semantic <strong>Intents</strong> that automatically resolve to accessible contrast, focus states, and styling rules at build time.
+        ChainCSS allows you to declare semantic <strong>Intents</strong> that automatically 
+        resolve to accessible contrast, focus states, and styling rules at build time.
       </p>
 
       {/* Sandbox Card */}
@@ -93,10 +122,16 @@ export default function IntentStyles() {
             <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#f1f5f9' }}>ChainCSS Source</span>
             <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: '#6366f1', background: 'rgba(99, 102, 241, 0.1)', padding: '4px 8px', borderRadius: '4px' }}>intent.chain.ts</span>
           </div>
-          <pre style={{ margin: 0, padding: '16px', backgroundColor: '#020617', borderRadius: '8px', overflowX: 'auto', fontSize: '13px', color: '#38bdf8', fontFamily: 'monospace', lineHeight: 1.5 }}>{`export const myBox = chain()
+          <pre style={{ margin: 0, padding: '16px', backgroundColor: '#020617', borderRadius: '8px', overflowX: 'auto', fontSize: '13px', color: '#38bdf8', fontFamily: 'monospace', lineHeight: 1.5 }}>{`// Explicit intent
+export const myBox = chain()
   .box({ padding: 24, borderRadius: 12 })
-  .intent({ purpose: '${activeIntent}' })
-  .$el('intent-card');`}</pre>
+  .intents(['${activeIntent}'])
+  .$el('intent-card');
+
+// Or use natural language
+export const magicBox = chain()
+  .describe("A ${current.name.toLowerCase()} component")
+  .$el('magic-card');`}</pre>
         </div>
 
         {/* Card 2: Compiled CSS Output */}
@@ -115,6 +150,11 @@ export default function IntentStyles() {
   border-radius: 12px;
   background-color: ${current.hex};
   border: 1px solid ${current.borderHex};
+}
+
+/* Dark mode auto-generated */
+[data-theme="dark"] .chain-intent-card {
+  background-color: ${current.id === 'glass' ? 'rgba(0,0,0,0.3)' : current.hex};
 }`}</pre>
         </div>
 

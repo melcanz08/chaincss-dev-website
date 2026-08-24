@@ -12,12 +12,48 @@ export default function SelfHealing() {
     <>
       <h1 className={contentTitle}>Intent Engine & Self-Healing</h1>
       <p className={contentDesc}>
-        ChainCSS's first pipeline pass doesn't just validate — it actively fixes mistakes.
-        Auto-corrects typos via Levenshtein distance, maps semantic values to correct CSS,
-        injects smart defaults, and suggests the closest match for every unrecognized property.
-        All during compilation, before any other pass runs.
+        ChainCSS's first pipeline pass doesn't just validate — it actively fixes mistakes,
+        suggests intents based on your manual properties, and teaches you the most expressive
+        way to write styles. Auto-corrects typos via Levenshtein distance, maps semantic values
+        to correct CSS, injects smart defaults, and suggests the closest match for every
+        unrecognized property.
       </p>
 
+      {/* ============================================================ */}
+      {/* NEW: Intent Suggestion Validator */}
+      {/* ============================================================ */}
+      <h2 className={sectionHeading}>Intent Suggestions (NEW)</h2>
+      <p className={paragraph}>
+        The <strong>Intent Suggestion Validator</strong> detects when you're writing properties
+        manually that match a known intent. It suggests the shorter, more expressive way:
+      </p>
+
+      <pre className={codeBlock}><code className="language-ts">{`// You write this:
+chain()
+  .flex({ direction: 'row', gap: 16 })
+  .box({ borderRadius: 12, padding: 16 })
+  .$el('card')
+
+// The compiler suggests:
+// [HINT] ".card" uses 3/4 properties from the "flex-row" intent (priority: 5).
+// Use .intents(['flex-row']) instead of writing 3 properties manually.
+// [HINT] ".card" uses 2/4 properties from the "card" intent (priority: 10).
+// Use .intents(['card']) instead of writing 2 properties manually.`}</code></pre>
+
+      <p className={paragraph}>
+        The validator uses the <strong>Intent Catalog</strong> and <strong>Intent Relationships</strong>{' '}
+        to provide context-aware suggestions:
+      </p>
+      <ul style={{ paddingLeft: '1.5rem', lineHeight: '2.2', color: '#cbd5e1' }}>
+        <li>✅ <strong>Priority-aware</strong> — Higher-priority intents are suggested first</li>
+        <li>✅ <strong>Conflict-aware</strong> — Warns when a suggestion conflicts with your current intents</li>
+        <li>✅ <strong>Requirement-aware</strong> — Tells you about missing dependencies</li>
+        <li>✅ <strong>Enhancement-aware</strong> — Suggests complementary intents</li>
+      </ul>
+
+      {/* ============================================================ */}
+      {/* Three Kinds of Corrections */}
+      {/* ============================================================ */}
       <h2 className={sectionHeading}>Three Kinds of Corrections</h2>
 
       <div className={tableWrapper}>
@@ -31,7 +67,7 @@ export default function SelfHealing() {
           <tbody>{[
             ['Property Correction', 'Misspelled or wrong property names', 'flx-direction', 'flex-direction'],
             ['Value Correction', 'Wrong values for known properties', 'display: flexbox', 'display: flex'],
-            ['Semantic Intent', 'Human-readable values', 'border-radius: rounded', 'border-radius: 9999px (pill)'],
+            ['Intent Suggestion', 'Manual properties matching an intent', 'borderRadius + padding + shadow', '.intents(["card"])'],
           ].map(([type, detects, example, correction], i) => (
             <tr key={i}>
               <td className={docTd}><strong>{type}</strong></td>
@@ -43,14 +79,10 @@ export default function SelfHealing() {
         </table>
       </div>
 
+      {/* ============================================================ */}
+      {/* Property Correction */}
+      {/* ============================================================ */}
       <h2 className={sectionHeading}>Property Correction: Levenshtein Distance</h2>
-      <p className={paragraph}>
-        When the engine encounters an unknown property, it computes the Levenshtein distance
-        against all 120+ known CSS properties. The closest match within a distance of 3
-        is auto-applied. The algorithm uses an optimized <code className={inlineCode}>Int32Array</code>{' '}
-        two-row buffer — zero heap allocations:
-      </p>
-
       <pre className={codeBlock}><code className="language-ts">{`// These all auto-correct during compilation:
 chain()
   .raw('flx-direction', 'column')   // → flex-direction (distance: 1, missing 'e')
@@ -59,13 +91,10 @@ chain()
   .raw('backgroud-color', '#fff')   // → background-color (distance: 1, missing 'n')
   .$el('auto-corrected')`}</code></pre>
 
+      {/* ============================================================ */}
+      {/* Value Correction */}
+      {/* ============================================================ */}
       <h2 className={sectionHeading}>Value Correction: Known Mistakes</h2>
-      <p className={paragraph}>
-        The engine maintains a dictionary of common value mistakes for specific properties.
-        Each correction has a confidence score — high-confidence corrections are applied
-        silently, low-confidence ones generate suggestions:
-      </p>
-
       <div className={tableWrapper}>
         <table className={docTable}>
           <thead><tr>
@@ -76,14 +105,9 @@ chain()
           </tr></thead>
           <tbody>{[
             ['display', 'flexbox', 'flex', '0.95'],
-            ['display', 'inline-flexbox', 'inline-flex', '0.95'],
             ['position', 'abs', 'absolute', '0.90'],
-            ['position', 'rel', 'relative', '0.90'],
             ['text-align', 'centered', 'center', '0.85'],
-            ['text-align', 'justified', 'justify', '0.85'],
-            ['overflow', 'scrollable', 'auto', '0.80'],
             ['cursor', 'hand', 'pointer', '0.90'],
-            ['user-select', 'unselectable', 'none', '0.85'],
           ].map(([prop, wrong, correct, confidence], i) => (
             <tr key={i}>
               <td className={docTd}><code className={inlineCode}>{prop}</code></td>
@@ -95,114 +119,43 @@ chain()
         </table>
       </div>
 
-      <h2 className={sectionHeading}>Semantic Intent: Human Words → CSS</h2>
+      {/* ============================================================ */}
+      {/* Natural Language */}
+      {/* ============================================================ */}
+      <h2 className={sectionHeading}>Natural Language: .describe()</h2>
       <p className={paragraph}>
-        The most powerful feature — write what you mean, not the CSS property value.
-        The engine maps semantic words to correct CSS:
+        The most powerful self-healing feature — describe what you want in plain English.
+        The semantic intent parser maps words to registered intents:
       </p>
 
-      <div className={tableWrapper}>
-        <table className={docTable}>
-          <thead><tr>
-            <th className={docTh}>What You Write</th>
-            <th className={docTh}>The Intent</th>
-            <th className={docTh}>Expands To</th>
-          </tr></thead>
-          <tbody>{[
-            ['rounded', 'Fully rounded pill shape', 'border-radius: 9999px'],
-            ['full / fullscreen', 'Fill available space', 'width: 100%; height: 100%'],
-            ['abs / absolutely', 'Absolute positioning', 'position: absolute'],
-            ['rel / relatively', 'Relative positioning', 'position: relative'],
-            ['hidden / invisible', 'Visibility toggle', 'visibility: hidden'],
-            ['flexbox', 'Flexbox with centering', 'display: flex; justify-content: center; align-items: center'],
-          ].map(([write, intent, expands], i) => (
-            <tr key={i}>
-              <td className={docTd}><code className={inlineCode}>{write}</code></td>
-              <td className={docTd} style={{ fontSize: 13 }}>{intent}</td>
-              <td className={docTd} style={{ fontSize: 12, fontFamily: 'monospace', color: '#4ade80' }}>{expands}</td>
-            </tr>
-          ))}</tbody>
-        </table>
-      </div>
-
-      <h2 className={sectionHeading}>Smart Defaults</h2>
-      <p className={paragraph}>
-        Some corrections come with defaults — related properties that should be set
-        together. For example, <code className={inlineCode}>position: absolute</code> is often
-        paired with positioning coordinates:
-      </p>
-
-      <pre className={codeBlock}><code className="language-ts">{`// "flexbox" doesn't just fix the value — it adds centering defaults
+      <pre className={codeBlock}><code className="language-ts">{`// Instead of writing 8+ properties:
 chain()
-  .raw('display', 'flexbox')
-  .$el('centered')
+  .describe("A frosted glass card with centered content and hover lift")
+  .$el('card')`}</code></pre>
 
-// The intent engine expands this to:
-// display: flex;
-// justify-content: center;  ← auto-added default
-// align-items: center;       ← auto-added default
+      <pre className={codeBlock}><code className="language-css">{`/* Automatically generated */
+.chain-card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.chain-card:hover {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+[data-theme="dark"] .chain-card {
+  background: rgba(0,0,0,0.3);
+}`}</code></pre>
 
-// "full" expands to both dimensions
-chain()
-  .raw('width', 'full')
-  .$el('full-width')
-
-// Expands to:
-// width: 100%;
-// height: 100%;  ← auto-added default`}</code></pre>
-
-      <h2 className={sectionHeading}>Layout Macros via Intents</h2>
-      <p className={paragraph}>
-        Beyond single-property corrections, the intent engine can expand named layout macros
-        into full CSS blocks. These are the 13 built-in macros from the layout-macros system:
-      </p>
-
-      <pre className={codeBlock}><code className="language-ts">{`// Instead of writing 8+ properties for a card:
-chain()
-  .raw('macro', 'card')
-  .$el('product-card')
-
-// Expands to:
-// display: flex;
-// flex-direction: column;
-// border-radius: 12px;
-// background-color: var(--card-bg, white);
-// box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
-// transition: box-shadow 0.2s ease, transform 0.2s ease;
-// overflow: hidden;
-// + hover: box-shadow + translateY(-2px)`}</code></pre>
-
-      <div className={tableWrapper}>
-        <table className={docTable}>
-          <thead><tr>
-            <th className={docTh}>Macro</th>
-            <th className={docTh}>Description</th>
-            <th className={docTh}>Properties Generated</th>
-          </tr></thead>
-          <tbody>{[
-            ['stickyHeader', 'Sticky header with blur', 'position:sticky + backdrop-filter + border-bottom + scroll shadow'],
-            ['card', 'Standard card with hover', 'flex column + border-radius + shadow + transition + hover lift'],
-            ['hero', 'Full-width hero section', 'flex centering + min-height:60vh + text-align:center'],
-            ['container', 'Responsive container', 'width:100% + max-width + margin:auto + responsive padding'],
-            ['center', 'Flexbox centering', 'display:flex + justify-content:center + align-items:center'],
-            ['glass', 'Frosted glass effect', 'backdrop-filter:blur + semi-transparent bg + border'],
-            ['pill', 'Pill-shaped element', 'border-radius:9999px + inline-flex centering + padding'],
-            ['truncate', 'Text truncation', 'overflow:hidden + text-overflow:ellipsis + white-space:nowrap'],
-          ].map(([macro, desc, props], i) => (
-            <tr key={i}>
-              <td className={docTd}><code className={inlineCode}>{macro}</code></td>
-              <td className={docTd} style={{ fontSize: 13 }}>{desc}</td>
-              <td className={docTd} style={{ fontSize: 12, fontFamily: 'monospace' }}>{props}</td>
-            </tr>
-          ))}</tbody>
-        </table>
-      </div>
-
+      {/* ============================================================ */}
+      {/* Healing Modes */}
+      {/* ============================================================ */}
       <h2 className={sectionHeading}>Healing Modes</h2>
-      <p className={paragraph}>
-        The intent engine supports three healing modes for different contexts:
-      </p>
-
       <div className={tableWrapper}>
         <table className={docTable}>
           <thead><tr>
@@ -226,13 +179,12 @@ chain()
 
       <div className={note}>
         <strong>💡 First pass in the pipeline:</strong> The intent normalizer runs before
-        validation, analysis, and optimization. Every subsequent pass operates on clean,
-        corrected data. Corrections are recorded in the declaration history for full
-        audit trail. Custom shorthands and macros registered in your config are
-        automatically recognized and excluded from correction.
-        See <a href="/docs/macros" style={{ color: '#818cf8' }}>Macros (100+)</a> for the
-        full catalog and <a href="/docs/tokens/semantic-intents" style={{ color: '#818cf8' }}>Semantic Intents</a> for
-        higher-level design abstractions.
+        validation, analysis, and optimization. The intent suggestion validator runs during
+        the validation phase and provides hints without modifying your code.
+        Corrections are recorded in the declaration history for full audit trail.
+        See <a href="/docs/semantic-intents" style={{ color: '#818cf8' }}>Semantic Intents</a> for
+        the full intent catalog and <a href="/docs/macros" style={{ color: '#818cf8' }}>Macros (100+)</a> for
+        layout primitives.
       </div>
     </>
   );

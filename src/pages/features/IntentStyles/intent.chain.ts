@@ -16,14 +16,29 @@ export const intentSubtitle = chain()
 
 export const intentCard = chain()
   .box({ borderRadius: 16, padding: 32, marginBottom: 32 })
-  .background({ color: { theme: { primary: '#1e293b', warning: '#451a03', success: '#064e3b', danger: '#4c0519' } } })
-  .box({ border: { theme: { primary: '1px solid #334155', warning: '1px solid #78350f', success: '1px solid #065f46', danger: '1px solid #881337' } } })
+  .background({ color: { theme: { 
+    'button-primary': '#1e293b', 
+    warning: '#451a03',
+    selected: '#064e3b', 
+    disabled: '#4c0519' 
+  } } })
+  .box({ border: { theme: { 
+    'button-primary': '1px solid #334155', 
+    warning: '1px solid #78350f',
+    selected: '1px solid #065f46', 
+    disabled: '1px solid #881337' 
+  } } })
   .raw('transition', 'all 0.3s ease')
   .$el('intent-card')
 
 export const intentPreviewBox = chain()
   .box({ borderRadius: 12, padding: 24 })
-  .background({ color: { theme: { primary: '#6366f1', warning: '#f59e0b', success: '#10b981', danger: '#f43f5e' } } })
+  .background({ color: { theme: { 
+    'button-primary': '#6366f1', 
+    warning: '#f59e0b',
+    selected: '#10b981', 
+    disabled: '#f43f5e' 
+  } } })
   .typography({ color: '#ffffff', fontSize: 15, fontWeight: '600' })
   .raw('transition', 'all 0.3s ease')
   .$el('intent-preview')

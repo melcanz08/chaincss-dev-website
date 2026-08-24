@@ -13,248 +13,186 @@ export default function AtRules() {
       <h1 className={contentTitle}>At-Rules & Nesting</h1>
       <p className={contentDesc}>
         Responsive breakpoints, feature queries, container queries, cascade layers,
-        custom keyframes, font-face declarations, and nested selectors. All use
-        callback-based APIs that compile within the at-rule's scope.
+        custom keyframes, font-face declarations, and nested selectors. Use the unified{' '}
+        <code className={inlineCode}>.atrule()</code> method or the legacy callback-based APIs.
       </p>
 
-      <h2 className={sectionHeading}>@media — Responsive Design</h2>
+      {/* ============================================================ */}
+      {/* NEW: Unified atrule() method */}
+      {/* ============================================================ */}
+      <h2 className={sectionHeading}>Unified Method: .atrule()</h2>
       <p className={paragraph}>
-        The callback receives a child chain. All styles within the callback
-        are scoped to the media query:
+        The <code className={inlineCode}>.atrule()</code> method accepts an object where keys are
+        at-rule names and values are configuration objects. This is the recommended way
+        to write at-rules in ChainCSS v2.15+:
       </p>
 
-      <pre className={codeBlock}><code className="language-javascript">{`chain()
+      <pre className={codeBlock}><code className="language-ts">{`chain()
+  .box({ padding: 16 })
+  .atrule({
+    media: {
+      query: '(min-width: 768px)',
+      styles: { padding: 24 }
+    },
+    supports: {
+      query: '(display: grid)',
+      styles: { display: 'grid' }
+    },
+    container: {
+      query: '(min-width: 400px)',
+      styles: { flexDirection: 'row' }
+    },
+    layer: {
+      name: 'components',
+      styles: { padding: 24 }
+    }
+  })
+  .$el('layout')`}</code></pre>
+
+      <pre className={codeBlock}><code className="language-css">{`/* Generated CSS */
+.chain-layout {
+  padding: 16px;
+}
+@media (min-width: 768px) {
+  .chain-layout {
+    padding: 24px;
+  }
+}
+@supports (display: grid) {
+  .chain-layout {
+    display: grid;
+  }
+}
+@container (min-width: 400px) {
+  .chain-layout {
+    flex-direction: row;
+  }
+}
+@layer components {
+  .chain-layout {
+    padding: 24px;
+  }
+}`}</code></pre>
+
+      <p className={paragraph}>
+        The <code className={inlineCode}>.atrule()</code> method supports <strong>all CSS at-rules</strong>:
+      </p>
+
+      <div className={tableWrapper}>
+        <table className={docTable}>
+          <thead><tr>
+            <th className={docTh}>Category</th>
+            <th className={docTh}>At-Rules</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td className={docTd}><strong>Conditional</strong></td>
+              <td className={docTd}><code className={inlineCode}>media</code>, <code className={inlineCode}>supports</code>, <code className={inlineCode}>container</code></td>
+            </tr>
+            <tr>
+              <td className={docTd}><strong>Architecture</strong></td>
+              <td className={docTd}><code className={inlineCode}>layer</code>, <code className={inlineCode}>scope</code>, <code className={inlineCode}>import</code>, <code className={inlineCode}>namespace</code>, <code className={inlineCode}>charset</code></td>
+            </tr>
+            <tr>
+              <td className={docTd}><strong>Animation</strong></td>
+              <td className={docTd}><code className={inlineCode}>keyframes</code>, <code className={inlineCode}>starting-style</code>, <code className={inlineCode}>view-transition</code>, <code className={inlineCode}>position-try</code></td>
+            </tr>
+            <tr>
+              <td className={docTd}><strong>Typography</strong></td>
+              <td className={docTd}><code className={inlineCode}>font-face</code>, <code className={inlineCode}>font-feature-values</code>, <code className={inlineCode}>font-palette-values</code></td>
+            </tr>
+            <tr>
+              <td className={docTd}><strong>Custom Data</strong></td>
+              <td className={docTd}><code className={inlineCode}>property</code>, <code className={inlineCode}>counter-style</code>, <code className={inlineCode}>color-profile</code>, <code className={inlineCode}>custom-media</code>, <code className={inlineCode}>custom-selector</code></td>
+            </tr>
+            <tr>
+              <td className={docTd}><strong>Print</strong></td>
+              <td className={docTd}><code className={inlineCode}>page</code>, <code className={inlineCode}>top-left</code>, <code className={inlineCode}>bottom-right</code>, etc.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* ============================================================ */}
+      {/* Legacy methods */}
+      {/* ============================================================ */}
+      <h2 className={sectionHeading}>Legacy Methods (Backward Compatible)</h2>
+
+      <h3 style={{ margin: '24px 0 8px', fontSize: 16, color: '#818cf8' }}>@media — Responsive Design</h3>
+      <pre className={codeBlock}><code className="language-ts">{`chain()
   .flex({ direction: 'column' })
   .box({ padding: 16 })
   .media('(min-width: 768px)', (c) => c
     .flex({ direction: 'row', gap: 24 })
     .box({ padding: 24 })
   )
-  .media('(max-width: 640px)', (c) => c
-    .flex({ direction: 'column' })
-    .box({ padding: 12 })
-  )
   .$el('layout')`}</code></pre>
 
-      <p className={paragraph}>
-        Multiple <code className={inlineCode}>.media()</code> calls with the same query string
-        are automatically merged by the rule builder — no duplicate <code className={inlineCode}>@media</code> blocks:
-      </p>
-
-      <pre className={codeBlock}><code className="language-javascript">{`// These two calls produce ONE @media block
-chain()
-  .media('(max-width: 768px)', (c) => c.box({ padding: 16 }))
-  .media('(max-width: 768px)', (c) => c.typography({ fontSize: 14 }))
-  .$el('responsive')
-
-// Output:
-// @media (max-width: 768px) {
-//   .chain-responsive { padding: 16px; font-size: 14px; }
-// }`}</code></pre>
-
-            <h2 className={sectionHeading}>Responsive Values (Media Query Shorthand)</h2>
-      <p className={paragraph}>
-        For the common case of changing a single property across breakpoints, use
-        named responsive values instead of multiple <code className={inlineCode}>.media()</code> calls.
-        Properties are automatically merged into shared <code className={inlineCode}>@media</code> blocks:
-      </p>
-
-      <pre className={codeBlock}><code className="language-javascript">{`// Named breakpoints — explicit and self-documenting
-chain()
+      <h3 style={{ margin: '24px 0 8px', fontSize: 16, color: '#818cf8' }}>Responsive Values (Media Query Shorthand)</h3>
+      <pre className={codeBlock}><code className="language-ts">{`chain()
   .box({ padding: { base: 16, md: 24, lg: 32 } })
   .typography({ fontSize: { base: 14, md: 16, lg: 18 } })
-  .$el('container')
-
-// Output — padding and font-size share the same @media blocks:
-// .chain-container { padding: 16px; font-size: 14px; }
-// @media (min-width: 768px) {
-//   .chain-container { padding: 24px; font-size: 16px; }
-// }
-// @media (min-width: 1024px) {
-//   .chain-container { padding: 32px; font-size: 18px; }
-// }
-
-// Any subset of breakpoints works:
-chain()
-  .box({ padding: { base: 16, lg: 32 } })  // skip md
   .$el('container')`}</code></pre>
 
-      <p className={paragraph}>
-        Available breakpoint keys: <code className={inlineCode}>base</code>,{' '}
-        <code className={inlineCode}>sm</code>, <code className={inlineCode}>md</code>,{' '}
-        <code className={inlineCode}>lg</code>, <code className={inlineCode}>xl</code>,{' '}
-        <code className={inlineCode}>2xl</code>, <code className={inlineCode}>mobile</code>,{' '}
-        <code className={inlineCode}>tablet</code>, <code className={inlineCode}>desktop</code>.
-        Custom breakpoints defined in your config are also supported.
-        Use <code className={inlineCode}>.media()</code> for complex cases where you need to
-        change multiple properties or add nested rules within a breakpoint.
-      </p>
-
-      <h2 className={sectionHeading}>@supports — Feature Queries</h2>
-
-      <pre className={codeBlock}><code className="language-javascript">{`chain()
+      <h3 style={{ margin: '24px 0 8px', fontSize: 16, color: '#818cf8' }}>@supports — Feature Queries</h3>
+      <pre className={codeBlock}><code className="language-ts">{`chain()
   .grid({ columns: '1fr' })
   .supports('(display: grid)', (c) => c
     .grid({ columns: '1fr 1fr', gap: 16 })
   )
-  .$el('grid-layout')
+  .$el('grid-layout')`}</code></pre>
 
-// Output:
-// .chain-grid-layout { grid-template-columns: 1fr; }
-// @supports (display: grid) {
-//   .chain-grid-layout { grid-template-columns: 1fr 1fr; gap: 16px; }
-// }`}</code></pre>
-
-      <h2 className={sectionHeading}>@container — Container Queries</h2>
-
-      <pre className={codeBlock}><code className="language-javascript">{`chain()
+      <h3 style={{ margin: '24px 0 8px', fontSize: 16, color: '#818cf8' }}>@container — Container Queries</h3>
+      <pre className={codeBlock}><code className="language-ts">{`chain()
   .containerQuery({ type: 'inline-size', name: 'card' })
   .container('(min-width: 400px)', (c) => c
     .flex({ direction: 'row' })
   )
-  .$el('card')
+  .$el('card')`}</code></pre>
 
-// Output:
-// .chain-card { container-type: inline-size; container-name: card; }
-// @container (min-width: 400px) {
-//   .chain-card { display: flex; flex-direction: row; }
-// }`}</code></pre>
-
-      <h2 className={sectionHeading}>@layer — Cascade Layers</h2>
-
-      <pre className={codeBlock}><code className="language-javascript">{`chain()
+      <h3 style={{ margin: '24px 0 8px', fontSize: 16, color: '#818cf8' }}>@layer — Cascade Layers</h3>
+      <pre className={codeBlock}><code className="language-ts">{`chain()
   .layer('components', (c) => c
     .box({ padding: 24, borderRadius: 8 })
-    .background({ color: '#ffffff' })
   )
-  .$el('layered-card')
+  .$el('layered-card')`}</code></pre>
 
-// Output:
-// @layer components {
-//   .chain-layered-card { padding: 24px; border-radius: 8px; background-color: #ffffff; }
-// }`}</code></pre>
-
-      <h2 className={sectionHeading}>@keyframes — Custom Animations</h2>
-
-      <pre className={codeBlock}><code className="language-javascript">{`chain()
+      <h3 style={{ margin: '24px 0 8px', fontSize: 16, color: '#818cf8' }}>@keyframes — Custom Animations</h3>
+      <pre className={codeBlock}><code className="language-ts">{`chain()
   .keyframes('slideIn', {
     '0%': { transform: 'translateX(-20px)', opacity: '0' },
     '100%': { transform: 'translateX(0)', opacity: '1' }
   })
   .animation({ name: 'slideIn', duration: '0.3s', timing: 'ease' })
-  .$el('animated')
+  .$el('animated')`}</code></pre>
 
-// Output:
-// @keyframes slideIn {
-//   0% { transform: translateX(-20px); opacity: 0; }
-//   100% { transform: translateX(0); opacity: 1; }
-// }
-// .chain-animated { animation: slideIn 0.3s ease; }`}</code></pre>
-
-      <p className={paragraph}>
-        Keyframes with the same name are merged, not duplicated. If you call{' '}
-        <code className={inlineCode}>.keyframes('slideIn', ...)</code> multiple times with
-        different steps, they're combined into a single <code className={inlineCode}>@keyframes</code> block.
-      </p>
-
-      <h2 className={sectionHeading}>@font-face — Custom Fonts</h2>
-
-      <pre className={codeBlock}><code className="language-javascript">{`chain()
+      <h3 style={{ margin: '24px 0 8px', fontSize: 16, color: '#818cf8' }}>@font-face — Custom Fonts</h3>
+      <pre className={codeBlock}><code className="language-ts">{`chain()
   .fontFace({
     fontFamily: 'MyCustomFont',
     src: "url('/fonts/MyCustomFont.woff2') format('woff2')",
     fontWeight: '400',
     fontStyle: 'normal',
-    fontDisplay: 'swap'
   })
   .typography({ fontFamily: "'MyCustomFont', sans-serif" })
-  .$el('custom-font')
+  .$el('custom-font')`}</code></pre>
 
-// Output:
-// @font-face {
-//   font-family: 'MyCustomFont';
-//   src: url('/fonts/MyCustomFont.woff2') format('woff2');
-//   font-weight: 400;
-//   font-style: normal;
-//   font-display: swap;
-// }
-// .chain-custom-font { font-family: 'MyCustomFont', sans-serif; }`}</code></pre>
-
-      <h2 className={sectionHeading}>Nesting & Children</h2>
-
-      <pre className={codeBlock}><code className="language-javascript">{`chain()
+      <h3 style={{ margin: '24px 0 8px', fontSize: 16, color: '#818cf8' }}>Nesting & Children</h3>
+      <pre className={codeBlock}><code className="language-ts">{`chain()
   .nest('.child', (c) => c
     .typography({ color: 'blue', fontSize: 14 })
   )
-  .nest('&[data-active="true"]', (c) => c
-    .background({ color: '#e0e7ff' })
-  )
-  .children((c) => c                       // & > * shorthand
+  .children((c) => c
     .box({ marginBottom: 8 })
   )
-  .$el('parent')
-
-// Output:
-// .chain-parent .child { color: blue; font-size: 14px; }
-// .chain-parent[data-active="true"] { background-color: #e0e7ff; }
-// .chain-parent > * { margin-bottom: 8px; }`}</code></pre>
-
-      <h2 className={sectionHeading}>.when() — Conditional Styles</h2>
-      <p className={paragraph}>
-        Conditionally apply styles at build time. The condition is evaluated once
-        during compilation — not at runtime:
-      </p>
-
-      <pre className={codeBlock}><code className="language-javascript">{`const isProduction = process.env.NODE_ENV === 'production'
-
-chain()
-  .box({ padding: 24 })
-  .when(isProduction, (c) => c
-    .box({ padding: 16 })     // override padding in production
-  )
-  .$el('conditional')`}</code></pre>
-
-      <h2 className={sectionHeading}>All At-Rules & Nesting Methods</h2>
-
-      <div className={tableWrapper}>
-        <table className={docTable}>
-          <thead><tr>
-            <th className={docTh}>Method</th>
-            <th className={docTh}>CSS Output</th>
-            <th className={docTh}>Deduplication</th>
-            <th className={docTh}>Use Case</th>
-          </tr></thead>
-          <tbody>{[
-            ['.media(query, fn)', '@media query { ... }', 'Yes — same query merged', 'Responsive breakpoints'],
-            ['Responsive values', '{ base: 16, md: 24, lg: 32 }', 'Yes — same breakpoint merged', 'Simple responsive properties'],
-            ['.supports(cond, fn)', '@supports cond { ... }', 'Yes — same condition merged', 'Feature detection'],
-            ['.container(query, fn)', '@container query { ... }', 'Yes — same query merged', 'Container queries'],
-            ['.layer(name, fn)', '@layer name { ... }', 'Yes — same layer merged', 'Cascade layers'],
-            ['.keyframes(name, steps)', '@keyframes name { ... }', 'Yes — same name merged', 'Custom animations'],
-            ['.fontFace(properties)', '@font-face { ... }', 'No — appended as new block', 'Custom fonts'],
-            ['.nest(selector, fn)', 'parent selector child', 'No — each unique selector kept', 'Child selectors'],
-            ['.children(fn)', 'parent > *', 'No — each unique style kept', 'Direct children'],
-            ['.when(condition, fn)', 'Conditional inclusion', 'N/A', 'Build-time toggles'],
-          ].map(([m, css, dedup, use]) => (
-            <tr key={m}>
-              <td className={docTd}><code className={inlineCode}>{m}</code></td>
-              <td className={docTd} style={{ fontSize: 12, fontFamily: 'monospace' }}>{css}</td>
-              <td className={docTd} style={{ fontSize: 12 }}>{dedup}</td>
-              <td className={docTd}>{use}</td>
-            </tr>
-          ))}</tbody>
-        </table>
-      </div>
+  .$el('parent')`}</code></pre>
 
       <div className={note}>
-        <strong>💡 Automatic deduplication:</strong> Repeated <code className={inlineCode}>.media()</code>,{' '}
-        <code className={inlineCode}>.supports()</code>, <code className={inlineCode}>.container()</code>,{' '}
-        <code className={inlineCode}>.layer()</code>, and <code className={inlineCode}>.keyframes()</code>{' '}
-        calls with the same identifier are merged into single blocks. Nested selectors and
-        font-face declarations are kept separate since they target different elements.
+        <strong>💡 Pro tip:</strong> Use <code className={inlineCode}>.atrule()</code> for new code.
+        It's more readable, more maintainable, and supports all CSS at-rules in a single unified API.
+        The legacy methods remain for backward compatibility.
         See <a href="/docs/pseudo-classes" style={{ color: '#818cf8' }}>Pseudo-Classes</a> for
-        interactive states and <a href="/docs/compiler/scroll-animations" style={{ color: '#818cf8' }}>Scroll Animations</a>{' '}
-        for scroll-driven keyframe generation.
+        the unified <code className={inlineCode}>.pseudo()</code> method.
       </div>
     </>
   );

@@ -61,10 +61,9 @@ export default function StylingProperties() {
   .box({ padding: 24, margin: '0 auto', maxWidth: 1200 })
   .typography({ fontSize: 16, fontWeight: '600', color: '#333' })
   .background({ color: '#fff' })
-  .hover()
-    .background({ color: '#f0f0f0' })
-    .transform({ scale: 1.02 })
-  .end()
+  .pseudo({
+    hover: { background: '#f0f0f0', transform: 'scale(1.02)' }
+  })
   .$el('card')`}</code></pre>
 
       <div className={tableWrapper}>
@@ -77,10 +76,6 @@ export default function StylingProperties() {
       </div>
 
       <h2 className={sectionHeading}>Short Aliases</h2>
-      <p className={paragraph}>
-        Every shorthand method supports short property names for power users.
-        Aliases are checked first — if a property isn't an alias, it's passed through as-is:
-      </p>
       <pre className={codeBlock}><code className="language-ts">{`chain()
   .flex({ d: 'col', ai: 'center', g: 16 })
   .box({ p: 24, m: '0 auto', w: '100%' })
@@ -96,91 +91,72 @@ export default function StylingProperties() {
         </table>
       </div>
 
-      <h2 className={sectionHeading}>Pseudo-Classes & States</h2>
+      <h2 className={sectionHeading}>Pseudo-Classes via .pseudo()</h2>
       <p className={paragraph}>
-        ChainCSS supports 8 pseudo-class methods. Each opens a new style context —
-        all subsequent method calls apply to that pseudo-class until <code className={inlineCode}>.end()</code> is called:
+        Use the unified <code className={inlineCode}>.pseudo()</code> method to define all
+        pseudo-classes and pseudo-elements in a single object:
       </p>
       <pre className={codeBlock}><code className="language-ts">{`chain()
   .background({ color: '#6366f1' })
-  .typography({ color: '#ffffff' })
   .box({ padding: '12px 24px', borderRadius: 8 })
-  .hover()                          // opens :hover context
-    .background({ color: '#4f46e5' })
-    .transform({ custom: 'scale(1.02)' })
-  .end()                            // closes :hover
-  .focus()                          // opens :focus context
-    .outline({ width: 2, color: '#818cf8' })
-  .end()
-  .$el('btn')
+  .pseudo({
+    hover: {
+      background: '#4f46e5',
+      transform: 'scale(1.02)'
+    },
+    focus: {
+      outline: '2px solid #818cf8'
+    },
+    active: {
+      transform: 'scale(0.95)'
+    }
+  })
+  .$el('btn')`}</code></pre>
 
-// Available: .hover() .focus() .active() .checked() 
-//           .disabled() .before() .after() .placeholder()`}</code></pre>
-
-      <h2 className={sectionHeading}>At-Rules & Nesting</h2>
       <p className={paragraph}>
-        Media queries, container queries, and nested selectors use callback-based APIs.
-        The callback receives a child chain that compiles within the at-rule's scope:
+        Legacy fluent methods (<code className={inlineCode}>.hover()</code>, <code className={inlineCode}>.focus()</code>, etc.)
+        still work for backward compatibility.
+      </p>
+
+      <h2 className={sectionHeading}>At-Rules via .atrule()</h2>
+      <p className={paragraph}>
+        Use the unified <code className={inlineCode}>.atrule()</code> method to define all
+        at-rules in a single object:
       </p>
       <pre className={codeBlock}><code className="language-ts">{`chain()
   .box({ padding: 16 })
-  .media('(max-width: 768px)', (c) => c    // @media query
-    .box({ padding: 12 })
-  )
-  .container('(min-width: 400px)', (c) => c // @container query
-    .flex({ direction: 'row' })
-  )
-  .nest('& .icon', (c) => c                 // nested selector
+  .atrule({
+    media: {
+      query: '(max-width: 768px)',
+      styles: { padding: 12 }
+    },
+    container: {
+      query: '(min-width: 400px)',
+      styles: { flexDirection: 'row' }
+    }
+  })
+  .nest('& .icon', (c) => c
     .box({ width: 24, height: 24 })
-  )
-  .children((c) => c                        // & > * shorthand
-    .box({ marginBottom: 8 })
   )
   .$el('responsive-card')`}</code></pre>
 
-            <h2 className={sectionHeading}>Style Composition with .extend()</h2>
-      <p className={paragraph}>
-        Compose styles by inheriting from a base style definition. Properties from the
-        base are merged first, then overridden by the extending chain. More flexible than
-        recipes for one-off variants, simpler than copy-paste:
-      </p>
-
-      <pre className={codeBlock}><code className="language-ts">{`// Build a base style (use .build() to get a reusable StyleObject)
+      <h2 className={sectionHeading}>Style Composition with .extend()</h2>
+      <pre className={codeBlock}><code className="language-ts">{`// Build a base style
 const baseBtn = chain()
   .box({ p: '8px 16px', br: 8 })
   .typography({ fw: '600' })
   .transition({ tr: 'all 0.2s ease' })
   .build()
 
-// Extend it — base properties are inherited, new ones override
+// Extend it
 const primaryBtn = chain()
   .extend(baseBtn)
   .background({ color: '#6366f1' })
   .typography({ color: '#ffffff' })
-  .hover(c => c.background({ color: '#4f46e5' }))
-  .$el('btn-primary')
-
-const secondaryBtn = chain()
-  .extend(baseBtn)
-  .background({ color: 'transparent' })
-  .typography({ color: '#6366f1' })
-  .box({ border: '1px solid #6366f1' })
-  .$el('btn-secondary')`}</code></pre>
-
-      <p className={paragraph}>
-        <code className={inlineCode}>.extend()</code> works with pseudo-classes, at-rules,
-        and nested rules from the base style. For complex multi-variant components,
-        use <a href="/docs/recipes" style={{ color: '#818cf8' }}>Recipes</a> which offer
-        type-safe variant selection and compound conditions.
-      </p>
-
-      <tr><td className={docTd}><code className={inlineCode}>.extend(styleDef)</code></td><td className={docTd}>StyleCollector</td><td className={docTd}>Inherit all properties from a base style definition.</td></tr>
+  .pseudo({ hover: { background: '#4f46e5' } })
+  .$el('btn-primary')`}</code></pre>
 
       <h2 className={sectionHeading}>The .raw() Escape Hatch</h2>
-      <p className={paragraph}>
-        For CSS properties not covered by the 16 structured methods, use <code className={inlineCode}>.raw()</code>.
-        It accepts either a property name + value or an object of properties:
-      </p>
       <pre className={codeBlock}><code className="language-ts">{`// Single property
 chain().raw('cursor', 'pointer').raw('resize', 'vertical').$el('element')
 
@@ -190,13 +166,7 @@ chain().raw({
   resize: 'vertical',
   WebkitAppearance: 'none',
   scrollBehavior: 'smooth',
-}).$el('element')
-
-// Mixed with structured methods
-chain()
-  .box({ padding: 24 })
-  .raw({ cursor: 'pointer', userSelect: 'none' })
-  .$el('card')`}</code></pre>
+}).$el('element')`}</code></pre>
 
       <div className={note}>
         <strong>Dynamic&lt;T&gt;:</strong> Every property in every shorthand accepts either a static value{' '}

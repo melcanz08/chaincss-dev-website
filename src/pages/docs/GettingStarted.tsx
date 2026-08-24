@@ -44,14 +44,55 @@ export default function GettingStarted() {
             ))}
           </div>
 
-          <h2 className={sectionHeading} style={{ marginTop: '40px' }}>How It Works</h2>
+          <h2 className={sectionHeading} style={{ marginTop: '40px' }}>Three Ways to Write Styles</h2>
+          <p className={paragraph}>
+            ChainCSS gives you three levels of abstraction. Choose the one that fits your workflow.
+          </p>
+
+          {/* Level 1: Natural Language */}
+          <h3 style={{ margin: '24px 0 8px', fontSize: '16px', color: '#818cf8' }}>1. Natural Language (Most Magical)</h3>
           <pre className={codeBlock}><code className="language-ts">{`import { chain } from 'chaincss'
 
-export const btn = chain()
+export const card = chain()
+  .describe("A frosted glass card with centered content")
+  .$el('card')`}</code></pre>
+          <pre className={codeBlock}><code className="language-css">{`/* Generated CSS */
+.chain-card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Dark mode auto-generated */
+[data-theme="dark"] .chain-card {
+  background: rgba(0,0,0,0.3);
+}`}</code></pre>
+
+          {/* Level 2: Semantic Intents */}
+          <h3 style={{ margin: '24px 0 8px', fontSize: '16px', color: '#818cf8' }}>2. Semantic Intents (Expressive)</h3>
+          <pre className={codeBlock}><code className="language-ts">{`export const card = chain()
+  .intents(['card', 'glass'])
+  .$el('card')`}</code></pre>
+          <p className={paragraph}>
+            The compiler recognizes 30+ intents (card, glass, button, modal, etc.) and expands them 
+            to 10+ CSS properties each. The <strong>Intent Suggestion Validator</strong> even detects 
+            when you're writing properties manually and suggests the equivalent intent.
+          </p>
+
+          {/* Level 3: Structured Shorthands */}
+          <h3 style={{ margin: '24px 0 8px', fontSize: '16px', color: '#818cf8' }}>3. Structured Shorthands (Explicit)</h3>
+          <pre className={codeBlock}><code className="language-ts">{`export const btn = chain()
   .background({ color: '#6366f1' })
   .typography({ color: '#ffffff', fontWeight: '600' })
   .box({ padding: '12px 24px', borderRadius: 8 })
-  .hover().background({ color: '#4f46e5' }).end()
+  .pseudo({
+    hover: { background: '#4f46e5' },
+    focus: { outline: '2px solid #818cf8' }
+  })
   .$el('button')`}</code></pre>
           <pre className={codeBlock}><code className="language-css">{`/* Output CSS */
 .chain-button {
@@ -63,6 +104,9 @@ export const btn = chain()
 }
 .chain-button:hover {
   background-color: #4f46e5;
+}
+.chain-button:focus {
+  outline: 2px solid #818cf8;
 }`}</code></pre>
 
           <div className={note}>
@@ -104,9 +148,7 @@ export default defineConfig({
           <pre className={codeBlock}><code className="language-ts">{`import { chain } from 'chaincss'
 
 export const btn = chain()
-  .background({ color: '#6366f1' })
-  .typography({ color: '#ffffff' })
-  .box({ padding: '12px 24px', borderRadius: 8 })
+  .describe("A indigo button with white text and rounded corners")
   .$el('button')`}</code></pre>
 
           <h2 className={sectionHeading}>4. Use It</h2>
@@ -129,56 +171,90 @@ export function Button() {
         <>
           <h1 className={contentTitle}>Quick Start</h1>
           <p className={contentDesc}>
-            Build a styled button step by step using structured shorthands.
+            Build a styled button step by step using the three abstraction levels.
           </p>
 
-          <h2 className={sectionHeading}>1. Your First Style</h2>
+          <h2 className={sectionHeading}>1. Natural Language (Fastest)</h2>
           <pre className={codeBlock}><code className="language-ts">{`import { chain } from 'chaincss'
 
 export const btn = chain()
-  .background({ color: '#6366f1' })
-  .typography({ fontSize: 16, fontWeight: '600', color: '#ffffff' })
-  .box({ padding: '12px 24px', borderRadius: 8 })
+  .describe("A indigo button with white text and hover state")
   .$el('button')`}</code></pre>
           <pre className={codeBlock}><code className="language-css">{`/* Generated CSS */
 .chain-button {
   background-color: #6366f1;
-  font-size: 16px;
-  font-weight: 600;
   color: #ffffff;
   padding: 12px 24px;
   border-radius: 8px;
+}
+.chain-button:hover {
+  background-color: #4f46e5;
 }`}</code></pre>
 
-          <h2 className={sectionHeading}>2. Add Hover and Focus</h2>
+          <h2 className={sectionHeading}>2. Semantic Intents (Expressive)</h2>
           <pre className={codeBlock}><code className="language-ts">{`export const btn = chain()
-  .background({ color: '#6366f1' })
-  .typography({ color: '#ffffff' })
-  .box({ padding: '12px 24px', borderRadius: 8 })
-  .hover().background({ color: '#4f46e5' }).end()
-  .focus().outline({ width: '2px', style: 'solid', color: '#818cf8' }).end()
+  .intents(['button-primary', 'compact'])
   .$el('button')`}</code></pre>
 
-          <h2 className={sectionHeading}>3. Responsive Design</h2>
-          <pre className={codeBlock}><code className="language-ts">{`chain()
-  .flex({ direction: 'column' })
-  .box({ padding: 16 })
-  .media('(min-width: 768px)', (c) => c
-    .flex({ direction: 'row' })
-    .box({ padding: 24 })
-  )
-  .$el('container')`}</code></pre>
+          <h2 className={sectionHeading}>3. Unified Pseudo Classes</h2>
+          <pre className={codeBlock}><code className="language-ts">{`export const btn = chain()
+  .background({ color: '#6366f1' })
+  .box({ padding: '12px 24px', borderRadius: 8 })
+  .pseudo({
+    hover: { background: '#4f46e5', transform: 'scale(1.02)' },
+    focus: { outline: '2px solid #818cf8' },
+    active: { transform: 'scale(0.95)' }
+  })
+  .$el('button')`}</code></pre>
+          <pre className={codeBlock}><code className="language-css">{`/* Generated CSS */
+.chain-button {
+  background-color: #6366f1;
+  padding: 12px 24px;
+  border-radius: 8px;
+}
+.chain-button:hover {
+  background-color: #4f46e5;
+  transform: scale(1.02);
+}
+.chain-button:focus {
+  outline: 2px solid #818cf8;
+}
+.chain-button:active {
+  transform: scale(0.95);
+}`}</code></pre>
 
-          <h2 className={sectionHeading}>4. Use Shorthands & Aliases</h2>
+          <h2 className={sectionHeading}>4. Unified At-Rules</h2>
           <pre className={codeBlock}><code className="language-ts">{`chain()
-  .flex({ d: 'col', ai: 'center', g: 16 })
-  .box({ p: 24, m: '0 auto', w: '100%', mw: 1200 })
-  .typography({ fs: 16, fw: '600', c: '#333' })
-  .$el('card')`}</code></pre>
+  .box({ padding: 16 })
+  .atrule({
+    media: {
+      query: '(min-width: 768px)',
+      styles: { padding: 24 }
+    },
+    supports: {
+      query: '(display: grid)',
+      styles: { display: 'grid' }
+    }
+  })
+  .$el('container')`}</code></pre>
+          <pre className={codeBlock}><code className="language-css">{`/* Generated CSS */
+.chain-container {
+  padding: 16px;
+}
+@media (min-width: 768px) {
+  .chain-container {
+    padding: 24px;
+  }
+}
+@supports (display: grid) {
+  .chain-container {
+    display: grid;
+  }
+}`}</code></pre>
 
           <h2 className={sectionHeading}>Next Steps</h2>
           <div className={note}>
-            <strong>You're ready!</strong> Explore <a href="/docs/mixed-mode" style={{ color: '#818cf8' }}>Mixed Mode</a> for dynamic styles, <a href="/docs/tokens" style={{ color: '#818cf8' }}>Design Tokens</a> for theming, or <a href="/docs/macros" style={{ color: '#818cf8' }}>Macros</a> for layout primitives.
+            <strong>You're ready!</strong> Explore <a href="/docs/design-tokens" style={{ color: '#818cf8' }}>Design Tokens</a> for theming, <a href="/docs/semantic-intents" style={{ color: '#818cf8' }}>Semantic Intents</a> for natural language, or <a href="/docs/macros" style={{ color: '#818cf8' }}>Macros</a> for layout primitives.
           </div>
         </>
       )}

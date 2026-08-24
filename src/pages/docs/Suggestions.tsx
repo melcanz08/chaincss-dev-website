@@ -12,10 +12,44 @@ export default function Suggestions() {
     <>
       <h1 className={contentTitle}>Suggestions Engine</h1>
       <p className={contentDesc}>
-        Fuzzy-matched "did you mean?" suggestions across 200+ known macros, shorthands,
-        CSS properties, animations, and breakpoints. Powers IDE autocomplete and CLI
-        error messages with context-aware narrowing and typo-tolerant matching.
+        Two layers of intelligence: (1) fuzzy-matched "did you mean?" suggestions across
+        200+ known macros, shorthands, CSS properties, animations, and breakpoints;
+        (2) intent-level suggestions that teach you the most expressive way to write styles.
       </p>
+
+      {/* ============================================================ */}
+      {/* NEW: Intent Suggestion Validator */}
+      {/* ============================================================ */}
+      <h2 className={sectionHeading}>Intent Suggestions (NEW)</h2>
+      <p className={paragraph}>
+        The <strong>Intent Suggestion Validator</strong> runs during the validation phase
+        and detects when you're writing properties manually that match a known intent.
+        It suggests the shorter, more expressive way:
+      </p>
+
+      <pre className={codeBlock}><code className="language-ts">{`// You write this:
+chain()
+  .flex({ direction: 'row', gap: 16 })
+  .box({ borderRadius: 12, padding: 16, overflow: 'hidden' })
+  .$el('card')
+
+// The compiler suggests:
+// [HINT] ".card" uses 3/4 properties from the "flex-row" intent (priority: 5).
+// Use .intents(['flex-row']) instead of writing 3 properties manually.
+// [HINT] ".card" uses 3/4 properties from the "card" intent (priority: 10).
+// Use .intents(['card']) instead of writing 3 properties manually.`}</code></pre>
+
+      <p className={paragraph}>
+        The validator uses the <strong>Intent Catalog</strong> (30+ intents) and{' '}
+        <strong>Intent Relationships</strong> to provide context-aware suggestions:
+      </p>
+      <ul style={{ paddingLeft: '1.5rem', lineHeight: '2.2', color: '#cbd5e1' }}>
+        <li>✅ <strong>Priority-aware</strong> — Higher-priority intents (card=10, button=10) are suggested first</li>
+        <li>✅ <strong>Conflict-aware</strong> — Warns when a suggestion conflicts with intents you already use</li>
+        <li>✅ <strong>Requirement-aware</strong> — Tells you about missing dependencies (e.g., card requires rounded)</li>
+        <li>✅ <strong>Enhancement-aware</strong> — Suggests complementary intents (e.g., card enhances hover-lift)</li>
+        <li>✅ <strong>Already-used aware</strong> — Skips intents you already have</li>
+      </ul>
 
       <h2 className={sectionHeading}>Knowledge Bases</h2>
 
@@ -32,6 +66,7 @@ export default function Suggestions() {
             ['CSS Properties', '50+', 'display, position, margin, padding, font-size, color, background-color'],
             ['Animations', '40+', 'fadeIn, slideInLeft, zoomInUp, bounce, pulse, shimmer'],
             ['Breakpoints', '26', 'sm, md, lg, xl, mobile, tablet, dark, reducedMotion'],
+            ['Intents', '30+', 'card, glass, flex-row, button-primary, modal, hover-lift'],
           ].map(([cat, count, examples], i) => (
             <tr key={i}>
               <td className={docTd}><strong>{cat}</strong></td>
@@ -49,70 +84,36 @@ export default function Suggestions() {
         and limited to the closest 3 matches:
       </p>
 
-      <pre className={codeBlock}><code className="language-ts">{`// What happens when you write "flx" instead of "flex"
-import { getSuggestion } from 'chaincss'
+      <pre className={codeBlock}><code className="language-ts">{`import { getSuggestion } from 'chaincss'
 
 getSuggestion('flx')
 // → { name: 'flex', distance: 1, type: 'macro' }
 
-// Context-aware narrowing
 getPropertySuggestion('bgc', 'color')
 // → 'background-color'  (narrowed to color-related properties)
 
-// Value-level suggestions
 getValueSuggestion('display', 'flexbox')
 // → { suggested: 'flex', confidence: 0.95 }`}</code></pre>
 
       <h2 className={sectionHeading}>Shorthand Explanations</h2>
-
       <pre className={codeBlock}><code className="language-ts">{`import { getShorthandSuggestion } from 'chaincss'
 
-getShorthandSuggestion('m')
-// → { suggestion: 'margin', explanation: 'Sets margin on all sides' }
-
-getShorthandSuggestion('br')
-// → { suggestion: 'border-radius', explanation: 'Sets border radius' }
-
-getShorthandSuggestion('fs')
-// → { suggestion: 'font-size', explanation: 'Sets font size' }
-
-getShorthandSuggestion('ai')
-// → { suggestion: 'align-items', explanation: 'Sets align-items property' }`}</code></pre>
+getShorthandSuggestion('m')   // → 'margin'
+getShorthandSuggestion('br')  // → 'border-radius'
+getShorthandSuggestion('fs')  // → 'font-size'
+getShorthandSuggestion('ai')  // → 'align-items'`}</code></pre>
 
       <h2 className={sectionHeading}>Autocomplete</h2>
-
       <pre className={codeBlock}><code className="language-ts">{`import { getAutocompleteSuggestions } from 'chaincss'
 
-// Prefix-based matching
 getAutocompleteSuggestions('flex')
 // → [
 //   { name: 'flex', type: 'macro' },
 //   { name: 'flexCenter', type: 'macro' },
 //   { name: 'flex-direction', type: 'css-property' },
-// ]
-
-// Empty prefix — returns top results from all categories
-getAutocompleteSuggestions('', 10)
-// → Top 10 suggestions across all knowledge bases`}</code></pre>
-
-      <h2 className={sectionHeading}>Detailed Suggestions</h2>
-
-      <pre className={codeBlock}><code className="language-ts">{`import { getDetailedSuggestion } from 'chaincss'
-
-getDetailedSuggestion('flexbox')
-// → {
-//   suggestion: 'flex',
-//   alternatives: [
-//     { name: 'flex', distance: 1, type: 'macro' },
-//     { name: 'flexCenter', distance: 3, type: 'macro' },
-//     { name: 'flex-direction', distance: 5, type: 'css-property' },
-//   ],
-//   type: 'macro',
-//   confidence: 0.94
-// }`}</code></pre>
+// ]`}</code></pre>
 
       <h2 className={sectionHeading}>Value Corrections</h2>
-
       <div className={tableWrapper}>
         <table className={docTable}>
           <thead><tr>
@@ -123,12 +124,8 @@ getDetailedSuggestion('flexbox')
           </tr></thead>
           <tbody>{[
             ['display', 'flexbox', 'flex', '0.95'],
-            ['display', 'inline-flexbox', 'inline-flex', '0.95'],
             ['position', 'abs', 'absolute', '0.90'],
-            ['position', 'rel', 'relative', '0.90'],
             ['text-align', 'centered', 'center', '0.85'],
-            ['text-align', 'justified', 'justify', '0.85'],
-            ['overflow', 'scrollable', 'auto', '0.80'],
             ['cursor', 'hand', 'pointer', '0.90'],
             ['user-select', 'unselectable', 'none', '0.85'],
           ].map(([prop, wrong, correct, confidence], i) => (
@@ -142,28 +139,15 @@ getDetailedSuggestion('flexbox')
         </table>
       </div>
 
-      <h2 className={sectionHeading}>Animation Suggestions</h2>
-      <p className={paragraph}>
-        The animation registry has its own typo-tolerant suggestion system:
-      </p>
-
-      <pre className={codeBlock}><code className="language-ts">{`import { getAnimationSuggestion, isValidAnimation } from 'chaincss'
-
-isValidAnimation('fadeIn')    // → true
-isValidAnimation('fadein')    // → false (case-sensitive)
-
-getAnimationSuggestion('fadein')
-// → 'fadeIn'  (auto-corrected via Levenshtein)
-
-getAnimationSuggestion('slidLeft')
-// → 'slideLeft'  (caught the missing 'e')`}</code></pre>
-
       <div className={note}>
-        <strong>💡 Used everywhere:</strong> The suggestions engine powers the intent normalizer
-        (auto-correcting typos during compilation), the CLI error messages, and IDE autocomplete
-        integrations. All five knowledge bases are indexed in O(1) Sets for instant category
-        lookups, with fuzzy matching only performed on the subset of candidates that pass
-        the length-difference filter.
+        <strong>💡 Two layers of intelligence:</strong> The low-level suggestions engine
+        (Levenshtein matching) auto-corrects typos during compilation. The high-level
+        Intent Suggestion Validator teaches you the most expressive way to write styles
+        by suggesting <code className={inlineCode}>.intents()</code> and{' '}
+        <code className={inlineCode}>.describe()</code> when it detects manual properties
+        that match a known pattern.
+        See <a href="/docs/semantic-intents" style={{ color: '#818cf8' }}>Semantic Intents</a> for
+        the full intent catalog.
       </div>
     </>
   );

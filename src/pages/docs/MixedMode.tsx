@@ -50,9 +50,9 @@ export const btn = chain.dynamic()
     ? '0 8px 25px rgba(99,102,241,0.4)'
     : '0 2px 8px rgba(0,0,0,0.1)'
   })
-  .hover()
-    .background({ color: '#4f46e5' })                                       // → static CSS
-  .end()
+  .pseudo({
+    hover: { background: '#4f46e5' }                                        // → static CSS
+  })
   .$el('btn')`}</code></pre>
 
       <div className={tableWrapper}>

@@ -13,72 +13,131 @@ export default function SemanticIntents() {
       <h1 className={contentTitle}>Semantic Intents</h1>
       <p className={contentDesc}>
         Named design patterns that expand to complete CSS with theme-aware token resolution.
-        Instead of writing 8+ properties for a card, write <code className={inlineCode}>intent: 'card'</code>.
-        12 built-in intents across 4 categories. Register your own for your design system.
+        Write <code className={inlineCode}>.describe("A frosted glass card")</code> or{' '}
+        <code className={inlineCode}>.intents(['card', 'glass'])</code> — the compiler
+        expands them to 10+ CSS properties with dark mode support built in.
       </p>
 
-      <h2 className={sectionHeading}>The Problem: Repetitive Component Styles</h2>
-      <p className={paragraph}>
-        Every design system has patterns that repeat across components. Cards need the same
-        border-radius, shadow, hover lift, and padding. Buttons need the same focus ring,
-        cursor, and transition. Inputs need the same border, focus state, and disabled state.
-      </p>
-      <p className={paragraph}>
-        Without intents, you either copy-paste these 8+ property blocks everywhere, or you create
-        a brittle abstraction that doesn't compose well with other styles. ChainCSS intents
-        solve this by letting you reference design patterns by name — the compiler expands them
-        to the correct CSS with the correct tokens for your active theme.
-      </p>
-
+      {/* ============================================================ */}
+      {/* Quick Example */}
+      {/* ============================================================ */}
       <h2 className={sectionHeading}>Quick Example</h2>
 
       <pre className={codeBlock}><code className="language-ts">{`import { chain } from 'chaincss'
 
 // Without intents — 8+ properties every time
-export const card = chain()
-  .box({ borderRadius: 12, overflow: 'hidden' })
+export const manualCard = chain()
+  .box({ borderRadius: 12, overflow: 'hidden', padding: 16 })
   .flex({ direction: 'column' })
   .background({ color: '$colors.gray.100' })
   .typography({ color: '$colors.gray.900' })
   .box({ border: '1px solid $colors.gray.200' })
-  .transition({ tr: 'box-shadow 0.2s ease, transform 0.2s ease' })
-  .hover()
-    .shadow({ box: '0 10px 30px rgba(0,0,0,0.15)' })
-    .transform({ custom: 'translateY(-2px)' })
-  .end()
-  .$el('product-card')
+  .transition({ tr: 'box-shadow 0.2s ease' })
+  .pseudo({
+    hover: { boxShadow: '0 10px 30px rgba(0,0,0,0.15)' }
+  })
+  .$el('manual-card')
 
-// With intents — one line
-export const card = chain()
-  .raw({ intent: 'card' })
-  .$el('product-card')
+// With intents — one line!
+export const intentCard = chain()
+  .intents(['card'])
+  .$el('intent-card')
 
-// Both produce identical CSS. The intent version also:
-// • Resolves token references from your theme (light/dark/high-contrast)
-// • Adds responsive padding adjustments on mobile
-// • Tags the rule with a11y requirements for the accessibility validator`}</code></pre>
+// With natural language — even shorter!
+export const magicCard = chain()
+  .describe("A frosted glass card with centered content")
+  .$el('magic-card')`}</code></pre>
 
+      <p className={paragraph}>
+        All three produce similar CSS. The intent versions also:
+      </p>
+      <ul style={{ paddingLeft: '1.5rem', lineHeight: '2.2', color: '#cbd5e1' }}>
+        <li>✅ Resolve token references from your theme (light/dark/high-contrast)</li>
+        <li>✅ Add responsive padding adjustments on mobile</li>
+        <li>✅ Tag the rule with a11y requirements for the accessibility validator</li>
+        <li>✅ Auto-generate dark mode theme overrides</li>
+      </ul>
+
+      {/* ============================================================ */}
+      {/* Three Ways to Write Intents */}
+      {/* ============================================================ */}
+      <h2 className={sectionHeading}>Three Ways to Use Intents</h2>
+
+      <h3 style={{ color: '#818cf8', marginTop: 24 }}>1. Natural Language (`.describe()`)</h3>
+      <p className={paragraph}>
+        Describe what you want in plain English. The semantic intent parser maps
+        words and phrases to registered intents:
+      </p>
+      <pre className={codeBlock}><code className="language-ts">{`chain()
+  .describe("A frosted glass card with centered content and hover lift")
+  .$el('card')`}</code></pre>
+      <pre className={codeBlock}><code className="language-css">{`/* Generated CSS */
+.chain-card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.chain-card:hover {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+[data-theme="dark"] .chain-card {
+  background: rgba(0,0,0,0.3);
+}`}</code></pre>
+
+      <h3 style={{ color: '#818cf8', marginTop: 24 }}>2. Explicit Intents (`.intents()`)</h3>
+      <p className={paragraph}>
+        Use exact intent names for precise control:
+      </p>
+      <pre className={codeBlock}><code className="language-ts">{`chain()
+  .intents(['card', 'glass', 'hover-lift'])
+  .$el('card')`}</code></pre>
+
+      <h3 style={{ color: '#818cf8', marginTop: 24 }}>3. Intent Suggestions (Automatic)</h3>
+      <p className={paragraph}>
+        The <strong>Intent Suggestion Validator</strong> detects when you're writing properties
+        manually and suggests the equivalent intent:
+      </p>
+      <pre className={codeBlock}><code className="language-ts">{`// You write this:
+chain()
+  .box({ borderRadius: 12, padding: 16, overflow: 'hidden' })
+  .flex({ direction: 'column' })
+  .$el('card')
+
+// The compiler suggests:
+// [HINT] ".card" uses 3/4 properties from the "card" intent (priority: 10).
+// Use .intents(['card']) instead of writing 3 properties manually.`}</code></pre>
+
+      {/* ============================================================ */}
+      {/* Built-in Intent Catalog */}
+      {/* ============================================================ */}
       <h2 className={sectionHeading}>Built-in Intent Catalog</h2>
       <p className={paragraph}>
-        12 intents across 4 categories. Each intent carries semantic meaning
-        that the token system uses to resolve theme-specific values.
+        30+ intents across 6 categories. Each intent has relationships
+        (requires, conflicts, enhances) that the validator checks.
       </p>
 
       <h3 style={{ color: '#e2e8f0', marginTop: 28 }}>Layout Intents</h3>
       <div className={tableWrapper}>
         <table className={docTable}>
-          <thead><tr><th className={docTh}>Intent</th><th className={docTh}>Description</th><th className={docTh}>Key Properties</th><th className={docTh}>Responsive</th></tr></thead>
+          <thead><tr><th className={docTh}>Intent</th><th className={docTh}>Description</th><th className={docTh}>Key Properties</th></tr></thead>
           <tbody>{[
-            ['center-content', 'Center content horizontally + vertically', 'display:flex; justify-content:center; align-items:center', 'No'],
-            ['stack', 'Vertical stack with consistent spacing', 'display:flex; flex-direction:column; gap', 'No'],
-            ['sidebar-layout', 'Two-column layout with mobile collapse', 'display:grid; grid-template-columns:280px 1fr; min-height:100vh', 'Yes — collapses to 1 column'],
-            ['grid-list', 'Responsive auto-fit grid', 'display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr))', 'Built-in'],
-          ].map(([name, desc, props, responsive], i) => (
+            ['center-content', 'Center content horizontally + vertically', 'display:flex; justify-content:center; align-items:center'],
+            ['stack', 'Vertical stack with consistent spacing', 'display:flex; flex-direction:column; gap'],
+            ['flex-row', 'Simple horizontal flex', 'display:flex; flex-direction:row'],
+            ['flex-col', 'Simple vertical flex', 'display:flex; flex-direction:column'],
+            ['grid-list', 'Responsive auto-fit grid', 'display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr))'],
+            ['container', 'Centered container with max-width', 'max-width; margin-inline:auto; padding'],
+          ].map(([name, desc, props], i) => (
             <tr key={i}>
               <td className={docTd}><code className={inlineCode}>{name}</code></td>
               <td className={docTd} style={{ fontSize: 13 }}>{desc}</td>
               <td className={docTd} style={{ fontSize: 12, fontFamily: 'monospace' }}>{props}</td>
-              <td className={docTd} style={{ fontSize: 13 }}>{responsive}</td>
             </tr>
           ))}</tbody>
         </table>
@@ -87,38 +146,40 @@ export const card = chain()
       <h3 style={{ color: '#e2e8f0', marginTop: 28 }}>Component Intents</h3>
       <div className={tableWrapper}>
         <table className={docTable}>
-          <thead><tr><th className={docTh}>Intent</th><th className={docTh}>Description</th><th className={docTh}>States</th><th className={docTh}>A11y</th></tr></thead>
+          <thead><tr><th className={docTh}>Intent</th><th className={docTh}>Description</th><th className={docTh}>Requires</th><th className={docTh}>Enhances</th></tr></thead>
           <tbody>{[
-            ['card', 'Content card with shadow, radius, hover lift', 'hover: shadow + translateY(-2px)', 'contrast, focus-visible'],
-            ['button-primary', 'Primary CTA button', 'hover, focus, active, disabled', 'contrast, touch-target, focus-visible'],
-            ['button-secondary', 'Secondary outlined button', 'hover, focus, disabled', 'contrast, touch-target, focus-visible'],
-            ['input-field', 'Text input with focus + error states', 'focus, disabled', 'contrast'],
-            ['modal', 'Modal dialog with overlay backdrop', 'None (structural)', 'contrast, focus-visible'],
-            ['tooltip', 'Hover tooltip', 'None (structural)', 'contrast'],
-          ].map(([name, desc, states, a11y], i) => (
+            ['card', 'Content card with shadow, radius, hover lift', 'rounded', 'elevated, glass, hover-lift, bordered'],
+            ['button-primary', 'Primary CTA button', 'focus-ring', 'hover-lift, compact, elevated'],
+            ['modal', 'Modal dialog with overlay', 'elevated, rounded', 'glass, center-content'],
+            ['badge', 'Small label/badge', 'rounded', 'compact, bold'],
+            ['tooltip', 'Hover tooltip', 'elevated, rounded', 'compact, muted'],
+            ['toast', 'Toast notification', 'elevated, rounded', 'glass, compact'],
+          ].map(([name, desc, req, enh], i) => (
             <tr key={i}>
               <td className={docTd}><code className={inlineCode}>{name}</code></td>
               <td className={docTd} style={{ fontSize: 13 }}>{desc}</td>
-              <td className={docTd} style={{ fontSize: 13 }}>{states}</td>
-              <td className={docTd} style={{ fontSize: 13 }}>{a11y}</td>
+              <td className={docTd} style={{ fontSize: 13 }}>{req}</td>
+              <td className={docTd} style={{ fontSize: 13 }}>{enh}</td>
             </tr>
           ))}</tbody>
         </table>
       </div>
 
-      <h3 style={{ color: '#e2e8f0', marginTop: 28 }}>Semantic Intents</h3>
+      <h3 style={{ color: '#e2e8f0', marginTop: 28 }}>Visual Intents</h3>
       <div className={tableWrapper}>
         <table className={docTable}>
-          <thead><tr><th className={docTh}>Intent</th><th className={docTh}>Description</th><th className={docTh}>Key Properties</th><th className={docTh}>Responsive</th></tr></thead>
+          <thead><tr><th className={docTh}>Intent</th><th className={docTh}>Description</th><th className={docTh}>Conflicts With</th></tr></thead>
           <tbody>{[
-            ['hero-section', 'Full-width hero banner', 'display:flex; flex-direction:column; min-height:60vh; text-align:center', 'Yes — min-height:40vh on mobile'],
-            ['sticky-header', 'Sticky header with backdrop blur', 'position:sticky; top:0; backdrop-filter:blur(8px); border-bottom', 'No'],
-          ].map(([name, desc, props, responsive], i) => (
+            ['glass', 'Frosted glass effect with backdrop-filter', 'flat, transparent'],
+            ['elevated', 'Raised surface with shadow', 'flat'],
+            ['bordered', 'Border outline', 'flat'],
+            ['rounded', 'Rounded corners', 'flat'],
+            ['gradient', 'Gradient background', 'transparent, flat'],
+          ].map(([name, desc, conflict], i) => (
             <tr key={i}>
               <td className={docTd}><code className={inlineCode}>{name}</code></td>
               <td className={docTd} style={{ fontSize: 13 }}>{desc}</td>
-              <td className={docTd} style={{ fontSize: 12, fontFamily: 'monospace' }}>{props}</td>
-              <td className={docTd} style={{ fontSize: 13 }}>{responsive}</td>
+              <td className={docTd} style={{ fontSize: 13 }}>{conflict}</td>
             </tr>
           ))}</tbody>
         </table>
@@ -127,171 +188,76 @@ export const card = chain()
       <h3 style={{ color: '#e2e8f0', marginTop: 28 }}>Interaction Intents</h3>
       <div className={tableWrapper}>
         <table className={docTable}>
-          <thead><tr><th className={docTh}>Intent</th><th className={docTh}>Description</th><th className={docTh}>States</th><th className={docTh}>A11y</th></tr></thead>
+          <thead><tr><th className={docTh}>Intent</th><th className={docTh}>Description</th><th className={docTh}>Conflicts With</th></tr></thead>
           <tbody>{[
-            ['hover-lift', 'Subtle lift on hover', 'hover: translateY(-2px) + box-shadow', 'focus-visible'],
-            ['focus-ring', 'Accessible focus indicator', 'focus-visible: outline + outline-offset', 'Built-in'],
-          ].map(([name, desc, states, a11y], i) => (
+            ['hover-lift', 'Subtle lift on hover', 'disabled'],
+            ['focus-ring', 'Accessible focus indicator', 'disabled'],
+            ['clickable', 'Clickable element', 'disabled'],
+            ['disabled', 'Disabled state', 'clickable, hover-lift, focus-ring'],
+            ['selected', 'Selected/active state', 'disabled, muted'],
+          ].map(([name, desc, conflict], i) => (
             <tr key={i}>
               <td className={docTd}><code className={inlineCode}>{name}</code></td>
               <td className={docTd} style={{ fontSize: 13 }}>{desc}</td>
-              <td className={docTd} style={{ fontSize: 13 }}>{states}</td>
-              <td className={docTd} style={{ fontSize: 13 }}>{a11y}</td>
+              <td className={docTd} style={{ fontSize: 13 }}>{conflict}</td>
             </tr>
           ))}</tbody>
         </table>
       </div>
 
-      <h2 className={sectionHeading}>How Semantic Resolution Works</h2>
+      {/* ============================================================ */}
+      {/* How Intent Resolution Works */}
+      {/* ============================================================ */}
+      <h2 className={sectionHeading}>How Intent Resolution Works</h2>
       <p className={paragraph}>
-        Intents don't store hardcoded CSS values — they store <strong>semantic references</strong> that the
-        token system resolves based on the active theme. This is what makes them theme-aware:
+        Intents resolve during the <strong>lowering phase</strong> of the pipeline.
+        The resolution order is:
       </p>
-
-      <pre className={codeBlock}><code className="language-ts">{`// The 'card' intent declares these semantics:
-semantics: [
-  { category: 'surface', intent: 'container' },   // → resolves to surface colors
-  { category: 'elevation', intent: 'raised' },     // → resolves to shadow values
-  { category: 'spacing', intent: 'comfortable' },  // → resolves to padding values
-]
-
-// In light theme, 'surface' + 'container' resolves to:
-//   background-color: var(--colors-gray-100)
-//   color: var(--colors-gray-900)
-//   border: 1px solid var(--colors-gray-200)
-
-// In dark theme, the same intent resolves to:
-//   background-color: var(--colors-gray-800)
-//   color: var(--colors-gray-100)
-//   border: 1px solid var(--colors-gray-700)`}</code></pre>
-
-      <p className={paragraph}>
-        The semantic token system has 5 categories with 6 variants each — that's 30 possible
-        combinations, each resolving to different values in light, dark, and high-contrast modes.
-      </p>
-
-      <div className={tableWrapper}>
-        <table className={docTable}>
-          <thead><tr><th className={docTh}>Category</th><th className={docTh}>Intents</th></tr></thead>
-          <tbody>{[
-            ['surface', 'interactive, container, overlay, sheet, tooltip, input'],
-            ['text', 'primary, secondary, muted, link, inverse, code'],
-            ['elevation', 'flat, raised, floating, sticky, overlay, modal'],
-            ['state', 'hover, active, focus, disabled, loading, selected'],
-            ['spacing', 'none, tight, compact, comfortable, spacious, generous'],
-          ].map(([cat, intents], i) => (
-            <tr key={i}>
-              <td className={docTd}><strong>{cat}</strong></td>
-              <td className={docTd} style={{ fontSize: 13, fontFamily: 'monospace' }}>{intents}</td>
-            </tr>
-          ))}</tbody>
-        </table>
-      </div>
-
-      <h2 className={sectionHeading}>Composing Intents</h2>
-      <p className={paragraph}>
-        Intents compose with other styles. Properties set after the intent override
-        the intent's defaults. You can also stack multiple intents:
-      </p>
-
-      <pre className={codeBlock}><code className="language-ts">{`// Start with a card, then customize
-chain()
-  .raw({ intent: 'card' })                    // base card pattern
-  .box({ borderRadius: 24 })                  // override border-radius
-  .background({ color: '$colors.white' })      // override background
-  .raw({ intent: 'hover-lift' })              // add hover interaction
-  .$el('featured-card')
-
-// Intents can reference each other via semantics.
-// 'button-primary' declares:
-//   semantics: [
-//     { category: 'surface', intent: 'interactive' },
-//     { category: 'spacing', intent: 'compact' },
-//     { category: 'state', intent: 'hover' },
-//     { category: 'state', intent: 'focus' },
-//     { category: 'state', intent: 'active' },
-//     { category: 'state', intent: 'disabled' }
-//   ]
-// Each category+intent pair resolves to theme-aware values.`}</code></pre>
-
-      <h2 className={sectionHeading}>A11y Awareness</h2>
-      <p className={paragraph}>
-        Intents declare their accessibility requirements. When the accessibility validator runs,
-        it checks that every rule using an intent satisfies its declared a11y requirements:
-      </p>
-
-      <pre className={codeBlock}><code className="language-ts">{`// 'button-primary' declares:
-a11y: ['contrast', 'touch-target', 'focus-visible']
-
-// The validator checks:
-// 1. contrast — text-on-background ratio ≥ 4.5:1
-// 2. touch-target — interactive area ≥ 44×44px
-// 3. focus-visible — :focus-visible style exists
-
-// If any check fails, chaincss check --strict fails the build.`}</code></pre>
+      <ol style={{ paddingLeft: '1.5rem', lineHeight: '2.2', color: '#cbd5e1' }}>
+        <li><strong>Parse</strong> — Intent names are extracted from <code className={inlineCode}>.intents()</code> or <code className={inlineCode}>.describe()</code></li>
+        <li><strong>Validate</strong> — Conflict/requirement/enhancement checks run</li>
+        <li><strong>Compose</strong> — Composite intents (like <code className={inlineCode}>glass-card</code>) expand to their sub-intents</li>
+        <li><strong>Resolve</strong> — Each intent expands to its CSS properties</li>
+        <li><strong>Theme</strong> — Dark/high-contrast overrides are applied</li>
+        <li><strong>Token</strong> — Token references (<code className={inlineCode}>$colors.primary</code>) resolve to CSS variables</li>
+      </ol>
 
       <h2 className={sectionHeading}>Registering Custom Intents</h2>
-      <p className={paragraph}>
-        Extend the catalog with your design system's patterns:
-      </p>
+      <pre className={codeBlock}><code className="language-ts">{`import { registerSemanticIntent } from 'chaincss'
 
-      <pre className={codeBlock}><code className="language-ts">{`// chaincss.config.ts
-import { registerIntent } from 'chaincss'
-
-registerIntent('brand-hero', {
+registerSemanticIntent({
   name: 'brand-hero',
   category: 'semantic',
-  description: 'Brand-specific hero with gradient overlay',
-  semantics: [
-    { category: 'surface', intent: 'container' },
-    { category: 'spacing', intent: 'generous' }
-  ],
-  properties: {
-    background: 'linear-gradient(135deg, $colors.primary.500, $colors.primary.700)',
-    color: '$colors.white',
-    position: 'relative',
-    overflow: 'hidden'
-  },
-  states: {
-    hover: {
-      // Optional hover state
-    }
-  },
-  responsive: {
-    mobile: {
-      minHeight: '40vh',
-      padding: '32px 16px'
-    }
-  },
-  a11y: ['contrast']
+  description: 'Brand-specific hero with gradient',
+  resolve: () => ({
+    properties: {
+      background: 'linear-gradient(135deg, #6366f1, #a78bfa)',
+      color: '#ffffff',
+      padding: '80px 24px',
+      textAlign: 'center',
+      minHeight: '60vh'
+    },
+    states: {
+      hover: { opacity: 0.9 }
+    },
+    responsive: {
+      mobile: { padding: '40px 16px', minHeight: '40vh' }
+    },
+    a11y: ['contrast']
+  })
 })
 
-// Now use it anywhere:
+// Now use it:
 chain()
-  .raw({ intent: 'brand-hero' })
+  .intents(['brand-hero'])
   .$el('hero')`}</code></pre>
 
       <div className={note}>
         <strong>💡 Best practice:</strong> Register intents for your 5-10 most repeated component patterns.
-        This ensures visual consistency, reduces copy-paste, and guarantees accessibility compliance
-        across every instance. Combined with <a href="/docs/tokens/entanglement" style={{ color: '#818cf8' }}>Token Entanglement</a>,
-        changing a design token automatically updates every component that uses these intents.
+        The intent suggestion validator will automatically suggest them when it detects matching
+        manual properties. Combined with <a href="/docs/tokens" style={{ color: '#818cf8' }}>Design Tokens</a>,
+        changing a token automatically updates every component that uses these intents.
       </div>
-
-      <h2 className={sectionHeading}>Intent Resolution in the Pipeline</h2>
-      <p className={paragraph}>
-        Intents are resolved during the <strong>lowering phase</strong> — after normalization, validation,
-        analysis, and optimization. This means:
-      </p>
-      <ol style={{ paddingLeft: '1.5rem', lineHeight: '2.2', color: '#cbd5e1' }}>
-        <li>Tokens are already resolved (so <code className={inlineCode}>$colors.primary.500</code> has a real value)</li>
-        <li>Semantic references are resolved via the semantic token system</li>
-        <li>Theme overrides (dark/high-contrast) are applied</li>
-        <li>Properties expand into declarations on the IR rule</li>
-        <li>States (hover/focus/active) create pseudo-class rules</li>
-        <li>Responsive overrides create media query rules</li>
-        <li>A11y requirements are tagged for the validator</li>
-      </ol>
     </>
   );
 }

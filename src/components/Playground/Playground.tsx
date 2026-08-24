@@ -1,275 +1,420 @@
-import { useState, useCallback } from 'react'
-import { useChainStyles, compileToCSS } from 'chaincss/runtime'
-import { chain as realChain } from 'chaincss'
-import {
-  playgroundSection, wrapper, panel, panelTitle, runButton,
-  tabs, codeDisplay, outputDisplay,
-  demoSection, demoDescription, controlBar,
-  themeToggle, counterBadge, previewCard,
-  previewTitle, previewText,
-  infoBox, infoTitle, infoList
-} from './playground.chain'
+// ============================================================================
+// FILE: src/components/Playground/Playground.tsx (REPLACEMENT)
+// ============================================================================
 
-const DEFAULT_STATIC = `chain()
-  .flex({ direction: 'column', gap: 16 })
-  .box({ padding: 24, borderRadius: 12 })
-  .background({ color: '#1e293b' })
-  .typography({ color: '#e2e8f0' })
-  .$el('my-card')`
+import { useEffect, useRef, useState } from 'react';
+import { EditorView, basicSetup } from 'codemirror';
+import { EditorState } from '@codemirror/state';
+import { css } from '@codemirror/lang-css';
+import { oneDark } from '@codemirror/theme-one-dark';
+import { compileString } from 'chaincss/playground';
 
-const DEFAULT_DYNAMIC = `chain.dynamic()
-  .box({ padding: 24, borderRadius: 12 })
-  .background({ color: (ctx) => ctx.isDark ? '#1e293b' : '#f8fafc' })
-  .typography({ color: (ctx) => ctx.isDark ? '#f1f5f9' : '#0f172a' })
-  .shadow({ box: (ctx) => ctx.isDark
-    ? '0 10px 60px rgba(0,0,0,0.5)'
-    : '0 4px 12px rgba(0,0,0,0.1)'
-  })
-  .$el('dynamic-card')`
-
-const TAB_STYLE = {
-  padding: '10px 20px',
-  borderRadius: 8,
-  fontSize: 14,
-  fontWeight: 600,
-  cursor: 'pointer',
-  border: 'none',
-  transition: 'all 0.15s ease',
+interface PlaygroundResult {
+  css: string;
+  ast: any;
+  diagnostics: any[];
+  error?: string;
 }
 
-function compileStatic(code: string): string {
-  try {
-    const chain = realChain
-    
-    // Replace .$el('name') with .build() to get the StyleObject
-    const modifiedCode = code.replace(/\.\$el\([^)]*\)/, '.build()')
-    const fn = new Function('chain', `return ${modifiedCode}`)
-    const styleObj = fn(chain)
-    
-    const css = compileToCSS(styleObj, {
-      scopeSelector: `.chain-${styleObj.selectors?.[0]?.replace(/^\./, '') || 'my-element'}`,
-      minify: false
-    })
-    
-    return css.trim();
-  } catch (e: any) {
-    return `/* Compilation Error */\n/* ${e.message} */\n\n/* Check your syntax and try again */`
-  }
-}
+const defaultCode = `import { chain } from 'chaincss';
 
-function compileDynamic(code: string): string {
-  try {
-    const chain = realChain
-    
-    // 1. Replace .$el('name') with .build() to get the underlying StyleObject (just like static mode)
-    const modifiedCode = code.replace(/\.\$el\([^)]*\)/, '.build()')
-    const fn = new Function('chain', `return ${modifiedCode}`)
-    const styleObj = fn(chain)
-    
-    // 2. Compile the dynamic style object into CSS with custom property fallbacks/placeholders
-    const className = styleObj.selectors?.[0]?.replace(/^\./, '') || 'dynamic-card'
-    const css = compileToCSS(styleObj, {
-      scopeSelector: `.chain-${className}`,
-      minify: false
-    })
-    
-    // 3. Annotate output lines containing CSS custom properties
-    const annotatedCss = css.split('\n').map((line: string) => {
-      if (line.includes('var(--')) {
-        return line + ' /* ← runtime CSS custom property */'
-      }
-      return line
-    }).join('\n')
-    
-    return annotatedCss.trim() + '\n\n/* Mixed mode — static compiled at BUILD TIME */\n/* Dynamic values update at RUNTIME via CSS variables */\n/* No DOM injection. No memory leaks. */'
-  } catch (e: any) {
-    return `/* Compilation Error */\n/* ${e.message} */\n\n/* Check your syntax and try again */`
-  }
-}
+export const card = chain()
+  .describe("A frosted glass card with centered content")
+  .$el('card');
+
+export const button = chain()
+  .background({ color: '#6366f1' })
+  .typography({ color: '#ffffff', fontWeight: '600' })
+  .box({ padding: '12px 24px', borderRadius: 8 })
+  .hover(c => c
+    .background({ color: '#4f46e5' })
+  )
+  .$el('button');`;
 
 export default function Playground() {
-  const [activeTab, setActiveTab] = useState<'static' | 'dynamic'>('static')
-  const [staticCode, setStaticCode] = useState(DEFAULT_STATIC)
-  const [dynamicCode, setDynamicCode] = useState(DEFAULT_DYNAMIC)
-  const [output, setOutput] = useState('')
-  const [isDark, setIsDark] = useState(true)
-  const [count, setCount] = useState(0)
-  const [copied, setCopied] = useState(false)
-  const [error, setError] = useState(false)
+  const editorRef = useRef<HTMLDivElement>(null);
+  const [cssOutput, setCssOutput] = useState('');
+  const [astOutput, setAstOutput] = useState('');
+  const [diagnostics, setDiagnostics] = useState<any[]>([]);
+  const [tableViewMode, setTableViewMode] = useState(true);
+  const [editorView, setEditorView] = useState<EditorView | null>(null);
+  const [copied, setCopied] = useState(false);
 
-  const { classes: dynamicClasses, styleVars } = useChainStyles(
-    { themeToggle, counterBadge, previewCard },
-    { isDark, count }
-  )
+  useEffect(() => {
+    if (!editorRef.current) return;
 
-  const runCompile = useCallback(() => {
-    setError(false)
-    const code = activeTab === 'static' ? staticCode : dynamicCode
-    const result = activeTab === 'static' ? compileStatic(code) : compileDynamic(code)
-    
-    if (result.startsWith('/* Compilation Error */')) {
-      setError(true)
+    const view = new EditorView({
+      state: EditorState.create({
+        doc: defaultCode,
+        extensions: [basicSetup, css(), oneDark],
+      }),
+      parent: editorRef.current,
+    });
+
+    setEditorView(view);
+    runCompiler(view.state.doc.toString());
+
+    return () => {
+      view.destroy();
+    };
+  }, []);
+
+  function runCompiler(code: string) {
+    try {
+      const result = compileString(code) as PlaygroundResult;
+      setCssOutput(result.css);
+      setAstOutput(JSON.stringify(result.ast, null, 2));
+      setDiagnostics(result.diagnostics || []);
+    } catch (e: any) {
+      setCssOutput(`/* Compilation Error */\n/* ${e.message} */`);
+      setAstOutput(JSON.stringify({ error: e.message }, null, 2));
+      setDiagnostics([]);
     }
-    
-    setOutput(result)
-  }, [activeTab, staticCode, dynamicCode])
+  }
 
-  // Auto-compile on mount
-  useState(() => {
-    setTimeout(() => {
-      const result = compileStatic(DEFAULT_STATIC)
-      setOutput(result)
-    }, 100)
-  })
+  function handleCompile() {
+    if (editorView) {
+      runCompiler(editorView.state.doc.toString());
+    }
+  }
 
-  const copyOutput = () => {
-    navigator.clipboard.writeText(output)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  function handleCopy() {
+    navigator.clipboard.writeText(cssOutput);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }
+
+  function renderASTTable(ast: any) {
+    if (!ast || !ast.rules) {
+      return '<p style="color: #94a3b8; padding: 20px;">No AST data available.</p>';
+    }
+
+    let html = `
+      <table style="width: 100%; border-collapse: collapse; background: #0f172a; border-radius: 8px; overflow: hidden; font-size: 13px;">
+        <thead>
+          <tr>
+            <th style="background: #1e293b; padding: 10px 12px; text-align: left; color: #94a3b8; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid #313244;">Type</th>
+            <th style="background: #1e293b; padding: 10px 12px; text-align: left; color: #94a3b8; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid #313244;">Selector / Property</th>
+            <th style="background: #1e293b; padding: 10px 12px; text-align: left; color: #94a3b8; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid #313244;">Value / Details</th>
+            <th style="background: #1e293b; padding: 10px 12px; text-align: left; color: #94a3b8; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid #313244;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    for (const rule of ast.rules) {
+      const isDead = rule.isDead || false;
+      const deadStyle = isDead ? 'opacity: 0.5; text-decoration: line-through;' : '';
+      
+      html += `
+        <tr style="${deadStyle} border-bottom: 1px solid #313244;">
+          <td style="padding: 8px 12px; color: #e2e8f0; font-weight: 600;">Rule</td>
+          <td style="padding: 8px 12px; color: #e2e8f0;"><strong>${rule.selector}</strong></td>
+          <td style="padding: 8px 12px; color: #94a3b8;">ID: ${rule.id}</td>
+          <td style="padding: 8px 12px;">${isDead ? '💀 Dead' : '✅ Alive'}</td>
+        </tr>
+      `;
+
+      for (const decl of rule.declarations || []) {
+        html += `
+          <tr style="background: #1e293b; border-bottom: 1px solid #313244;">
+            <td style="padding: 8px 12px; color: #94a3b8;">Declaration</td>
+            <td style="padding: 8px 12px; padding-left: 30px; color: #e2e8f0;">${decl.property}</td>
+            <td style="padding: 8px 12px; color: #4ade80;">${decl.value}</td>
+            <td style="padding: 8px 12px;">—</td>
+          </tr>
+        `;
+      }
+
+      for (const pc of rule.pseudoClasses || []) {
+        html += `
+          <tr style="border-bottom: 1px solid #313244;">
+            <td style="padding: 8px 12px; color: #94a3b8;">Pseudo</td>
+            <td style="padding: 8px 12px; color: #e2e8f0;"><strong>${rule.selector}:${pc.name}</strong></td>
+            <td style="padding: 8px 12px; color: #94a3b8;">Declarations: ${pc.declarations?.length || 0}</td>
+            <td style="padding: 8px 12px;">—</td>
+          </tr>
+        `;
+      }
+
+      for (const atRule of rule.atRules || []) {
+        html += `
+          <tr style="background: #111827; border-bottom: 1px solid #313244;">
+            <td style="padding: 8px 12px; color: #94a3b8;">@${atRule.type}</td>
+            <td style="padding: 8px 12px; color: #e2e8f0;"><strong>@${atRule.type}</strong></td>
+            <td style="padding: 8px 12px; color: #94a3b8;">Declarations: ${atRule.declarations?.length || 0}</td>
+            <td style="padding: 8px 12px;">—</td>
+          </tr>
+        `;
+      }
+    }
+
+    for (const diag of ast.diagnostics || []) {
+      html += `
+        <tr style="background: #1e1e2e; border-bottom: 1px solid #313244;">
+          <td style="padding: 8px 12px; color: #94a3b8;">Diagnostic</td>
+          <td style="padding: 8px 12px; color: ${diag.severity === 'error' ? '#f87171' : diag.severity === 'warning' ? '#fbbf24' : '#60a5fa'};">[${diag.severity.toUpperCase()}] ${diag.message}</td>
+          <td style="padding: 8px 12px; color: #94a3b8;">${diag.suggestion || '—'}</td>
+          <td style="padding: 8px 12px; color: #94a3b8;">${diag.pass || '—'}</td>
+        </tr>
+      `;
+    }
+
+    html += '</tbody></table>';
+    return html;
   }
 
   return (
-    <div className={playgroundSection}>
-      <h2 className={panelTitle} style={{ fontSize: 24, marginBottom: 8 }}>Live Compiler Playground</h2>
-      <p className={demoDescription} style={{ marginBottom: 32 }}>
-        Edit the ChainCSS code below and compile it to CSS using the <strong>real compiler</strong>.
-      </p>
-
-      <div className={tabs}>
+    <div style={{
+      minHeight: '100vh',
+      background: '#0f172a',
+      color: '#e2e8f0',
+      fontFamily: 'Inter, sans-serif',
+      padding: '100px 24px 60px',
+      maxWidth: 1400,
+      margin: '0 auto',
+    }}>
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '12px 20px',
+        background: '#1e293b',
+        border: '1px solid rgba(99, 102, 241, 0.2)',
+        borderRadius: 12,
+        marginBottom: 24,
+      }}>
+        <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#e2e8f0' }}>
+          ChainCSS Playground
+        </h2>
         <button
-          onClick={() => { setActiveTab('static'); setOutput(''); setError(false) }}
+          onClick={handleCompile}
           style={{
-            ...TAB_STYLE,
-            background: activeTab === 'static' ? '#6366f1' : 'transparent',
-            color: activeTab === 'static' ? '#fff' : '#94a3b8',
+            background: '#6366f1',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: 8,
+            padding: '10px 20px',
+            fontSize: 14,
+            fontWeight: 600,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
           }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = '#4f46e5')}
+          onMouseLeave={(e) => (e.currentTarget.style.background = '#6366f1')}
         >
-          Static Mode (chain)
-        </button>
-        <button
-          onClick={() => { setActiveTab('dynamic'); setOutput(''); setError(false) }}
-          style={{
-            ...TAB_STYLE,
-            background: activeTab === 'dynamic' ? '#6366f1' : 'transparent',
-            color: activeTab === 'dynamic' ? '#fff' : '#94a3b8',
-          }}
-        >
-          Mixed Mode (chain.dynamic)
+          Compile (Ctrl+Enter)
         </button>
       </div>
 
-      <div className={wrapper}>
-        <div className={panel}>
-          <div className={panelTitle}>
-            {activeTab === 'static' ? 'Input: chain()' : 'Input: chain.dynamic()'}
-          </div>
-          <textarea
-            style={{
-              width: '100%',
-              minHeight: 200,
-              background: '#0f172a',
-              borderRadius: 8,
-              padding: 16,
-              fontSize: 13,
-              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-              color: '#e2e8f0',
-              border: error ? '1px solid #ef4444' : '1px solid rgba(99, 102, 241, 0.3)',
-              outline: 'none',
-              resize: 'vertical',
-              lineHeight: 1.7,
-            }}
-            value={activeTab === 'static' ? staticCode : dynamicCode}
-            onChange={(e) => {
-              if (activeTab === 'static') setStaticCode(e.target.value)
-              else setDynamicCode(e.target.value)
-            }}
-            spellCheck={false}
-          />
-          <button className={runButton} onClick={runCompile}>
-            Compile →
-          </button>
-        </div>
-        <div className={panel}>
-          <div className={panelTitle}>Compiled CSS Output</div>
-          <div className={outputDisplay} style={{ 
-            position: 'relative',
-            border: error ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)'
+      {/* Main Grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: 16,
+        marginBottom: 16,
+      }}>
+        {/* Editor Panel */}
+        <div style={{
+          background: '#0f172a',
+          border: '1px solid rgba(99, 102, 241, 0.2)',
+          borderRadius: 12,
+          overflow: 'hidden',
+        }}>
+          <div style={{
+            padding: '8px 16px',
+            background: '#1e293b',
+            borderBottom: '1px solid rgba(99, 102, 241, 0.2)',
+            fontSize: 12,
+            textTransform: 'uppercase',
+            letterSpacing: 1,
+            color: '#94a3b8',
           }}>
-            <code style={{ 
-              fontFamily: "'JetBrains Mono', monospace", 
-              whiteSpace: 'pre-wrap',
-              color: error ? '#fca5a5' : '#4ade80'
-            }}>
-              {output || 'Edit the code on the left and click "Compile →"'}
-            </code>
-            {output && (
+            ChainCSS Input
+          </div>
+          <div ref={editorRef} />
+        </div>
+
+        {/* CSS Output Panel */}
+        <div style={{
+          background: '#0f172a',
+          border: '1px solid rgba(16, 185, 129, 0.3)',
+          borderRadius: 12,
+          overflow: 'hidden',
+        }}>
+          <div style={{
+            padding: '8px 16px',
+            background: '#1e293b',
+            borderBottom: '1px solid rgba(16, 185, 129, 0.3)',
+            fontSize: 12,
+            textTransform: 'uppercase',
+            letterSpacing: 1,
+            color: '#94a3b8',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+            Compiled CSS
+            <button
+              onClick={handleCopy}
+              style={{
+                background: copied ? '#10b981' : '#1e293b',
+                color: '#ffffff',
+                border: '1px solid rgba(99, 102, 241, 0.3)',
+                borderRadius: 6,
+                padding: '4px 10px',
+                fontSize: 12,
+                cursor: 'pointer',
+              }}
+            >
+              {copied ? '✅ Copied!' : '📋 Copy'}
+            </button>
+          </div>
+          <pre style={{
+            margin: 0,
+            padding: 16,
+            maxHeight: 400,
+            overflow: 'auto',
+            fontSize: 13,
+            color: '#4ade80',
+            fontFamily: 'monospace',
+            whiteSpace: 'pre-wrap',
+          }}>
+            {cssOutput}
+          </pre>
+        </div>
+      </div>
+
+      {/* Diagnostics Panel */}
+      {diagnostics.length > 0 && (
+        <div style={{
+          background: '#0f172a',
+          border: '1px solid rgba(99, 102, 241, 0.2)',
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 16,
+        }}>
+          <div style={{
+            fontSize: 12,
+            textTransform: 'uppercase',
+            letterSpacing: 1,
+            color: '#94a3b8',
+            marginBottom: 12,
+          }}>
+            Diagnostics ({diagnostics.length})
+          </div>
+          {diagnostics.map((d, i) => (
+            <div
+              key={i}
+              style={{
+                padding: '8px 12px',
+                marginBottom: 6,
+                borderRadius: 6,
+                background: d.severity === 'error' ? '#1e1e2e' : '#1e293b',
+                borderLeft: `3px solid ${
+                  d.severity === 'error' ? '#f87171' :
+                  d.severity === 'warning' ? '#fbbf24' :
+                  d.severity === 'info' ? '#60a5fa' : '#4ade80'
+                }`,
+              }}
+            >
+              <span style={{
+                fontWeight: 600,
+                color: d.severity === 'error' ? '#f87171' :
+                       d.severity === 'warning' ? '#fbbf24' :
+                       d.severity === 'info' ? '#60a5fa' : '#4ade80',
+              }}>
+                [{d.severity.toUpperCase()}]
+              </span>{' '}
+              <span style={{ color: '#e2e8f0' }}>{d.message}</span>
+              {d.suggestion && (
+                <span style={{ color: '#94a3b8', fontStyle: 'italic', marginLeft: 8 }}>
+                  {d.suggestion}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* AST / IR Inspector */}
+      <div style={{
+        background: '#0f172a',
+        border: '1px solid rgba(99, 102, 241, 0.2)',
+        borderRadius: 12,
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          padding: '8px 16px',
+          background: '#1e293b',
+          borderBottom: '1px solid rgba(99, 102, 241, 0.2)',
+          fontSize: 12,
+          textTransform: 'uppercase',
+          letterSpacing: 1,
+          color: '#94a3b8',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+          AST / IR Inspector
+          <div style={{ display: 'flex', gap: 8 }}>
+            {!tableViewMode && (
               <button
-                onClick={copyOutput}
+                onClick={() => {
+                  navigator.clipboard.writeText(astOutput);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 1500);
+                }}
                 style={{
-                  position: 'absolute',
-                  top: 8,
-                  right: 8,
-                  background: copied ? '#22c55e' : 'rgba(255,255,255,0.1)',
-                  color: copied ? '#fff' : '#94a3b8',
-                  border: 'none',
+                  background: copied ? '#10b981' : '#1e293b',
+                  color: '#ffffff',
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
                   borderRadius: 6,
                   padding: '4px 10px',
-                  fontSize: 11,
+                  fontSize: 12,
                   cursor: 'pointer',
-                  fontFamily: 'Inter, sans-serif',
                 }}
               >
-                {copied ? 'Copied!' : 'Copy'}
+                {copied ? '✅ Copied!' : '📋 Copy JSON'}
               </button>
             )}
+            <button
+              onClick={() => setTableViewMode(!tableViewMode)}
+              style={{
+                background: '#1e293b',
+                color: '#e2e8f0',
+                border: '1px solid rgba(99, 102, 241, 0.3)',
+                borderRadius: 6,
+                padding: '4px 10px',
+                fontSize: 12,
+                cursor: 'pointer',
+              }}
+            >
+              {tableViewMode ? '📝 JSON View' : '📊 Table View'}
+            </button>
           </div>
         </div>
-      </div>
-
-      {/* Live Mixed Mode Demo */}
-      <div className={demoSection}>
-        <h2 className={panelTitle}>Live Mixed Mode Demo</h2>
-        <p className={demoDescription}>
-          This card uses <code style={{ color: '#818cf8' }}>chain.dynamic()</code>.
-          Toggle the theme — styles update instantly via CSS custom properties.
-        </p>
-
-        <div className={controlBar}>
-          <button
-            className={dynamicClasses.themeToggle}
-            style={styleVars}
-            onClick={() => setIsDark(!isDark)}
-          >
-            {isDark ? '🌙 Dark Mode' : '☀️ Light Mode'}
-          </button>
-          <button
-            className={dynamicClasses.counterBadge}
-            style={styleVars}
-            onClick={() => setCount(c => c + 1)}
-          >
-            Clicks: {count}
-          </button>
-        </div>
-
-        <div className={dynamicClasses.previewCard} style={styleVars}>
-          <h3 className={previewTitle}>Mixed Mode Preview</h3>
-          <p className={previewText}>
-            Background, text color, and shadow are all dynamic.
-            <br />
-            They change instantly via CSS custom properties — no DOM manipulation.
-          </p>
-        </div>
-      </div>
-
-      <div className={infoBox}>
-        <h3 className={infoTitle}>🔬 What's happening?</h3>
-        <ul className={infoList}>
-          <li><strong style={{ color: '#818cf8' }}>Static properties</strong> (padding, border-radius) compiled to CSS at build time</li>
-          <li><strong style={{ color: '#818cf8' }}>Dynamic values</strong> (background, color, shadow) applied as CSS custom properties</li>
-          <li>No <code style={{ color: '#a78bfa' }}>&lt;style&gt;</code> tag injection — values swap instantly on the element</li>
-          <li>Zero memory leaks, React concurrent-mode safe</li>
-        </ul>
+        {tableViewMode ? (
+          <div
+            style={{ padding: 16, overflow: 'auto', maxHeight: 500 }}
+            dangerouslySetInnerHTML={{ __html: renderASTTable(JSON.parse(astOutput || '{}')) }}
+          />
+        ) : (
+          <pre style={{
+            margin: 0,
+            padding: 16,
+            maxHeight: 500,
+            overflow: 'auto',
+            fontSize: 13,
+            color: '#e2e8f0',
+            fontFamily: 'monospace',
+            whiteSpace: 'pre-wrap',
+          }}>
+            {astOutput}
+          </pre>
+        )}
       </div>
     </div>
-  )
+  );
 }
