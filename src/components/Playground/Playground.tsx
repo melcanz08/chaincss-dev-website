@@ -1,5 +1,5 @@
 // ============================================================================
-// FILE: src/components/Playground/Playground.tsx (REPLACEMENT)
+// FILE: src/components/Playground/Playground.tsx (RESPONSIVE - CORRECTED)
 // ============================================================================
 
 import { useEffect, useRef, useState } from 'react';
@@ -39,6 +39,22 @@ export default function Playground() {
   const [tableViewMode, setTableViewMode] = useState(true);
   const [editorView, setEditorView] = useState<EditorView | null>(null);
   const [copied, setCopied] = useState(false);
+  const [activeMobilePanel, setActiveMobilePanel] = useState<'editor' | 'css' | 'ast'>('editor');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if mobile on mount
+    checkMobile();
+    
+    // Add resize listener
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  function checkMobile() {
+    setIsMobile(window.innerWidth <= 768);
+  }
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -54,8 +70,19 @@ export default function Playground() {
     setEditorView(view);
     runCompiler(view.state.doc.toString());
 
+    // Add keyboard shortcut
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        handleCompile();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       view.destroy();
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
@@ -78,8 +105,8 @@ export default function Playground() {
     }
   }
 
-  function handleCopy() {
-    navigator.clipboard.writeText(cssOutput);
+  function handleCopy(text: string) {
+    navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   }
@@ -90,7 +117,8 @@ export default function Playground() {
     }
 
     let html = `
-      <table style="width: 100%; border-collapse: collapse; background: #0f172a; border-radius: 8px; overflow: hidden; font-size: 13px;">
+      <div style="overflow-x: auto;">
+      <table style="width: 100%; min-width: 600px; border-collapse: collapse; background: #0f172a; border-radius: 8px; overflow: hidden; font-size: 13px;">
         <thead>
           <tr>
             <th style="background: #1e293b; padding: 10px 12px; text-align: left; color: #94a3b8; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid #313244;">Type</th>
@@ -160,9 +188,23 @@ export default function Playground() {
       `;
     }
 
-    html += '</tbody></table>';
+    html += '</tbody></table></div>';
     return html;
   }
+
+  const panelButtonStyle = (isActive: boolean) => ({
+    flex: 1,
+    padding: '12px 16px',
+    background: isActive ? '#6366f1' : '#1e293b',
+    color: isActive ? '#ffffff' : '#94a3b8',
+    border: '1px solid rgba(99, 102, 241, 0.3)',
+    borderRadius: 8,
+    cursor: 'pointer',
+    fontSize: 14,
+    fontWeight: 600,
+    transition: 'all 0.2s ease',
+    whiteSpace: 'nowrap' as const,
+  });
 
   return (
     <div style={{
@@ -170,60 +212,107 @@ export default function Playground() {
       background: '#0f172a',
       color: '#e2e8f0',
       fontFamily: 'Inter, sans-serif',
-      padding: '100px 24px 60px',
+      padding: '80px 16px 40px',
       maxWidth: 1400,
       margin: '0 auto',
     }}>
       {/* Header */}
       <div style={{
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '12px 20px',
+        flexDirection: 'column',
+        gap: 12,
+        padding: 16,
         background: '#1e293b',
         border: '1px solid rgba(99, 102, 241, 0.2)',
         borderRadius: 12,
-        marginBottom: 24,
+        marginBottom: 16,
       }}>
-        <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#e2e8f0' }}>
-          ChainCSS Playground
-        </h2>
-        <button
-          onClick={handleCompile}
-          style={{
-            background: '#6366f1',
-            color: '#ffffff',
-            border: 'none',
-            borderRadius: 8,
-            padding: '10px 20px',
-            fontSize: 14,
-            fontWeight: 600,
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = '#4f46e5')}
-          onMouseLeave={(e) => (e.currentTarget.style.background = '#6366f1')}
-        >
-          Compile (Ctrl+Enter)
-        </button>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 12,
+        }}>
+          <h2 style={{ 
+            margin: 0, 
+            fontSize: 'clamp(16px, 4vw, 24px)', 
+            fontWeight: 700, 
+            color: '#e2e8f0' 
+          }}>
+            ChainCSS Playground
+          </h2>
+          <button
+            onClick={handleCompile}
+            style={{
+              background: '#6366f1',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: 8,
+              padding: '10px 20px',
+              fontSize: 'clamp(12px, 3vw, 14px)',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = '#4f46e5')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = '#6366f1')}
+          >
+            ⚡ Compile
+          </button>
+        </div>
+        <div style={{ fontSize: 12, color: '#64748b' }}>
+          Keyboard shortcut: Ctrl+Enter (or Cmd+Enter on Mac)
+        </div>
       </div>
 
-      {/* Main Grid */}
+      {/* Mobile Panel Switcher - ONLY visible on mobile */}
+      {isMobile && (
+        <div style={{
+          display: 'flex',
+          gap: 8,
+          marginBottom: 16,
+        }}>
+          <button
+            onClick={() => setActiveMobilePanel('editor')}
+            style={panelButtonStyle(activeMobilePanel === 'editor')}
+          >
+            📝 Editor
+          </button>
+          <button
+            onClick={() => setActiveMobilePanel('css')}
+            style={panelButtonStyle(activeMobilePanel === 'css')}
+          >
+            🎨 CSS
+          </button>
+          <button
+            onClick={() => setActiveMobilePanel('ast')}
+            style={panelButtonStyle(activeMobilePanel === 'ast')}
+          >
+            🔍 AST
+          </button>
+        </div>
+      )}
+
+      {/* Main Grid - Editor & CSS side by side on desktop, stacked on mobile */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(min(100%, 600px), 1fr))',
         gap: 16,
         marginBottom: 16,
       }}>
         {/* Editor Panel */}
         <div style={{
+          display: !isMobile || activeMobilePanel === 'editor' ? 'block' : 'none',
           background: '#0f172a',
           border: '1px solid rgba(99, 102, 241, 0.2)',
           borderRadius: 12,
           overflow: 'hidden',
+          minHeight: isMobile ? '60vh' : 400,
         }}>
           <div style={{
-            padding: '8px 16px',
+            padding: '12px 16px',
             background: '#1e293b',
             borderBottom: '1px solid rgba(99, 102, 241, 0.2)',
             fontSize: 12,
@@ -233,18 +322,26 @@ export default function Playground() {
           }}>
             ChainCSS Input
           </div>
-          <div ref={editorRef} />
+          <div 
+            ref={editorRef} 
+            style={{
+              minHeight: isMobile ? 'calc(60vh - 48px)' : 350,
+              fontSize: 'clamp(12px, 3vw, 14px)',
+            }}
+          />
         </div>
 
         {/* CSS Output Panel */}
         <div style={{
+          display: !isMobile || activeMobilePanel === 'css' ? 'block' : 'none',
           background: '#0f172a',
           border: '1px solid rgba(16, 185, 129, 0.3)',
           borderRadius: 12,
           overflow: 'hidden',
+          minHeight: isMobile ? '60vh' : 400,
         }}>
           <div style={{
-            padding: '8px 16px',
+            padding: '12px 16px',
             background: '#1e293b',
             borderBottom: '1px solid rgba(16, 185, 129, 0.3)',
             fontSize: 12,
@@ -254,10 +351,12 @@ export default function Playground() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 8,
           }}>
-            Compiled CSS
+            <span>Compiled CSS</span>
             <button
-              onClick={handleCopy}
+              onClick={() => handleCopy(cssOutput)}
               style={{
                 background: copied ? '#10b981' : '#1e293b',
                 color: '#ffffff',
@@ -274,12 +373,15 @@ export default function Playground() {
           <pre style={{
             margin: 0,
             padding: 16,
-            maxHeight: 400,
+            maxHeight: isMobile ? 'calc(60vh - 48px)' : 400,
+            minHeight: isMobile ? 'calc(60vh - 48px)' : 350,
             overflow: 'auto',
-            fontSize: 13,
+            fontSize: 'clamp(11px, 2.5vw, 13px)',
             color: '#4ade80',
             fontFamily: 'monospace',
             whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            WebkitOverflowScrolling: 'touch',
           }}>
             {cssOutput}
           </pre>
@@ -338,15 +440,16 @@ export default function Playground() {
         </div>
       )}
 
-      {/* AST / IR Inspector */}
+      {/* AST / IR Inspector - Always visible on desktop, toggle on mobile */}
       <div style={{
+        display: !isMobile || activeMobilePanel === 'ast' ? 'block' : 'none',
         background: '#0f172a',
         border: '1px solid rgba(99, 102, 241, 0.2)',
         borderRadius: 12,
         overflow: 'hidden',
       }}>
         <div style={{
-          padding: '8px 16px',
+          padding: '12px 16px',
           background: '#1e293b',
           borderBottom: '1px solid rgba(99, 102, 241, 0.2)',
           fontSize: 12,
@@ -356,16 +459,14 @@ export default function Playground() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 8,
         }}>
-          AST / IR Inspector
+          <span>AST / IR Inspector</span>
           <div style={{ display: 'flex', gap: 8 }}>
             {!tableViewMode && (
               <button
-                onClick={() => {
-                  navigator.clipboard.writeText(astOutput);
-                  setCopied(true);
-                  setTimeout(() => setCopied(false), 1500);
-                }}
+                onClick={() => handleCopy(astOutput)}
                 style={{
                   background: copied ? '#10b981' : '#1e293b',
                   color: '#ffffff',
@@ -376,7 +477,7 @@ export default function Playground() {
                   cursor: 'pointer',
                 }}
               >
-                {copied ? '✅ Copied!' : '📋 Copy JSON'}
+                {copied ? '✅' : '📋'}
               </button>
             )}
             <button
@@ -389,27 +490,35 @@ export default function Playground() {
                 padding: '4px 10px',
                 fontSize: 12,
                 cursor: 'pointer',
+                whiteSpace: 'nowrap',
               }}
             >
-              {tableViewMode ? '📝 JSON View' : '📊 Table View'}
+              {tableViewMode ? '📝 JSON' : '📊 Table'}
             </button>
           </div>
         </div>
         {tableViewMode ? (
           <div
-            style={{ padding: 16, overflow: 'auto', maxHeight: 500 }}
+            style={{ 
+              padding: 16, 
+              overflow: 'auto', 
+              maxHeight: isMobile ? '60vh' : 500,
+              WebkitOverflowScrolling: 'touch',
+            }}
             dangerouslySetInnerHTML={{ __html: renderASTTable(JSON.parse(astOutput || '{}')) }}
           />
         ) : (
           <pre style={{
             margin: 0,
             padding: 16,
-            maxHeight: 500,
+            maxHeight: isMobile ? '60vh' : 500,
             overflow: 'auto',
-            fontSize: 13,
+            fontSize: 'clamp(11px, 2.5vw, 13px)',
             color: '#e2e8f0',
             fontFamily: 'monospace',
             whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            WebkitOverflowScrolling: 'touch',
           }}>
             {astOutput}
           </pre>
